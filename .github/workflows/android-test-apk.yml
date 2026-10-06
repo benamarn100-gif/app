@@ -41,7 +41,10 @@ jobs:
         run: npx expo prebuild --platform android --no-install --clean
       - name: APK bauen (arm64)
         working-directory: android
-        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a --no-daemon
+        # Ohne Android-Lint (prüft nur Bibliotheken, braucht viel Speicher; CI prüft den App-Code).
+        # Eigenes Zeitlimit, damit ein hängender Gradle-Prozess nicht den ganzen Lauf blockiert.
+        timeout-minutes: 50
+        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a -x lintVitalAnalyzeRelease -x lintVitalReportRelease -x lintVitalRelease --no-daemon
       - name: Dateiname
         id: name
         run: echo "file=mednow-test-${GITHUB_SHA::7}.apk" >> "$GITHUB_OUTPUT"

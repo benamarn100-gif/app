@@ -121,6 +121,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     '@maplibre/maplibre-react-native',
+    './plugins/withGradleMemory',
     // Quellkarten-Upload nur, wenn ein Sentry-Projekt (EU-Region) konfiguriert ist.
     // Das SDK selbst startet erst nach Opt-in (src/lib/monitoring.ts).
     ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
