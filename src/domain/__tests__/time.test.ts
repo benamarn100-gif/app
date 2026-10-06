@@ -72,6 +72,16 @@ describe('Europe/Berlin-Zeitlogik', () => {
     expect(windowRange('week', late).to.toISOString()).toBe('2026-10-28T22:59:59.999Z');
   });
 
+  it('windowRange: next24h reicht am Abend bis in den nächsten Vormittag', () => {
+    const evening = new Date('2026-10-06T18:30:00Z'); // 20:30 Berlin
+    expect(windowRange('next24h', evening)).toEqual({
+      from: evening,
+      to: new Date('2026-10-07T18:30:00Z'),
+    });
+    // „today“ hätte nur noch 3,5 Stunden
+    expect(windowRange('today', evening).to.toISOString()).toBe('2026-10-06T21:59:59.999Z');
+  });
+
   it('berlinDayOffset zählt Kalendertage in Berlin', () => {
     const now = new Date('2026-10-06T21:30:00Z'); // 23:30 Berlin
     expect(berlinDayOffset('2026-10-06T22:30:00Z', now)).toBe(1); // 00:30 Berlin am 07.10.

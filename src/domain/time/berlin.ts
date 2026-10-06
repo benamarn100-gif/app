@@ -34,12 +34,15 @@ export type Range = { from: Date; to: Date };
 
 /**
  * Zeitfenster für Status und Suche:
+ * - next24h: jetzt bis jetzt + 24 h (auch am Abend sinnvoll: „Heute noch frei“)
  * - today: jetzt bis Tagesende (Berlin)
  * - tomorrow: morgen 00:00 bis 23:59:59 (Berlin)
  * - week: jetzt bis Ende des 7. Kalendertags (heute + 6)
  */
 export function windowRange(window: TimeWindow, now: Date): Range {
   switch (window) {
+    case 'next24h':
+      return { from: now, to: new Date(now.getTime() + 24 * 60 * 60 * 1000) };
     case 'today':
       return { from: now, to: endOfBerlinDay(now) };
     case 'tomorrow': {

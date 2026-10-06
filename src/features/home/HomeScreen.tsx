@@ -55,7 +55,7 @@ export function HomeScreen() {
   const favorites = usePreferences((s) => s.favoriteSpecialtyIds);
   const radiusKm = usePreferences((s) => s.radiusKm);
   const setFilters = useSearchFilters((s) => s.set);
-  const today = useBasicSearchParams('today');
+  const today = useBasicSearchParams('next24h');
   const week = useBasicSearchParams('week');
   const todayQuery = useAvailabilitySearch(today.params);
   const weekQuery = useAvailabilitySearch(week.params);

@@ -183,7 +183,7 @@ export function AppointmentsScreen() {
           />
         ) : (
           list.map((a, i) => (
-            <Stagger key={a.id} index={i}>
+            <Stagger key={a.id} index={i} animateLayout>
               <AppointmentCard
                 appointment={a}
                 onRoute={() => void openRoute(a.practice)}
@@ -203,40 +203,42 @@ export function AppointmentsScreen() {
         {(waitlist.data ?? []).length ? (
           <View style={styles.section}>
             <SectionHeader title={t('appointments.waitlists')} />
-            {(waitlist.data ?? []).map((entry) => (
-              <Card key={entry.id} tone="muted">
-                <View style={styles.offerRow}>
-                  <Hourglass size={20} color={theme.colors.primary} strokeWidth={2.25} />
-                  <View style={styles.flex}>
-                    <Text variant="bodyStrong">
-                      {entry.practiceName ??
-                        (entry.target.kind === 'specialty'
-                          ? t('waitlist.targetLabelSpecialty', {
-                              specialty: t(`specialty.${entry.label}` as 'specialty.hno'),
-                              km: entry.maxDistanceKm,
-                            })
-                          : entry.label)}
-                    </Text>
-                    <Text variant="small" color="textSecondary">
-                      {t('waitlist.position', {
-                        date: formatBerlinDate(entry.createdAt, locale, {
-                          day: 'numeric',
-                          month: 'long',
-                        }),
-                      })}
-                    </Text>
+            {(waitlist.data ?? []).map((entry, i) => (
+              <Stagger key={entry.id} index={i} animateLayout>
+                <Card tone="muted">
+                  <View style={styles.offerRow}>
+                    <Hourglass size={20} color={theme.colors.primary} strokeWidth={2.25} />
+                    <View style={styles.flex}>
+                      <Text variant="bodyStrong">
+                        {entry.practiceName ??
+                          (entry.target.kind === 'specialty'
+                            ? t('waitlist.targetLabelSpecialty', {
+                                specialty: t(`specialty.${entry.label}` as 'specialty.hno'),
+                                km: entry.maxDistanceKm,
+                              })
+                            : entry.label)}
+                      </Text>
+                      <Text variant="small" color="textSecondary">
+                        {t('waitlist.position', {
+                          date: formatBerlinDate(entry.createdAt, locale, {
+                            day: 'numeric',
+                            month: 'long',
+                          }),
+                        })}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Button
-                  variant="text"
-                  label={t('waitlist.leave')}
-                  onPress={async () => {
-                    await leave.mutateAsync(entry.id);
-                    toast.show(t('waitlist.left'), 'info');
-                  }}
-                  style={styles.leave}
-                />
-              </Card>
+                  <Button
+                    variant="text"
+                    label={t('waitlist.leave')}
+                    onPress={async () => {
+                      await leave.mutateAsync(entry.id);
+                      toast.show(t('waitlist.left'), 'info');
+                    }}
+                    style={styles.leave}
+                  />
+                </Card>
+              </Stagger>
             ))}
           </View>
         ) : null}

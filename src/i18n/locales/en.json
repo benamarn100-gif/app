@@ -41,6 +41,7 @@
     "off": "Off"
   },
   "time": {
+    "next24h": "Next 24 h",
     "today": "Today",
     "tomorrow": "Tomorrow",
     "thisWeek": "This week",
@@ -122,13 +123,13 @@
   },
   "home": {
     "heroTitle": "I need an appointment today",
-    "heroBody": "We’ll show you right away where something is still free today.",
-    "heroCount_one": "{{count}} practice with free appointments today",
-    "heroCount_other": "{{count}} practices with free appointments today",
-    "heroNone": "Fully booked today – we’ll show you the earliest appointments.",
+    "heroBody": "We'll show you right away where something is free soon.",
+    "heroCount_one": "{{count}} practice with free appointments in the next 24 h",
+    "heroCount_other": "{{count}} practices with free appointments in the next 24 h",
+    "heroNone": "Fully booked for the next 24 hours – here are the earliest appointments.",
     "heroA11yHint": "Shows nearby practices sorted by the earliest free appointment",
     "specialties": "Specialties",
-    "todayNearby": "Free today near you",
+    "todayNearby": "Free soon near you",
     "thisWeek": "Free this week",
     "mapPreview": "Map",
     "mapPreviewCount_one": "{{count}} practice nearby",
@@ -136,7 +137,7 @@
     "openMap": "Open map",
     "nextAppointments": "My next appointments",
     "noAppointments": "No appointments planned yet.",
-    "todayEmpty": "Nothing is free nearby today. This week looks better.",
+    "todayEmpty": "Nothing nearby in the next 24 hours. This week looks better.",
     "weekEmpty": "Nothing is free nearby this week. Widen the radius or join a waitlist."
   },
   "card": {
@@ -151,9 +152,9 @@
     "video": "Video"
   },
   "acute": {
-    "title": "Free today",
-    "subtitle": "Earliest appointment first, then the shortest distance.",
-    "noneToday": "Nothing left today – earliest {{when}}.",
+    "title": "Available soon",
+    "subtitle": "Next 24 hours: earliest appointment first, then the shortest distance.",
+    "noneToday": "Nothing available in the next 24 hours – earliest {{when}}.",
     "unknownSection": "No current appointment data",
     "unknownHint": "Best to give them a quick call.",
     "bookedSection": "Currently fully booked",

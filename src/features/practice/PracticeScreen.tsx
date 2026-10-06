@@ -177,8 +177,14 @@ export function PracticeScreen() {
   return (
     <View style={styles.root} testID="practice-screen">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-        {/* Foto-Header (ohne Foto: warme Illustration); im Querformat flacher */}
-        <View style={[styles.hero, compactHero && styles.heroCompact]}>
+        {/* Foto-Header (ohne Foto: warme Illustration). Bewusst flach, damit die freien
+            Termine ohne Scrollen sichtbar sind; im Querformat noch flacher. */}
+        <View
+          style={[
+            practice.photoUrl ? styles.heroPhoto : styles.hero,
+            compactHero && styles.heroCompact,
+          ]}
+        >
           {practice.photoUrl ? (
             <Image
               source={{ uri: practice.photoUrl }}
@@ -195,7 +201,7 @@ export function PracticeScreen() {
               style={styles.heroImage}
             >
               <View style={styles.heroIllustration}>
-                <IllustrationPractice size={compactHero ? 72 : 150} />
+                <IllustrationPractice size={compactHero ? 72 : 104} />
               </View>
             </LinearGradient>
           )}
@@ -337,8 +343,9 @@ export function PracticeScreen() {
 
 const useStyles = makeStyles((t) => ({
   root: { flex: 1, backgroundColor: t.colors.background },
-  hero: { height: 180 },
-  heroCompact: { height: 96 },
+  hero: { height: 120 },
+  heroPhoto: { height: 160 },
+  heroCompact: { height: 88 },
   heroImage: { ...{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 } },
   heroIllustration: {
     flex: 1,
@@ -348,7 +355,7 @@ const useStyles = makeStyles((t) => ({
   },
   content: {
     paddingHorizontal: t.layout.screenPadding,
-    gap: t.space.xl,
+    gap: t.space.lg,
     maxWidth: t.layout.maxContentWidth,
     width: '100%',
     alignSelf: 'center',

@@ -9,7 +9,11 @@ export type AvailabilityStatus = 'free' | 'few' | 'booked' | 'unknown';
 export type SlotStatus = 'open' | 'held' | 'booked' | 'cancelled';
 export type HoldReason = 'checkout' | 'waitlist_offer';
 export type VisitType = 'in_person' | 'video';
-export type TimeWindow = 'today' | 'tomorrow' | 'week';
+/**
+ * Zeitfenster der Suche. `next24h` beantwortet „Wo komme ich bald dran?“ auch am Abend –
+ * „heute“ endet um Mitternacht und zeigt ab ca. 18 Uhr fast immer „ausgebucht“.
+ */
+export type TimeWindow = 'next24h' | 'today' | 'tomorrow' | 'week';
 export type InsuranceType = 'public' | 'private';
 
 export const AGE_GROUPS = [

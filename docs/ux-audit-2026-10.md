@@ -17,20 +17,20 @@
 
 ## Phase 1 – Befunde
 
-| # | Schwere | Bereich | Befund | Maßnahme |
-| --- | --- | --- | --- | --- |
-| K1 | kritisch | Start | Der nächste Termin steht als 7. von 8 Blöcken ganz unten; die Startseite beantwortet die zwei Kernfragen nicht in 3 Sekunden | Dashboard neu (Phase 2): Hero = nächster Termin, Suche mit Schnellfiltern, „Frei in deiner Nähe“ |
-| K2 | kritisch | Akut | „Heute“ endet um Mitternacht: ab dem Abend zeigen Start und Akut-Modus fast immer „heute alles vergeben“, obwohl morgen früh Termine frei sind | Zeitfenster „nächste 24 Stunden“ (App, Demo, Datenbank) |
-| K3 | kritisch | Start | Doppelte Aussagen: Hero „heute alles vergeben“ und darunter Block „heute nichts frei“; dazu Wochenliste und Kartenvorschau mit denselben Praxen | Ein Block je Aussage (Phase 2) |
-| M1 | mittel | Animation | Listen springen beim Entfernen/Einfügen (Storno, Filterwechsel, Alarm löschen) | Layout-Übergänge auf dem UI-Thread (`LinearTransition`), bei „Bewegung reduzieren“ aus |
-| M2 | mittel | Suche | Kein Pull-to-Refresh in der Suche (Start und Termine haben es) | Ergänzen, mit Marken-Animation |
-| M3 | mittel | Praxis | Kopfbereich mit großer Illustration schiebt Termine unter die Falz | Kopf kompakter, Termine früher sichtbar |
-| M4 | mittel | Sicherheit | Notrufnummern nur als Leiste; keine Notapotheke, keine Krisen-Hotline | Eigene Notfall-Seite (Phase 3.8) |
-| M5 | mittel | Karte | Nur Luftlinie; keine Einschätzung, wie lange man braucht | Geschätzte Gehzeit/Fahrzeit (klar als „ca.“ markiert), Route je Verkehrsmittel (Phase 3.3) |
-| M6 | mittel | Haptik | Kein haptisches Signal beim Setzen eines Termin-Alarms (nur Toast) | Erfolgs-Haptik beim Alarm |
-| F1 | Feinschliff | Start | Begrüßung + Standort-Chip brauchen zwei Zeilen | Eine Zeile |
-| F2 | Feinschliff | Start | Fachrichtungs-Chips abgeschnitten, ohne Hinweis auf Scrollen | In die Schnellfilter der Suche verlegt |
-| F3 | Feinschliff | Web | Tab-Bar-Schriftgröße im Web als Zahl statt Token | Token verwenden |
+| #   | Schwere     | Bereich    | Befund                                                                                                                                          | Maßnahme                                                                                         |
+| --- | ----------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| K1  | kritisch    | Start      | Der nächste Termin steht als 7. von 8 Blöcken ganz unten; die Startseite beantwortet die zwei Kernfragen nicht in 3 Sekunden                    | Dashboard neu (Phase 2): Hero = nächster Termin, Suche mit Schnellfiltern, „Frei in deiner Nähe“ |
+| K2  | kritisch    | Akut       | „Heute“ endet um Mitternacht: ab dem Abend zeigen Start und Akut-Modus fast immer „heute alles vergeben“, obwohl morgen früh Termine frei sind  | Zeitfenster „nächste 24 Stunden“ (App, Demo, Datenbank)                                          |
+| K3  | kritisch    | Start      | Doppelte Aussagen: Hero „heute alles vergeben“ und darunter Block „heute nichts frei“; dazu Wochenliste und Kartenvorschau mit denselben Praxen | Ein Block je Aussage (Phase 2)                                                                   |
+| M1  | mittel      | Animation  | Listen springen beim Entfernen/Einfügen (Storno, Filterwechsel, Alarm löschen)                                                                  | Layout-Übergänge auf dem UI-Thread (`LinearTransition`), bei „Bewegung reduzieren“ aus           |
+| M2  | mittel      | Suche      | Kein Pull-to-Refresh in der Suche (Start und Termine haben es)                                                                                  | Ergänzen, mit Marken-Animation                                                                   |
+| M3  | mittel      | Praxis     | Kopfbereich mit großer Illustration schiebt Termine unter die Falz                                                                              | Kopf kompakter, Termine früher sichtbar                                                          |
+| M4  | mittel      | Sicherheit | Notrufnummern nur als Leiste; keine Notapotheke, keine Krisen-Hotline                                                                           | Eigene Notfall-Seite (Phase 3.8)                                                                 |
+| M5  | mittel      | Karte      | Nur Luftlinie; keine Einschätzung, wie lange man braucht                                                                                        | Geschätzte Gehzeit/Fahrzeit (klar als „ca.“ markiert), Route je Verkehrsmittel (Phase 3.3)       |
+| M6  | –           | Haptik     | ~~Kein haptisches Signal beim Termin-Alarm~~ – Fehlbefund: der Erfolgs-Toast löst bereits `haptics.success()` aus                               | keine                                                                                            |
+| F1  | Feinschliff | Start      | Begrüßung + Standort-Chip brauchen zwei Zeilen                                                                                                  | Eine Zeile                                                                                       |
+| F2  | Feinschliff | Start      | Fachrichtungs-Chips abgeschnitten, ohne Hinweis auf Scrollen                                                                                    | In die Schnellfilter der Suche verlegt                                                           |
+| F3  | Feinschliff | Web        | Tab-Bar-Schriftgröße im Web als Zahl statt Token                                                                                                | Token verwenden                                                                                  |
 
 Geprüft und in Ordnung: Farb-Tokens (keine Hex-Werte außerhalb der Tokens), Typo-Skala, 4/8-pt-Raster, Radien,
 Schatten, dunkles Design (Kontrast 98/98 Paare AA), Safe Areas, Tastatur-Verhalten in Formularen
@@ -43,5 +43,19 @@ Press-Skalierung 0,97, Stagger 40 ms für höchstens 8 Elemente.
 
 ## Umsetzung
 
-Reihenfolge: K2, M1–M3, M6, F1–F3 in Phase 1; K1/K3 in Phase 2; M4, M5 in Phase 3.
+Reihenfolge: K2, M1–M3, F3 in Phase 1; K1/K3, F1/F2 in Phase 2; M4, M5 in Phase 3.
+
+| #   | Stand Phase 1                                                                                                                                                                                           |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| K2  | Zeitfenster `next24h` (App, Demo-Daten, Datenbank-Migration 1100, Filter „Nächste 24 Std.“); Akut-Modus „Heute noch frei“ und Startseite nutzen es                                                      |
+| M1  | `Stagger animateLayout`: Nachrutschen mit Standard-Feder und Ausblenden beim Entfernen (Termine, Termin-Alarme, Familie); bei „Bewegung reduzieren“ ohne Gleiten; nicht in FlashList (Zellen-Recycling) |
+| M2  | Pull-to-Refresh in der Suche (Liste) mit Marken-Animation                                                                                                                                               |
+| M3  | Praxis-Kopf 180 → 120 pt (Illustration) bzw. 160 pt (Foto), Abstände 24 → 20 pt                                                                                                                         |
+| M6  | Fehlbefund, nichts zu tun                                                                                                                                                                               |
+| F3  | Tab-Beschriftung im Web nutzt `typography.caption`                                                                                                                                                      |
+
+Nebenbei gefunden und behoben (kritisch, Server): `search_availability`/`get_slots` scheiterten für App-Nutzer mit
+„permission denied“, weil sie ganze Slot-Zeilen lasen (Spaltenrechte schützen `held_by`). Migration 1000, Tests als
+`anon`/`authenticated`, Rauchtest im Deploy-Workflow schlägt jetzt bei HTTP-Fehlern fehl.
+
 Ergebnisse und Abweichungen stehen im Abschlussbericht (`docs/release-notes-2026-10.md`).

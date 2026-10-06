@@ -7,7 +7,7 @@ import {
   type ComponentType,
   type Ref,
 } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { FlashList } from '@shopify/flash-list';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -35,6 +35,7 @@ import { makeStyles, useTheme } from '@/design/theme';
 import { destinationPoint, type BBox } from '@/domain/geo/distance';
 import { geohashesForBBox } from '@/domain/geo/geohash';
 import type { LatLng, PracticeAvailability } from '@/domain/types';
+import { BrandRefresh } from '@/features/home/BrandRefresh';
 import { useT } from '@/i18n/useT';
 import { activeFilterCount, nextRadius, useSearchFilters } from '@/state/searchFilters';
 
@@ -99,6 +100,13 @@ export function SearchScreen() {
   const { params: searchParams, center } = useFilteredSearchParams();
   const query = useAvailabilitySearch(searchParams);
   const items = useMemo(() => query.data ?? [], [query.data]);
+  // Pull-to-Refresh: eigener Zustand, damit Hintergrund-Refetches keinen Spinner zeigen
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await query.refetch();
+    setRefreshing(false);
+  }, [query]);
   const filterCount = activeFilterCount(filters);
 
   // Realtime: Zellen des sichtbaren Bereichs (Karte) bzw. des Umkreises (Liste)
@@ -289,8 +297,17 @@ export function SearchScreen() {
 
   return (
     <View style={[styles.root, { paddingTop: insets.top + 8 }]} testID="search-list-view">
+      <BrandRefresh visible={refreshing} />
       <FlashList
         data={query.isLoading ? [] : items}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="transparent"
+            colors={[theme.colors.primary]}
+          />
+        }
         keyExtractor={(item) => item.practice.id}
         renderItem={renderCard}
         ListHeaderComponent={

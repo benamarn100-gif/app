@@ -1,6 +1,6 @@
 import { ScrollView, View } from 'react-native';
 
-import { Avatar, Card, PressableScale, Skeleton, Text } from '@/components';
+import { Avatar, Card, PressableScale, Skeleton, Stagger, Text } from '@/components';
 import { Trash } from '@/components/icons';
 import { useDependents, useRemoveDependent } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
@@ -27,26 +27,28 @@ export function FamilyScreen() {
           {t('profile.familyEmpty')}
         </Text>
       ) : (
-        (dependents.data ?? []).map((d) => (
-          <Card key={d.id}>
-            <View style={styles.row}>
-              <Avatar name={d.label} size={40} />
-              <View style={styles.flex}>
-                <Text variant="bodyStrong">{d.label}</Text>
-                <Text variant="small" color="textSecondary">
-                  {t(`ageGroup.${d.ageGroup}`)}
-                </Text>
+        (dependents.data ?? []).map((d, i) => (
+          <Stagger key={d.id} index={i} animateLayout>
+            <Card>
+              <View style={styles.row}>
+                <Avatar name={d.label} size={40} />
+                <View style={styles.flex}>
+                  <Text variant="bodyStrong">{d.label}</Text>
+                  <Text variant="small" color="textSecondary">
+                    {t(`ageGroup.${d.ageGroup}`)}
+                  </Text>
+                </View>
+                <PressableScale
+                  onPress={() => remove.mutate(d.id)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${t('common.delete')}: ${d.label}`}
+                  style={styles.remove}
+                >
+                  <Trash size={20} color={theme.colors.statusBooked} strokeWidth={2} />
+                </PressableScale>
               </View>
-              <PressableScale
-                onPress={() => remove.mutate(d.id)}
-                accessibilityRole="button"
-                accessibilityLabel={`${t('common.delete')}: ${d.label}`}
-                style={styles.remove}
-              >
-                <Trash size={20} color={theme.colors.statusBooked} strokeWidth={2} />
-              </PressableScale>
-            </View>
-          </Card>
+            </Card>
+          </Stagger>
         ))
       )}
       <PatientPicker value={null} onChange={() => undefined} />

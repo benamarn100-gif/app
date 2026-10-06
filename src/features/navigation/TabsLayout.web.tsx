@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 import { CalendarDays, CircleUserRound, House, Search } from '@/components/icons';
 import { useOffers } from '@/data/hooks';
 import { useTheme } from '@/design/theme';
-import { fontFamily } from '@/design/tokens';
+import { typography } from '@/design/tokens';
 import { useT } from '@/i18n/useT';
 
 /**
@@ -27,7 +27,7 @@ export function TabsLayout() {
           height: 64,
           paddingBottom: 8,
         },
-        tabBarLabelStyle: { fontFamily: fontFamily.bodyMedium, fontSize: 12 },
+        tabBarLabelStyle: typography.caption,
       }}
     >
       <Tabs.Screen

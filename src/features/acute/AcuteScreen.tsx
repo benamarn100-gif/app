@@ -43,8 +43,9 @@ type Row =
 
 /**
  * Akut-Modus: Praxen in der Nähe mit dem frühesten freien Termin – sortiert nach
- * Uhrzeit, dann Entfernung, dann Bewertung. Ist heute nichts frei, sagen wir das ehrlich
- * und zeigen den frühesten Termin der Woche.
+ * Uhrzeit, dann Entfernung, dann Bewertung. Zeitfenster: die nächsten 24 Stunden (auch am
+ * Abend sinnvoll). Ist darin nichts frei, sagen wir das ehrlich und zeigen den frühesten Termin
+ * der Woche.
  */
 export function AcuteScreen() {
   const styles = useStyles();
@@ -53,12 +54,12 @@ export function AcuteScreen() {
   const now = useNow(60_000);
   const prefRadius = usePreferences((s) => s.radiusKm);
   const [radius, setRadius] = useState(prefRadius);
-  const today = useBasicSearchParams('today', radius);
+  const today = useBasicSearchParams('next24h', radius);
   const week = useBasicSearchParams('week', radius);
   const todayQuery = useAvailabilitySearch(today.params);
   const todayRanked = useMemo(() => rankAcute(todayQuery.data ?? []), [todayQuery.data]);
   const hasToday = todayRanked.some((r) => r.nextSlot);
-  // Nur laden, wenn heute nichts frei ist
+  // Nur laden, wenn in den nächsten 24 Stunden nichts frei ist
   const weekQuery = useAvailabilitySearch(week.params, {
     enabled: todayQuery.isSuccess && !hasToday,
   });

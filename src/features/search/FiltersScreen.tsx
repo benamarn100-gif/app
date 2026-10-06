@@ -8,6 +8,7 @@ import { useAvailabilitySearch } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { SPECIALTIES } from '@/domain/seed/catalog';
 import { ACCESSIBILITY_FEATURES, type AccessibilityFeature, type TimeWindow } from '@/domain/types';
+import type { TranslationKey } from '@/i18n';
 import { useT } from '@/i18n/useT';
 import { RADIUS_STEPS, useSearchFilters } from '@/state/searchFilters';
 
@@ -17,6 +18,13 @@ const LANGUAGES = ['en', 'tr', 'ru', 'ar', 'pl', 'uk', 'fr', 'es'] as const;
 const FILTERABLE_A11Y: AccessibilityFeature[] = ACCESSIBILITY_FEATURES.filter(
   (f) => f !== 'parking',
 );
+const WINDOWS: TimeWindow[] = ['next24h', 'today', 'tomorrow', 'week'];
+const WINDOW_LABEL = {
+  next24h: 'time.next24h',
+  today: 'time.today',
+  tomorrow: 'time.tomorrow',
+  week: 'time.thisWeek',
+} as const satisfies Record<TimeWindow, TranslationKey>;
 
 /**
  * Filter-Sheet: Fachrichtung, Umkreis 1–50 km, Zeitraum, Sprache, Barrierefreiheit,
@@ -136,17 +144,11 @@ export function FiltersScreen() {
 
         <Section title={t('filters.window')}>
           <View style={styles.wrap} accessibilityRole="radiogroup">
-            {(['today', 'tomorrow', 'week'] as TimeWindow[]).map((w) => (
+            {WINDOWS.map((w) => (
               <Chip
                 key={w}
                 role="radio"
-                label={t(
-                  w === 'today'
-                    ? 'time.today'
-                    : w === 'tomorrow'
-                      ? 'time.tomorrow'
-                      : 'time.thisWeek',
-                )}
+                label={t(WINDOW_LABEL[w])}
                 selected={f.window === w}
                 onPress={() => f.set({ window: w })}
               />

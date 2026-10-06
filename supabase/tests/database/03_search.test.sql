@@ -1,5 +1,5 @@
 begin;
-select plan(10);
+select plan(12);
 
 -- Zeitfenster in Berliner Zeit inkl. Sommerzeit
 select is(
@@ -16,6 +16,17 @@ select is(
   (select w_to from app.window_bounds('tomorrow', '2026-10-24 10:00:00+00')),
   '2026-10-25 22:59:59.999999+00'::timestamptz,
   'Der 25.10.2026 hat 25 Stunden'
+);
+
+select is(
+  (select w_to from app.window_bounds('next24h', '2026-10-06 18:30:00+00')),
+  '2026-10-07 18:30:00+00'::timestamptz,
+  'next24h reicht am Abend bis in den nächsten Tag'
+);
+select ok(
+  (select count(*) from public.search_availability(50.5558, 9.6808, 15, 'next24h') where open_count > 0)
+    >= (select count(*) from public.search_availability(50.5558, 9.6808, 15, 'today') where open_count > 0),
+  'next24h findet mindestens so viele freie Praxen wie today'
 );
 
 -- Suche rund um Fulda
