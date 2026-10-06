@@ -135,7 +135,7 @@ jobs:
 
       - name: Edge Functions
         if: inputs.functions
-        run: supabase functions deploy --project-ref "$PROJECT_REF" --use-api
+        run: supabase functions deploy --project-ref "$PROJECT_REF" --use-api --import-map supabase/functions/deno.json
 
       - name: Rauchtest (Suche mit dem öffentlichen App-Schlüssel)
         run: |

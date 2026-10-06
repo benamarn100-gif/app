@@ -83,25 +83,39 @@ policy = "per_worker"
 deno_version = 2
 
 [functions.book_slot]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = true
 
 [functions.hold_slot]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = true
 
 [functions.cancel_appointment]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = true
 
 [functions.reschedule_appointment]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = true
 
 [functions.waitlist]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = true
 
 [functions.account]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = true
 
 # Worker: wird von pg_net/pg_cron aufgerufen, geschützt über WORKER_SECRET.
 [functions.send_notifications]
+# Gemeinsame Import-Liste (beim Bereitstellen sonst nicht gefunden)
+import_map = "./functions/deno.json"
 verify_jwt = false
 
 [analytics]
