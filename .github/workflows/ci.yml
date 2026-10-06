@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'claude/**']
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  app:
+    name: Lint · Typecheck · Tests · Kontrast · i18n
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npm run format:check
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Kontrast (WCAG 2.1 AA)
+        run: npm run check:contrast
+      - name: Übersetzungen (de/en, du/Sie)
+        run: npm run check:i18n
+      - name: Unit- und Komponententests
+        run: npm test -- --ci --coverage
+      - name: Expo-Konfiguration prüfen
+        run: npx expo config --type public > /dev/null
+      - name: Bundle-Größe (Web-Export als Referenz)
+        run: |
+          npx expo export --platform web --output-dir dist > /dev/null
+          du -sh dist/_expo/static/js/web | tee bundle-size.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bundle-size
+          path: bundle-size.txt
+
+  database:
+    name: Datenbank (Migrationen, RLS, pgTAP, Doppelbuchung)
+    runs-on: ubuntu-24.04
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: PostgreSQL 16 + PostGIS + pgTAP
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-16 postgresql-16-postgis-3 postgresql-16-pgtap libtap-parser-sourcehandler-pgtap-perl
+          sudo systemctl start postgresql
+          sudo -u postgres psql -c "alter user postgres password 'postgres';"
+      - name: Migrationen, Seed, pgTAP und Nebenläufigkeitstest
+        run: npm run db:test
+
+  edge-functions:
+    name: Edge Functions (Deno)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Typecheck
+        working-directory: supabase/functions
+        run: deno check --config deno.json */index.ts
+      - name: Tests
+        working-directory: supabase/functions
+        run: deno test --allow-env --config deno.json tests/

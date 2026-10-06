@@ -1,0 +1,192 @@
+import { Alert, ScrollView, Share, View } from 'react-native';
+import { router } from 'expo-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { Download, MapPin, Trash, TriangleAlert } from 'lucide-react-native';
+
+import {
+  Button,
+  Card,
+  Divider,
+  ListRow,
+  SectionHeader,
+  Skeleton,
+  Text,
+  useToast,
+} from '@/components';
+import { useConsents, useRevokeConsent } from '@/data/hooks';
+import { useRepository } from '@/data/DataProvider';
+import { makeStyles, useTheme } from '@/design/theme';
+import { formatBerlinDate } from '@/domain/time/berlin';
+import type { Consent, ConsentType } from '@/domain/types';
+import { useT } from '@/i18n/useT';
+import { usePreferences } from '@/state/preferences';
+
+const SHOWN: ConsentType[] = ['health_data', 'push', 'crash_reports'];
+
+/** Datenschutz-Center: Einwilligungen einsehen/widerrufen, Datenexport, Konto löschen. */
+export function PrivacyScreen() {
+  const theme = useTheme();
+  const styles = useStyles();
+  const { t, locale } = useT();
+  const toast = useToast();
+  const repo = useRepository();
+  const client = useQueryClient();
+  const consents = useConsents();
+  const revoke = useRevokeConsent();
+  const prefs = usePreferences();
+
+  const latest = (type: ConsentType): Consent | undefined =>
+    (consents.data ?? [])
+      .filter((c) => c.type === type)
+      .sort((a, b) => Date.parse(b.grantedAt) - Date.parse(a.grantedAt))[0];
+  const date = (iso: string) =>
+    formatBerlinDate(iso, locale, { day: 'numeric', month: 'long', year: 'numeric' });
+
+  const confirmRevoke = (type: ConsentType) =>
+    Alert.alert(
+      t('privacy.revokeConfirmTitle'),
+      type === 'health_data' ? t('privacy.revokeHealthBody') : '',
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('privacy.revoke'),
+          style: 'destructive',
+          onPress: async () => {
+            await revoke.mutateAsync(type);
+            toast.show(t('privacy.revoked'), 'success');
+          },
+        },
+      ],
+    );
+
+  const exportData = async () => {
+    try {
+      const data = await repo.exportData();
+      await Share.share({ title: 'mednow-export.json', message: JSON.stringify(data, null, 2) });
+      toast.show(t('privacy.exportReady'), 'success');
+    } catch {
+      toast.show(t('errors.generic'), 'error');
+    }
+  };
+
+  const deleteAll = () =>
+    Alert.alert(t('privacy.deleteConfirmTitle'), t('privacy.deleteConfirmBody'), [
+      { text: t('common.cancel'), style: 'cancel' },
+      {
+        text: t('privacy.deleteConfirm'),
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await repo.deleteAccount();
+            client.clear();
+            prefs.reset();
+            toast.show(t('privacy.deleted'), 'success');
+            router.replace('/onboarding');
+          } catch {
+            toast.show(t('errors.generic'), 'error');
+          }
+        },
+      },
+    ]);
+
+  return (
+    <ScrollView style={styles.root} contentContainerStyle={styles.content} testID="privacy-center">
+      <Text variant="body" color="textSecondary">
+        {t('privacy.intro')}
+      </Text>
+
+      <View style={styles.section}>
+        <SectionHeader title={t('privacy.consents')} />
+        {consents.isLoading ? (
+          <Skeleton height={120} />
+        ) : (
+          SHOWN.map((type) => {
+            const c = latest(type);
+            const active = c && !c.revokedAt;
+            if (type === 'crash_reports') {
+              return (
+                <Card key={type} padding="none">
+                  <ListRow
+                    title={t('privacy.crashReports')}
+                    subtitle={t('privacy.crashReportsHint')}
+                    switchValue={prefs.crashReportsOptIn}
+                    onSwitch={(v) => prefs.set({ crashReportsOptIn: v })}
+                  />
+                </Card>
+              );
+            }
+            return (
+              <Card key={type} testID={`consent-${type}`}>
+                <Text variant="bodyStrong">{t(`privacy.types.${type}`)}</Text>
+                <Text variant="small" color="textSecondary">
+                  {!c
+                    ? t('privacy.consentNone')
+                    : c.revokedAt
+                      ? t('privacy.consentRevoked', { date: date(c.revokedAt) })
+                      : t('privacy.consentGranted', {
+                          date: date(c.grantedAt),
+                          version: c.version,
+                        })}
+                </Text>
+                {active ? (
+                  <Button
+                    variant="text"
+                    label={t('privacy.revoke')}
+                    onPress={() => confirmRevoke(type)}
+                    style={styles.inlineButton}
+                  />
+                ) : null}
+              </Card>
+            );
+          })
+        )}
+      </View>
+
+      <Card tone="muted">
+        <View style={styles.row}>
+          <MapPin size={18} color={theme.colors.primary} strokeWidth={2} />
+          <View style={styles.flex}>
+            <Text variant="bodyStrong">{t('privacy.location')}</Text>
+            <Text variant="small" color="textSecondary">
+              {t('privacy.locationHint')}
+            </Text>
+          </View>
+        </View>
+      </Card>
+
+      <Card padding="none">
+        <ListRow
+          icon={Download}
+          title={t('privacy.export')}
+          subtitle={t('privacy.exportHint')}
+          onPress={() => void exportData()}
+          testID="export-data"
+        />
+        <Divider inset={64} />
+        <ListRow
+          icon={Trash}
+          title={t('privacy.deleteAccount')}
+          destructive
+          onPress={deleteAll}
+          testID="delete-account"
+        />
+      </Card>
+
+      <View style={styles.row}>
+        <TriangleAlert size={16} color={theme.colors.textSecondary} strokeWidth={2} />
+        <Text variant="caption" color="textSecondary" style={styles.flex}>
+          {t('legal.placeholder')}
+        </Text>
+      </View>
+    </ScrollView>
+  );
+}
+
+const useStyles = makeStyles((t) => ({
+  root: { flex: 1, backgroundColor: t.colors.background },
+  content: { padding: t.layout.screenPadding, gap: t.space.lg, paddingBottom: t.space.huge },
+  section: { gap: t.space.sm },
+  row: { flexDirection: 'row', alignItems: 'flex-start', gap: t.space.sm },
+  flex: { flex: 1, gap: 2 },
+  inlineButton: { alignSelf: 'flex-start', marginTop: t.space.xs },
+}));

@@ -23,14 +23,14 @@ NativeWind 4.2 (stabil) basiert auf Tailwind v3; NativeWind 5 (Tailwind v4) ist 
 **D-06 · Kontrast: erwartete minimale Anpassungen (Vorabprüfung).**
 Eine Vorabrechnung der Vorgabe-Palette zeigt, wo `scripts/check-contrast.ts` in Phase 1 anschlagen wird:
 
-| Paar | Kontrast | Ziel | Geplante Anpassung (minimal, Phase 1) |
-|---|---|---|---|
-| frei `#15803D` auf frei-weich `#DCF5E6` | 4,36 | 4,5 | Text auf weicher Fläche minimal abdunkeln |
-| wenige `#B45309` auf wenige-weich `#FDEFD3` | 4,42 | 4,5 | Text minimal abdunkeln |
-| Primär `#0F766E` auf Primär-weich `#DDF1EE` | 4,66 | 4,5 | ok |
-| unbekannt `#64748B` auf Hintergrund `#F7F5F0` / gedämpft `#EEF3F1` | 4,37 / 4,24 | 4,5 | minimal abdunkeln |
-| unbekannt `#64748B` auf dunkler Fläche `#121E1C` | 3,59 | 4,5 | eigener Dunkel-Wert (heller) |
-| Rahmen `#DCE4E1` auf Fläche (hell) / `#26403C` (dunkel) | 1,29 / 1,53 | 3,0 für Bedien-Grenzen | `border` bleibt dekorativ (Karten); neues Token `borderStrong` (≥ 3:1) für Eingabefelder, Chips, Fokusringe |
+| Paar                                                               | Kontrast    | Ziel                   | Geplante Anpassung (minimal, Phase 1)                                                                       |
+| ------------------------------------------------------------------ | ----------- | ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| frei `#15803D` auf frei-weich `#DCF5E6`                            | 4,36        | 4,5                    | Text auf weicher Fläche minimal abdunkeln                                                                   |
+| wenige `#B45309` auf wenige-weich `#FDEFD3`                        | 4,42        | 4,5                    | Text minimal abdunkeln                                                                                      |
+| Primär `#0F766E` auf Primär-weich `#DDF1EE`                        | 4,66        | 4,5                    | ok                                                                                                          |
+| unbekannt `#64748B` auf Hintergrund `#F7F5F0` / gedämpft `#EEF3F1` | 4,37 / 4,24 | 4,5                    | minimal abdunkeln                                                                                           |
+| unbekannt `#64748B` auf dunkler Fläche `#121E1C`                   | 3,59        | 4,5                    | eigener Dunkel-Wert (heller)                                                                                |
+| Rahmen `#DCE4E1` auf Fläche (hell) / `#26403C` (dunkel)            | 1,29 / 1,53 | 3,0 für Bedien-Grenzen | `border` bleibt dekorativ (Karten); neues Token `borderStrong` (≥ 3:1) für Eingabefelder, Chips, Fokusringe |
 
 Alle übrigen Text-Paare liegen über 4,5:1 (z. B. Text primär auf Hintergrund 15,2:1, Weiß auf Primär 5,5:1, Text auf Coral 6,5:1). Das Skript passt nicht automatisch an; es meldet und die Anpassung wird im Token-File dokumentiert.
 
@@ -95,3 +95,46 @@ Keine Kombination aus realen Praxen (z. B. OSM) mit erfundener Verfügbarkeit, w
 
 **D-27 · Praxis-Dashboard (Phase 6): Vite + React SPA statt Next.js.**
 Kein SSR-Bedarf, einfache statische EU-Auslieferung, gleiche Supabase-Auth/RLS. Endgültig bestätigt zu Beginn von Phase 6.
+
+---
+
+## Entscheidungen während der Umsetzung (Phasen 1–6)
+
+**D-28 · Schriften zur Laufzeit aus lokalen Assets laden (ersetzt D-23).**
+Beim Einbetten per Config-Plugin unterscheiden sich die Font-Family-Namen zwischen iOS (PostScript-Name) und Android (Dateiname). `useFonts` mit festen Schlüsseln (`Inter_400Regular` …) ist auf iOS, Android und Web identisch. Die vier Schnitte werden einzeln importiert (nicht das ganze Paket) und liegen im App-Bundle – kein Netzwerk, der Splash bleibt sichtbar, bis sie geladen sind.
+
+**D-29 · Routen unter `src/app/` (statt `app/`).**
+Standard des SDK-57-Templates; Expo Router erkennt `src/app` automatisch. Routen bleiben dünn und rendern Feature-Screens aus `src/features/*`.
+
+**D-30 · Schema `app` ist über die API erreichbar – aber nur für `service_role`.**
+Edge Functions rufen die security-definer-Funktionen per supabase-js (`db: { schema: 'app' }`) auf. Alle mutierenden Funktionen sind für `anon`/`authenticated` widerrufen, alle Tabellen in `app` haben RLS ohne Policies. `config.toml` → `api.schemas` enthält `app` (gehostet: `supabase config push` oder Dashboard → API → Exposed schemas).
+
+**D-31 · Web-Vorschau mit JS-Tabs (`TabsLayout.web.tsx`).**
+Native Tabs werden im Web oben angezeigt; für die Entwicklungs-Vorschau und Screenshots gibt es eine klassische Tab-Bar unten. Gleichzeitig der dokumentierte Fallback für D-07.
+
+**D-32 · Demo-Slots erzeugt die Datenbank selbst (`app.demo_generate_slots`).**
+Statische Stammdaten (Praxen, Ärzte, Profile) kommen aus dem TS-Generator (`supabase/seed.sql`, identische IDs). Slots erzeugt eine SQL-Funktion mit deterministischem Hash und rollt sie nachts weiter – ohne Node-Prozess im Betrieb. Die konkreten Demo-Slots in App-Demo und Datenbank können sich daher unterscheiden.
+
+**D-33 · Demo-Modus simuliert die Warteliste.**
+Ohne Backend gibt es keine anderen Nutzenden. Nach dem Eintragen wird nach ~20 s ein passender Termin „frei“ (fiktive Stornierung), es folgen Angebot, lokale Mitteilung und 10-Minuten-Countdown – der echte Ablauf ist in SQL umgesetzt und getestet (`05_waitlist.test.sql`).
+
+**D-34 · Fiktive Telefonnummern aus dem für Film/Fernsehen reservierten Bereich (069 90009 xxx).**
+„Anrufen“ funktioniert in der Demo, erreicht aber niemanden.
+
+**D-35 · Push-Tokens speichern Sprache und du/Sie.**
+Der Server kennt sonst die Sprache nicht. Die Texte bleiben datensparsam (keine Praxis/Fachrichtung).
+
+**D-36 · Buchen erfordert eine bestätigte E-Mail (Supabase-Modus).**
+Umsetzung der Empfehlung zu Frage 3: anonyme Sitzung ab Start, vor der ersten Buchung 6-stelliger Code (`updateUser` + `verifyOtp('email_change')`, Nutzer-ID bleibt). Existiert die Adresse schon, Anmeldung per OTP. Die Edge Function prüft `is_anonymous`. Im Demo-Modus entfällt der Schritt.
+
+**D-37 · Kalender über `expo-calendar/legacy` (`createEventInCalendarAsync`).**
+SDK 57 markiert die alte API als veraltet zugunsten von `calendar.addEventWithForm()`, das auf Android keinen Standardkalender kennt. Der Legacy-Import öffnet auf beiden Plattformen den System-Dialog ohne Lese-Berechtigung. Migration in `TODO.md`.
+
+**D-38 · Abgelaufene Wartelisten-Angebote sind nicht sofort frei buchbar.**
+Nur abgelaufene **Checkout**-Holds gelten als frei. Ein abgelaufenes Angebot reicht der Job (alle 30 s) an die nächste Person weiter – sonst könnte jemand ohne Warteliste der nächsten Person in der Schlange zuvorkommen.
+
+**D-39 · Karten-Pins als generierte PNGs mit Status-Symbol (`scripts/generate-map-icons.ts`).**
+Farbe + Symbol (✓ ! × ?) + Uhrzeit als Label – Status nie nur über Farbe, auch auf der Karte.
+
+**D-40 · Optimierter Seed-Generator.**
+Zeitzonen-Rechnungen werden je Tag/Uhrzeit gecacht, Würfe über einen Integer-Mixer: 230 ms → 70 ms (Desktop) für ~7 000 Slots. Die Erzeugung läuft erst nach dem ersten Frame.

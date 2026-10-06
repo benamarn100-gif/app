@@ -1,0 +1,12 @@
+node_modules
+dist
+.expo
+ios
+android
+supabase/seed.sql
+package-lock.json
+dashboard/dist
+supabase/migrations
+supabase/tests
+coverage
+assets
