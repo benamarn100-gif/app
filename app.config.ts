@@ -111,7 +111,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           'MedNow trägt deinen Termin auf Wunsch in deinen Kalender ein.',
       },
     ],
-    ['expo-notifications', { color: colors.light.primary, defaultChannel: 'appointments' }],
+    [
+      'expo-notifications',
+      {
+        // Android: einfarbiges Symbol in der Statusleiste (sonst weißes Quadrat)
+        icon: './assets/notification-icon.png',
+        color: colors.light.primary,
+        defaultChannel: 'appointments',
+      },
+    ],
     '@maplibre/maplibre-react-native',
     // Quellkarten-Upload nur, wenn ein Sentry-Projekt (EU-Region) konfiguriert ist.
     // Das SDK selbst startet erst nach Opt-in (src/lib/monitoring.ts).

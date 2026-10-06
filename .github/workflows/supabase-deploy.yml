@@ -1,0 +1,133 @@
+name: Supabase bereitstellen (Frankfurt)
+
+# Richtet ein vorhandenes Supabase-Projekt (Region eu-central-1) ein bzw. aktualisiert es:
+# Auth-Konfiguration, Migrationen (+ Demo-Daten), Vault-Secrets, Edge Functions.
+# Wiederholbar: Secrets werden nur angelegt, wenn sie fehlen – der Feldschlüssel wird nie ersetzt.
+#
+# GitHub → Settings → Secrets and variables → Actions:
+#   Secrets:   SUPABASE_ACCESS_TOKEN (supabase.com/dashboard/account/tokens)
+#              SUPABASE_DB_PASSWORD  (beim Anlegen des Projekts vergeben)
+#              EXPO_ACCESS_TOKEN     (optional, für Push über Expo – docs/push-setup.md)
+#   Variable:  SUPABASE_PROJECT_REF  (z. B. abcdefghijklmnopqrst)
+# Kein Service-Role-Key nötig – und er gehört nie in die App oder ins Repository.
+
+on:
+  workflow_dispatch:
+    inputs:
+      seed:
+        description: 'Demo-Daten einspielen (nur beim ersten Mal sinnvoll)'
+        type: boolean
+        default: false
+      config:
+        description: 'Auth-Konfiguration übertragen (config.toml)'
+        type: boolean
+        default: true
+      functions:
+        description: 'Edge Functions bereitstellen'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Bereitstellen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+    steps:
+      - name: Zugangsdaten prüfen
+        run: |
+          missing=0
+          for name in SUPABASE_ACCESS_TOKEN SUPABASE_DB_PASSWORD PROJECT_REF; do
+            if [ -z "${!name}" ]; then echo "::error::$name fehlt (siehe Kopf dieser Datei)"; missing=1; fi
+          done
+          exit $missing
+
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Region prüfen (nur Frankfurt)
+        run: |
+          region="$(curl -fsS -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+            "https://api.supabase.com/v1/projects/$PROJECT_REF" | jq -r '.region')"
+          echo "Region: $region"
+          if [ "$region" != "eu-central-1" ]; then
+            echo "::error::Projekt liegt in $region – Gesundheitsdaten nur in eu-central-1 (Frankfurt)."
+            exit 1
+          fi
+
+      - name: Projekt verknüpfen
+        run: supabase link --project-ref "$PROJECT_REF"
+
+      - name: Auth-Konfiguration übertragen
+        if: inputs.config
+        run: supabase config push --yes
+
+      - name: Migrationen
+        run: |
+          if [ "${{ inputs.seed }}" = "true" ]; then
+            supabase db push --include-seed --yes
+          else
+            supabase db push --yes
+          fi
+
+      - name: Vault-Secrets anlegen (falls fehlend)
+        run: |
+          sql=$(cat <<'SQL'
+          do $$
+          begin
+            if not exists (select 1 from vault.secrets where name = 'mednow_field_key') then
+              perform vault.create_secret(encode(extensions.gen_random_bytes(32), 'base64'), 'mednow_field_key');
+            end if;
+            if not exists (select 1 from vault.secrets where name = 'mednow_worker_secret') then
+              perform vault.create_secret(encode(extensions.gen_random_bytes(32), 'hex'), 'mednow_worker_secret');
+            end if;
+            if not exists (select 1 from vault.secrets where name = 'mednow_functions_url') then
+              perform vault.create_secret('https://__REF__.supabase.co/functions/v1', 'mednow_functions_url');
+            end if;
+          end $$;
+          SQL
+          )
+          sql="${sql//__REF__/$PROJECT_REF}"
+          jq -n --arg q "$sql" '{query: $q}' | curl -fsS -X POST \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
+            --data @- "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" > /dev/null
+          echo "Vault-Secrets vorhanden."
+
+      - name: Edge-Function-Secrets
+        if: inputs.functions
+        env:
+          EXPO_ACCESS_TOKEN: ${{ secrets.EXPO_ACCESS_TOKEN }}
+        run: |
+          worker="$(jq -n --arg q "select decrypted_secret as s from vault.decrypted_secrets where name = 'mednow_worker_secret'" '{query: $q}' \
+            | curl -fsS -X POST -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
+              --data @- "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" | jq -r '.[0].s')"
+          [ -n "$worker" ] && [ "$worker" != "null" ] || { echo "::error::mednow_worker_secret nicht lesbar"; exit 1; }
+          echo "::add-mask::$worker"
+          args=("WORKER_SECRET=$worker")
+          if [ -n "$EXPO_ACCESS_TOKEN" ]; then args+=("EXPO_ACCESS_TOKEN=$EXPO_ACCESS_TOKEN"); fi
+          supabase secrets set --project-ref "$PROJECT_REF" "${args[@]}"
+
+      - name: Edge Functions
+        if: inputs.functions
+        run: supabase functions deploy --project-ref "$PROJECT_REF" --use-api
+
+      - name: Zusammenfassung
+        run: |
+          {
+            echo "### Supabase (Frankfurt) bereit"
+            echo "- URL: https://$PROJECT_REF.supabase.co"
+            echo "- App: \`EXPO_PUBLIC_SUPABASE_URL\` = URL oben, \`EXPO_PUBLIC_SUPABASE_ANON_KEY\` = *Publishable/anon key* aus Project Settings → API Keys"
+            echo "- Nie den Service-Role-Key in App oder Repository."
+          } >> "$GITHUB_STEP_SUMMARY"
