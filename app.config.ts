@@ -8,13 +8,24 @@ import { colors } from './src/design/tokens';
 
 /**
  * App-Konfiguration. Markenname zentral in src/config/brand.ts.
- * EAS: EAS_PROJECT_ID setzen (eas init), dann `eas build` / `eas update`.
+ *
+ * Umgebungsvariablen (Build-Zeit, keine Geheimnisse – siehe docs/test-builds.md):
+ * - EAS_PROJECT_ID / EXPO_OWNER: anderes Expo-Projekt als das Standardprojekt (Updates, Push-Token)
+ * - APP_VARIANT=preview: Testversion („MedNow Test“, Diagnose-Seite)
+ * - GOOGLE_SERVICES_JSON: Pfad zur Firebase-Datei (EAS-Umgebungsvariable vom Typ „Datei“),
+ *   nötig für Push auf Android
  */
-const projectId = process.env.EAS_PROJECT_ID;
+/** Expo-Projekt (expo.dev). Kein Geheimnis – die ID steht auch im App-Bundle. */
+const DEFAULT_PROJECT_ID = '2fc9f403-cc00-478b-876d-9e2f6b78d1ab';
+const projectId = process.env.EAS_PROJECT_ID?.trim() || DEFAULT_PROJECT_ID;
+const owner = process.env.EXPO_OWNER?.trim() || undefined;
+const isPreview = process.env.APP_VARIANT === 'preview';
+const googleServicesFile = process.env.GOOGLE_SERVICES_JSON?.trim() || undefined;
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: brand.name,
+  ...(owner ? { owner } : {}),
+  name: isPreview ? `${brand.name} Test` : brand.name,
   slug: brand.slug,
   scheme: brand.scheme,
   version: '0.1.0',
@@ -58,6 +69,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.RECORD_AUDIO',
     ],
     predictiveBackGestureEnabled: true,
+    ...(googleServicesFile ? { googleServicesFile } : {}),
   },
   web: {
     favicon: './assets/favicon.png',
@@ -120,10 +132,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     typedRoutes: true,
   },
   runtimeVersion: { policy: 'appVersion' },
-  ...(projectId
-    ? {
-        updates: { url: `https://u.expo.dev/${projectId}` },
-        extra: { eas: { projectId } },
-      }
-    : {}),
+  // Beim Start wird nicht auf Updates gewartet (Kaltstart < 2 s); ein neues Update
+  // gilt ab dem nächsten Start. EXPO_NO_UPDATES=1 schaltet sie ab (Builds ohne EAS).
+  updates:
+    process.env.EXPO_NO_UPDATES === '1'
+      ? { enabled: false }
+      : {
+          url: `https://u.expo.dev/${projectId}`,
+          checkAutomatically: 'ON_LOAD',
+          fallbackToCacheTimeout: 0,
+        },
+  extra: { eas: { projectId } },
 });

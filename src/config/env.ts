@@ -14,6 +14,8 @@ const schema = z.object({
   mapStyleUrl: z.url(),
   sentryDsn: z.url().optional(),
   demoCity: z.string(),
+  /** Testversionen: Diagnose-Seite und Startzeit-Messung (docs/test-builds.md). */
+  diagnostics: z.boolean(),
 });
 
 export type Env = z.infer<typeof schema>;
@@ -38,6 +40,7 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
       'https://tiles.openfreemap.org/styles/positron',
     sentryDsn: emptyToUndefined(source.EXPO_PUBLIC_SENTRY_DSN),
     demoCity: emptyToUndefined(source.EXPO_PUBLIC_DEMO_CITY) ?? 'fulda',
+    diagnostics: emptyToUndefined(source.EXPO_PUBLIC_DIAGNOSTICS) === '1',
   });
 }
 
@@ -49,6 +52,7 @@ export const env: Env = parseEnv({
   EXPO_PUBLIC_MAP_STYLE_URL: process.env.EXPO_PUBLIC_MAP_STYLE_URL,
   EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
   EXPO_PUBLIC_DEMO_CITY: process.env.EXPO_PUBLIC_DEMO_CITY,
+  EXPO_PUBLIC_DIAGNOSTICS: process.env.EXPO_PUBLIC_DIAGNOSTICS,
 });
 
 export const demoCity = resolveCity(env.demoCity);
