@@ -16,9 +16,8 @@
 
 ### Backend (Supabase, Region eu-central-1)
 
-- [ ] Projekt anlegen, `supabase link`, `supabase config push` (Auth: anonyme Anmeldung, E-Mail-Codes, MFA/TOTP, Vorlagen), `supabase db push --include-seed` – Schritte im `README.md`.
-- [ ] Vault-Secrets `mednow_field_key`, `mednow_functions_url`, `mednow_worker_secret`; Edge-Function-Secrets `WORKER_SECRET`, optional `EXPO_ACCESS_TOKEN`.
-- [ ] Erweiterungen `pg_cron` und `pg_net` im Projekt aktivieren und danach den Job-Block aus `20261006000700_demo_and_jobs.sql` erneut ausführen (Jobs werden nur angelegt, wenn die Erweiterungen verfügbar sind).
+- [ ] Projekt in Frankfurt anlegen, GitHub-Secrets setzen, Workflow „Supabase bereitstellen (Frankfurt)“ ausführen (Konfiguration, Migrationen, Vault-Secrets, Edge Functions – `docs/supabase-setup.md`).
+- [ ] Danach prüfen: Erweiterungen `pg_cron`/`pg_net` aktiv, 5 Cron-Jobs angelegt, 7 Edge Functions bereit.
 - [ ] Eigenen SMTP-Anbieter mit Sitz/Servern in der EU hinterlegen (Supabase-Standard-SMTP ist nur für Tests).
 - [ ] Point-in-Time-Recovery/Backups, Auth-Rate-Limits und Log-Aufbewahrung im Projekt prüfen.
 - [ ] Demo-Daten (`is_demo`) vor dem Livegang entfernen oder klar getrennt betreiben.
@@ -28,8 +27,8 @@
 - [x] Expo-Projekt verknüpft (`extra.eas.projectId`), Testprofile und EAS Update eingerichtet (`docs/test-builds.md`).
 - [ ] Expo-Projekt auf expo.dev mit dem GitHub-Repository verbinden (für Builds aus dem Repository).
 - [ ] Bundle-ID/Package (`brand.ts`) final, bevor die erste Store-Version entsteht.
-- [ ] Push: APNs-Key (iOS) und FCM-V1-Dienstkonto (Android) in EAS hinterlegen; Zustellung und datensparsame Sperrbildschirm-Texte auf Geräten prüfen.
-- [ ] Produktions-Kartenstil auf eigenem EU-Tileserver (`EXPO_PUBLIC_MAP_STYLE_URL`), OSM-Attribution sichtbar lassen.
+- [ ] Push: `google-services.json` als EAS-Datei-Variable, FCM-V1-Dienstkonto und APNs-Key in EAS, `EXPO_ACCESS_TOKEN` für die Edge Function; Zustellung und Sperrbildschirm-Texte auf Geräten prüfen (`docs/push-setup.md`).
+- [ ] Kartenspeicher in der EU anlegen, Workflow „Kartenkacheln bereitstellen (EU)“ ausführen, `EXPO_PUBLIC_MAP_STYLE_URL(_DARK)` setzen; OSM-Attribution sichtbar lassen (`docs/map-tiles.md`).
 - [ ] Sentry: Organisation in der EU-Region, DSN als `EXPO_PUBLIC_SENTRY_DSN`, „Prevent Storing of IP Addresses“ aktivieren, `SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN` als EAS-Secrets für Quellkarten (Metro-Konfiguration `getSentryExpoConfig` ergänzen).
 - [ ] Store-Angaben: Apple App Privacy, Google Data Safety, Gesundheits-App-Richtlinien, Screenshots, Altersfreigabe.
 

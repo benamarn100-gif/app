@@ -114,7 +114,9 @@ export const PracticeMap = forwardRef<PracticeMapHandle, Props>(function Practic
     >
       <Map
         style={StyleSheet.absoluteFill}
-        mapStyle={env.mapStyleUrl}
+        mapStyle={
+          theme.scheme === 'dark' && env.mapStyleUrlDark ? env.mapStyleUrlDark : env.mapStyleUrl
+        }
         attribution
         attributionPosition={{ bottom: bottomInset + 8, right: 8 }}
         logo={false}

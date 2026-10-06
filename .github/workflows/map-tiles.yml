@@ -1,0 +1,139 @@
+name: Kartenkacheln bereitstellen (EU)
+
+# Eigener Kartenspeicher in der EU: Deutschland-Ausschnitt der Protomaps-Basiskarte (OpenStreetMap,
+# ODbL) als eine PMTiles-Datei, dazu Stile (hell/dunkel, deutsche Beschriftung), Schriften und Symbole.
+# Alles landet in einem S3-kompatiblen Speicher in der EU (z. B. Hetzner Object Storage, IONOS S3) –
+# die App lädt danach keine Karteninhalte mehr von Dritten. Details: docs/map-tiles.md
+#
+# GitHub → Settings → Secrets and variables → Actions:
+#   Secrets:   TILES_S3_ACCESS_KEY, TILES_S3_SECRET_KEY
+#   Variablen: TILES_S3_ENDPOINT (z. B. https://fsn1.your-objectstorage.com),
+#              TILES_S3_BUCKET   (z. B. mednow-karten),
+#              TILES_PUBLIC_URL  (öffentliche Basis-URL, z. B. https://mednow-karten.fsn1.your-objectstorage.com)
+
+on:
+  workflow_dispatch:
+    inputs:
+      bbox:
+        description: 'Ausschnitt (minLon,minLat,maxLon,maxLat) – Standard: Deutschland mit Rand'
+        type: string
+        default: '5.8,47.2,15.1,55.1'
+      maxzoom:
+        description: 'Höchste Zoomstufe (15 = Hausnummern; jede Stufe ~verdoppelt die Größe)'
+        type: string
+        default: '15'
+  schedule:
+    # Monatlich aktualisieren (1. des Monats, 03:17 UTC)
+    - cron: '17 3 1 * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: map-tiles
+  cancel-in-progress: false
+
+jobs:
+  tiles:
+    name: Kacheln, Stile, Schriften
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.TILES_S3_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.TILES_S3_SECRET_KEY }}
+      AWS_DEFAULT_REGION: eu-central-1
+      ENDPOINT: ${{ vars.TILES_S3_ENDPOINT }}
+      BUCKET: ${{ vars.TILES_S3_BUCKET }}
+      PUBLIC_URL: ${{ vars.TILES_PUBLIC_URL }}
+      BBOX: ${{ inputs.bbox || '5.8,47.2,15.1,55.1' }}
+      MAXZOOM: ${{ inputs.maxzoom || '15' }}
+    steps:
+      - name: Zugangsdaten prüfen
+        run: |
+          missing=0
+          for name in AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY ENDPOINT BUCKET PUBLIC_URL; do
+            if [ -z "${!name}" ]; then echo "::error::$name fehlt (siehe Kopf dieser Datei)"; missing=1; fi
+          done
+          exit $missing
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - run: npm ci
+
+      - name: pmtiles-Werkzeug
+        run: |
+          go install github.com/protomaps/go-pmtiles@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Neuesten Protomaps-Build finden
+        id: build
+        run: |
+          for i in $(seq 0 14); do
+            day="$(date -u -d "-$i day" +%Y%m%d)"
+            if curl -fsI "https://build.protomaps.com/$day.pmtiles" > /dev/null; then
+              echo "url=https://build.protomaps.com/$day.pmtiles" >> "$GITHUB_OUTPUT"
+              echo "day=$day" >> "$GITHUB_OUTPUT"
+              echo "Build: $day"
+              exit 0
+            fi
+          done
+          echo "::error::Kein Protomaps-Build der letzten 14 Tage gefunden"; exit 1
+
+      - name: Ausschnitt erzeugen
+        run: |
+          mkdir -p out
+          go-pmtiles extract "${{ steps.build.outputs.url }}" out/germany.pmtiles \
+            --bbox="$BBOX" --maxzoom="$MAXZOOM" --download-threads=8
+          go-pmtiles verify out/germany.pmtiles
+          go-pmtiles show out/germany.pmtiles | head -20
+          du -h out/germany.pmtiles
+
+      - name: Stile erzeugen
+        run: npx tsx scripts/build-map-style.ts "$PUBLIC_URL" out germany.pmtiles
+
+      - name: Schriften und Symbole
+        run: |
+          git clone --depth 1 https://github.com/protomaps/basemaps-assets.git assets-src
+          mkdir -p out/fonts out/sprites/v4
+          for font in "Noto Sans Regular" "Noto Sans Medium" "Noto Sans Italic" "Noto Sans Devanagari Regular v1"; do
+            cp -r "assets-src/fonts/$font" out/fonts/
+          done
+          cp assets-src/sprites/v4/light* assets-src/sprites/v4/dark* out/sprites/v4/
+          cp assets-src/LICENSE* out/ 2>/dev/null || true
+
+      - name: Hochladen
+        run: |
+          s3="aws s3 --endpoint-url $ENDPOINT"
+          # Kacheln: einen Tag zwischenspeichern (monatliche Aktualisierung), Stile/Schriften ebenso
+          $s3 cp out/germany.pmtiles "s3://$BUCKET/germany.pmtiles" \
+            --acl public-read --content-type application/vnd.pmtiles --cache-control "public, max-age=86400"
+          $s3 sync out/fonts "s3://$BUCKET/fonts" --acl public-read \
+            --content-type application/x-protobuf --cache-control "public, max-age=2592000"
+          $s3 sync out/sprites "s3://$BUCKET/sprites" --acl public-read --cache-control "public, max-age=86400"
+          for f in out/style-*.json; do
+            $s3 cp "$f" "s3://$BUCKET/$(basename "$f")" --acl public-read \
+              --content-type application/json --cache-control "public, max-age=3600"
+          done
+
+      - name: Erreichbarkeit prüfen
+        run: |
+          curl -fsS "$PUBLIC_URL/style-light.json" | jq -e '.version == 8' > /dev/null
+          # PMTiles braucht Bereichsanfragen (HTTP 206) und CORS für Web-Clients
+          status="$(curl -s -o /dev/null -w '%{http_code}' -H 'Range: bytes=0-126' "$PUBLIC_URL/germany.pmtiles")"
+          [ "$status" = "206" ] || { echo "::error::Range-Anfrage liefert $status statt 206"; exit 1; }
+          curl -fsS -o /dev/null "$PUBLIC_URL/fonts/Noto%20Sans%20Regular/0-255.pbf"
+
+      - name: Zusammenfassung
+        run: |
+          {
+            echo "### Kartenspeicher bereit (Protomaps-Build ${{ steps.build.outputs.day }})"
+            echo "- Größe: $(du -h out/germany.pmtiles | cut -f1), Ausschnitt $BBOX, Zoom bis $MAXZOOM"
+            echo "- \`EXPO_PUBLIC_MAP_STYLE_URL\` = $PUBLIC_URL/style-light.json"
+            echo "- \`EXPO_PUBLIC_MAP_STYLE_URL_DARK\` = $PUBLIC_URL/style-dark.json"
+          } >> "$GITHUB_STEP_SUMMARY"

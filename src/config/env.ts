@@ -13,6 +13,8 @@ const schema = z.object({
   supabaseUrl: z.url().optional(),
   supabaseAnonKey: z.string().min(20).optional(),
   mapStyleUrl: z.url(),
+  /** Optional: dunkler Kartenstil (eigener Kachelspeicher, docs/map-tiles.md) */
+  mapStyleUrlDark: z.url().optional(),
   sentryDsn: z.url().optional(),
   demoCity: z.string(),
   /** Testversionen: Diagnose-Seite und Startzeit-Messung (docs/test-builds.md). */
@@ -39,6 +41,7 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
     mapStyleUrl:
       emptyToUndefined(source.EXPO_PUBLIC_MAP_STYLE_URL) ??
       'https://tiles.openfreemap.org/styles/positron',
+    mapStyleUrlDark: emptyToUndefined(source.EXPO_PUBLIC_MAP_STYLE_URL_DARK),
     sentryDsn: emptyToUndefined(source.EXPO_PUBLIC_SENTRY_DSN),
     demoCity: emptyToUndefined(source.EXPO_PUBLIC_DEMO_CITY) ?? 'fulda',
     diagnostics: emptyToUndefined(source.EXPO_PUBLIC_DIAGNOSTICS) === '1',
@@ -58,6 +61,7 @@ export const env: Env = parseEnv({
   EXPO_PUBLIC_SUPABASE_URL: process.env.EXPO_PUBLIC_SUPABASE_URL,
   EXPO_PUBLIC_SUPABASE_ANON_KEY: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
   EXPO_PUBLIC_MAP_STYLE_URL: process.env.EXPO_PUBLIC_MAP_STYLE_URL,
+  EXPO_PUBLIC_MAP_STYLE_URL_DARK: process.env.EXPO_PUBLIC_MAP_STYLE_URL_DARK,
   EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
   EXPO_PUBLIC_DEMO_CITY: process.env.EXPO_PUBLIC_DEMO_CITY,
   EXPO_PUBLIC_DIAGNOSTICS: process.env.EXPO_PUBLIC_DIAGNOSTICS || testChannel,

@@ -44,6 +44,9 @@ Konfiguration: `.env.example` nach `.env.local` kopieren (Demo-Stadt, Kartenstil
 
 ## Mit Supabase (echtes Backend)
 
+Am einfachsten über den GitHub-Workflow „Supabase bereitstellen (Frankfurt)“: **`docs/supabase-setup.md`**.
+Push-Zugänge: `docs/push-setup.md`. Eigener Kartenspeicher in der EU: `docs/map-tiles.md`. Manuell:
+
 1. Projekt auf [supabase.com](https://supabase.com) anlegen – **Region: Central EU (Frankfurt), eu-central-1**.
 2. CLI verbinden und Datenbank aufsetzen:
    ```bash
