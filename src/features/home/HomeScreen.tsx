@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { ChevronRight, MapPin, Zap } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -21,6 +20,7 @@ import {
   Stagger,
   Text,
 } from '@/components';
+import { ChevronRight, MapPin, Zap } from '@/components/icons';
 import { useAppointments, useAvailabilitySearch } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { rankAcute } from '@/domain/ranking/acute';

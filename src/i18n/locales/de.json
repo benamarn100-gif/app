@@ -283,6 +283,7 @@
     "holdNotice_formal": "Wir halten den Termin {{minutes}} Minuten für Sie.",
     "holdRemaining": "Noch {{time}} reserviert",
     "holdRemainingA11y": "Reservierung läuft noch {{minutes}} Minuten",
+    "holdEndingA11y": "Noch eine Minute, dann wird der Termin wieder freigegeben.",
     "holding": "Termin wird reserviert",
     "patientTitle": "Für wen ist der Termin?",
     "patientSelf": "Für mich",
@@ -413,7 +414,8 @@
     "expired_formal": "Diese Reservierung ist abgelaufen. Sie bleiben auf der Warteliste.",
     "declined": "Alles klar. Wir geben den Termin weiter und melden uns beim nächsten.",
     "pending": "Offenes Angebot",
-    "pendingA11y": "Offenes Terminangebot, läuft noch {{minutes}} Minuten"
+    "pendingA11y": "Offenes Terminangebot, läuft noch {{minutes}} Minuten",
+    "endingA11y": "Noch eine Minute, dann geht der Termin an die nächste Person."
   },
   "notifications": {
     "offerTitle": "MedNow",
@@ -476,8 +478,8 @@
     "revokeHealthBody": "Ohne diese Einwilligung kannst du keine neuen Termine buchen. Bestehende Termine bleiben bestehen.",
     "revokeHealthBody_formal": "Ohne diese Einwilligung können Sie keine neuen Termine buchen. Bestehende Termine bleiben bestehen.",
     "revoked": "Einwilligung widerrufen.",
-    "crashReports": "Anonyme Absturzberichte senden",
-    "crashReportsHint": "Hilft uns, Fehler zu beheben. Ohne Namen, Termine oder Standort. Server in Frankfurt.",
+    "crashReports": "Absturzberichte senden",
+    "crashReportsHint": "Hilft uns, Fehler zu beheben. Ohne Namen, Kontaktdaten, Termine oder Standort. Server in der EU (Frankfurt).",
     "export": "Meine Daten exportieren",
     "exportHint": "Eine Datei mit allem, was wir über dich gespeichert haben.",
     "exportHint_formal": "Eine Datei mit allem, was wir über Sie gespeichert haben.",
@@ -494,7 +496,7 @@
       "terms": "Nutzungsbedingungen",
       "privacy": "Datenschutzerklärung",
       "push": "Mitteilungen",
-      "crash_reports": "Anonyme Absturzberichte",
+      "crash_reports": "Absturzberichte",
       "analytics": "Anonyme Nutzungsstatistik"
     }
   },

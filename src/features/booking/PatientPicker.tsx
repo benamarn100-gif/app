@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { UserPlus } from 'lucide-react-native';
 
 import { Button, Chip, Text, TextField, useToast } from '@/components';
+import { UserPlus } from '@/components/icons';
 import { useAddDependent, useDependents } from '@/data/hooks';
 import { makeStyles } from '@/design/theme';
 import { AGE_GROUPS, type AgeGroup } from '@/domain/types';

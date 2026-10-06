@@ -1,7 +1,7 @@
 import { View } from 'react-native';
-import { Accessibility, Check, Languages, ShieldCheck, Star } from 'lucide-react-native';
 
 import { Avatar, Card, FreshnessLabel, Text } from '@/components';
+import { Accessibility, Check, Languages, ShieldCheck, Star } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import { specialtyById } from '@/domain/seed/catalog';
 import { ACCESSIBILITY_FEATURES, WEEKDAYS, type Doctor, type Practice } from '@/domain/types';

@@ -1,5 +1,7 @@
 import { TZDate } from '@date-fns/tz';
-import { addDays, getISOWeek, startOfDay } from 'date-fns';
+import { addDays } from 'date-fns/addDays';
+import { getISOWeek } from 'date-fns/getISOWeek';
+import { startOfDay } from 'date-fns/startOfDay';
 
 import { APP_TIME_ZONE, toBerlin } from '@app/domain/time/berlin';
 

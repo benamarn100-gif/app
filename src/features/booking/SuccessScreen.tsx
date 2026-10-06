@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import Animated, { FadeInDown, useReducedMotion, FadeIn } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Bell, BellRing, CalendarCheck, CalendarPlus, Navigation } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AnimatedCheck, Button, OrganicBackground, Text, useToast } from '@/components';
+import { Bell, BellRing, CalendarCheck, CalendarPlus, Navigation } from '@/components/icons';
 import { useAppointments } from '@/data/hooks';
 import { makeStyles } from '@/design/theme';
 import { AppointmentCard } from '@/features/appointments/AppointmentCard';

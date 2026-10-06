@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 import { router } from 'expo-router';
-import { Bell, Phone } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -18,6 +17,7 @@ import {
   Stagger,
   Text,
 } from '@/components';
+import { Bell, Phone } from '@/components/icons';
 import { useAvailabilitySearch } from '@/data/hooks';
 import { makeStyles } from '@/design/theme';
 import { rankAcute } from '@/domain/ranking/acute';

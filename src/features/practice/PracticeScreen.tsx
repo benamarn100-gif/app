@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Linking, ScrollView, View } from 'react-native';
+import { Linking, ScrollView, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Bell, CalendarCheck, Globe, MapPin, Navigation, Phone } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -19,6 +18,7 @@ import {
   Text,
   useToast,
 } from '@/components';
+import { Bell, CalendarCheck, Globe, MapPin, Navigation, Phone } from '@/components/icons';
 import { STATUS_VISUALS } from '@/components/status';
 import { usePractice, usePracticeSlots, useRealtimeSlots, useSearchCenter } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
@@ -47,6 +47,8 @@ import { SlotPicker } from './SlotPicker';
 export function PracticeScreen() {
   const theme = useTheme();
   const styles = useStyles();
+  // Querformat/niedrige Fenster: Illustration verkleinern, damit Inhalte sichtbar bleiben
+  const compactHero = useWindowDimensions().height < 500;
   const insets = useSafeAreaInsets();
   const { t, locale } = useT();
   const toast = useToast();
@@ -163,8 +165,8 @@ export function PracticeScreen() {
   return (
     <View style={styles.root} testID="practice-screen">
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-        {/* Foto-Header (ohne Foto: warme Illustration) */}
-        <View style={styles.hero}>
+        {/* Foto-Header (ohne Foto: warme Illustration); im Querformat flacher */}
+        <View style={[styles.hero, compactHero && styles.heroCompact]}>
           {practice.photoUrl ? (
             <Image
               source={{ uri: practice.photoUrl }}
@@ -181,7 +183,7 @@ export function PracticeScreen() {
               style={styles.heroImage}
             >
               <View style={styles.heroIllustration}>
-                <IllustrationPractice size={150} />
+                <IllustrationPractice size={compactHero ? 72 : 150} />
               </View>
             </LinearGradient>
           )}
@@ -323,6 +325,7 @@ export function PracticeScreen() {
 const useStyles = makeStyles((t) => ({
   root: { flex: 1, backgroundColor: t.colors.background },
   hero: { height: 180 },
+  heroCompact: { height: 96 },
   heroImage: { ...{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 } },
   heroIllustration: {
     flex: 1,

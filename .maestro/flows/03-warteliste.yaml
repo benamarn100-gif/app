@@ -1,0 +1,80 @@
+# Demo: Rund 20 Sekunden nach dem Eintragen wird ein Termin frei (docs/decisions.md D-33).
+appId: de.mednow.app
+name: Warteliste – Angebot annehmen
+---
+- runFlow: ../subflows/start-demo.yaml
+- tapOn:
+    id: 'tab-search'
+- runFlow:
+    when:
+      visible:
+        id: 'search-map-view'
+    commands:
+      - tapOn:
+          id: 'view-toggle'
+- extendedWaitUntil:
+    visible:
+      id: 'search-result-0'
+    timeout: 15000
+- tapOn:
+    id: 'search-result-0'
+- extendedWaitUntil:
+    visible:
+      id: 'practice-screen'
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      id: 'notify-me'
+    direction: DOWN
+- tapOn:
+    id: 'notify-me'
+- extendedWaitUntil:
+    visible:
+      id: 'waitlist-sheet'
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: 'consent-checkbox'
+    direction: DOWN
+- tapOn:
+    id: 'consent-checkbox'
+- tapOn:
+    id: 'join-waitlist'
+# Vorab-Hinweis zu Mitteilungen: später entscheiden
+- runFlow:
+    when:
+      visible:
+        id: 'push-preprompt'
+    commands:
+      - tapOn:
+          id: 'push-later'
+- tapOn:
+    id: 'tab-appointments'
+- extendedWaitUntil:
+    visible:
+      id: 'pending-offer-.*'
+    timeout: 60000
+- tapOn:
+    id: 'pending-offer-.*'
+    index: 0
+- extendedWaitUntil:
+    visible:
+      id: 'offer-screen'
+    timeout: 10000
+- tapOn:
+    id: 'contact-name'
+- inputText: 'Alex Beispiel'
+- tapOn:
+    id: 'contact-phone'
+- inputText: '0661 123456'
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'accept-offer'
+    direction: DOWN
+- tapOn:
+    id: 'accept-offer'
+- extendedWaitUntil:
+    visible:
+      id: 'booking-success'
+    timeout: 15000

@@ -1,10 +1,11 @@
 import { forwardRef, useState, type ComponentType, type ReactNode } from 'react';
 import { TextInput, View, type TextInputProps } from 'react-native';
-import { CircleAlert, type LucideProps } from 'lucide-react-native';
+import type { LucideProps } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { maxFontScale } from '@/design/tokens';
 
+import { CircleAlert } from './icons';
 import { Text } from './Text';
 
 export type TextFieldProps = Omit<TextInputProps, 'style'> & {

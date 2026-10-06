@@ -1,8 +1,8 @@
 import { ScrollView, View } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { TriangleAlert } from 'lucide-react-native';
 
 import { Card, EmergencyBar, Text } from '@/components';
+import { TriangleAlert } from '@/components/icons';
 import { brand } from '@/config/brand';
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT, type TFn } from '@/i18n/useT';

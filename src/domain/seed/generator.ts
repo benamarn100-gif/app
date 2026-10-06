@@ -1,4 +1,4 @@
-import { addDays } from 'date-fns';
+import { addDays } from 'date-fns/addDays';
 
 import type { CityConfig } from '../../config/city';
 import { destinationPoint } from '../geo/distance';

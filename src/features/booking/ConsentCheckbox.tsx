@@ -1,8 +1,8 @@
 import { View } from 'react-native';
-import { Check } from 'lucide-react-native';
 import { router } from 'expo-router';
 
 import { Button, PressableScale, Text } from '@/components';
+import { Check } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT } from '@/i18n/useT';
 import { haptics } from '@/lib/haptics';

@@ -1,6 +1,9 @@
 import { ScrollView, View } from 'react-native';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { Card, Chip, Divider, ListRow, SectionHeader, SegmentedControl, Text } from '@/components';
 import {
   Accessibility,
   Bell,
@@ -18,10 +21,7 @@ import {
   ShieldCheck,
   Smartphone,
   Users,
-} from 'lucide-react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-import { Card, Chip, Divider, ListRow, SectionHeader, SegmentedControl, Text } from '@/components';
+} from '@/components/icons';
 import { useSearchCenter, useSession } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
 import { makeStyles } from '@/design/theme';

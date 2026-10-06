@@ -1,7 +1,7 @@
 import { View } from 'react-native';
-import { CalendarPlus, Clock, MapPin, Navigation, RotateCcw, Video, X } from 'lucide-react-native';
 
 import { Avatar, Button, Card, DemoBadge, Text } from '@/components';
+import { CalendarPlus, Clock, MapPin, Navigation, RotateCcw, Video, X } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import { specialtyById } from '@/domain/seed/catalog';
 import { formatBerlinTime } from '@/domain/time/berlin';

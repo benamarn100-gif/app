@@ -11,12 +11,12 @@ import {
 import { AccessibilityInfo, Pressable, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp, FadeOut, useReducedMotion } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { CircleAlert, CircleCheck, Info, X } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT } from '@/i18n/useT';
 import { haptics } from '@/lib/haptics';
 
+import { CircleAlert, CircleCheck, Info, X } from './icons';
 import { Text } from './Text';
 
 export type ToastKind = 'success' | 'error' | 'info';

@@ -1,0 +1,6 @@
+# Maestro-Workspace: `maestro test .maestro/` führt alle Abläufe in flows/ aus.
+# Voraussetzung: Development- oder Preview-Build der App (Demo-Modus) auf Simulator/Emulator.
+flows:
+  - 'flows/*'
+executionOrder:
+  continueOnFailure: false

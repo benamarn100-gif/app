@@ -265,6 +265,7 @@
     "holdNotice": "We’re holding this appointment for you for {{minutes}} minutes.",
     "holdRemaining": "Reserved for {{time}}",
     "holdRemainingA11y": "Reservation expires in {{minutes}} minutes",
+    "holdEndingA11y": "One minute left before the appointment is released again.",
     "holding": "Reserving appointment",
     "patientTitle": "Who is the appointment for?",
     "patientSelf": "For me",
@@ -371,7 +372,8 @@
     "expired": "This reservation has expired. You’re still on the waitlist.",
     "declined": "All right. We’ll pass it on and let you know about the next one.",
     "pending": "Open offer",
-    "pendingA11y": "Open appointment offer, {{minutes}} minutes left"
+    "pendingA11y": "Open appointment offer, {{minutes}} minutes left",
+    "endingA11y": "One minute left before the appointment goes to the next person."
   },
   "notifications": {
     "offerTitle": "MedNow",
@@ -427,8 +429,8 @@
     "revokeConfirmTitle": "Withdraw consent?",
     "revokeHealthBody": "Without this consent you can’t book new appointments. Existing appointments remain.",
     "revoked": "Consent withdrawn.",
-    "crashReports": "Send anonymous crash reports",
-    "crashReportsHint": "Helps us fix bugs. No names, appointments or location. Servers in Frankfurt.",
+    "crashReports": "Send crash reports",
+    "crashReportsHint": "Helps us fix bugs. No names, contact details, appointments or location. Servers in the EU (Frankfurt).",
     "export": "Export my data",
     "exportHint": "A file with everything we have stored about you.",
     "exportReady": "Export created.",
@@ -444,7 +446,7 @@
       "terms": "Terms of use",
       "privacy": "Privacy policy",
       "push": "Notifications",
-      "crash_reports": "Anonymous crash reports",
+      "crash_reports": "Crash reports",
       "analytics": "Anonymous usage statistics"
     }
   },

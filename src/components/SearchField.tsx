@@ -1,10 +1,11 @@
 import { forwardRef, useState } from 'react';
 import { Pressable, TextInput, View, type TextInputProps } from 'react-native';
-import { Search, X } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { maxFontScale } from '@/design/tokens';
 import { useT } from '@/i18n/useT';
+
+import { Search, X } from './icons';
 
 type Props = Omit<TextInputProps, 'style' | 'onChangeText' | 'value'> & {
   value: string;

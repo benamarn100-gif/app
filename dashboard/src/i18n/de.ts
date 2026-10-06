@@ -18,6 +18,12 @@ export const de = {
     cancel: 'Abbrechen',
     mainNav: 'Hauptnavigation',
     idleSignedOut: 'Sie wurden nach 30 Minuten ohne Aktivität abgemeldet.',
+    idleWarningTitle: 'Noch da?',
+    idleWarningBody_one:
+      'Zum Schutz der Patientendaten werden Sie in {{count}} Sekunde automatisch abgemeldet.',
+    idleWarningBody_other:
+      'Zum Schutz der Patientendaten werden Sie in {{count}} Sekunden automatisch abgemeldet.',
+    staySignedIn: 'Angemeldet bleiben',
     loadFailed: 'Die Daten konnten nicht geladen werden.',
   },
   login: {

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
-import { Map as MapIcon } from 'lucide-react-native';
 
 import { Card, Text } from '@/components';
+import { Map as MapIcon } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import type { LatLng, PracticeAvailability } from '@/domain/types';
 import { useT } from '@/i18n/useT';

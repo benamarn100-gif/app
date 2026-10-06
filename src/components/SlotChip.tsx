@@ -1,9 +1,9 @@
 import { View } from 'react-native';
-import { Video } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { haptics } from '@/lib/haptics';
 
+import { Video } from './icons';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 

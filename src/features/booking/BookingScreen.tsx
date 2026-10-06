@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AccessibilityInfo, ScrollView, View } from 'react-native';
 import Animated, { FadeIn, FadeInRight, useReducedMotion } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
-import { CalendarCheck, Clock, MapPin, Stethoscope, Timer, Video, X } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -16,6 +15,7 @@ import {
   Text,
   useToast,
 } from '@/components';
+import { CalendarCheck, Clock, MapPin, Stethoscope, Timer, Video, X } from '@/components/icons';
 import {
   useBookSlot,
   useContact,
@@ -82,6 +82,15 @@ export function BookingScreen() {
   const doctor = practice.data?.doctors.find((d) => d.id === slot?.doctorId);
   const msLeft = hold.heldUntil ? Date.parse(hold.heldUntil) - now.getTime() : null;
   const expired = msLeft !== null && msLeft <= 0;
+  // Screenreader: einmalig ankündigen, wenn die Reservierung bald endet (WCAG 2.2.1)
+  const lastMinute = msLeft !== null && msLeft > 0 && msLeft <= 60_000;
+  const announced = useRef(false);
+  useEffect(() => {
+    if (lastMinute && !announced.current) {
+      announced.current = true;
+      AccessibilityInfo.announceForAccessibility(t('booking.holdEndingA11y'));
+    }
+  }, [lastMinute, t]);
   const needsVerification = repo.mode === 'supabase' && (session.data?.isAnonymous ?? true);
   const alternatives = useMemo(
     () => (slots.data ?? []).filter((s) => s.id !== slotId && isSlotBookable(s, now)).slice(0, 6),

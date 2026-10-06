@@ -15,6 +15,10 @@ export const en: Messages = {
     cancel: 'Cancel',
     mainNav: 'Main navigation',
     idleSignedOut: 'You were signed out after 30 minutes of inactivity.',
+    idleWarningTitle: 'Still there?',
+    idleWarningBody_one: 'To protect patient data, you will be signed out in {{count}} second.',
+    idleWarningBody_other: 'To protect patient data, you will be signed out in {{count}} seconds.',
+    staySignedIn: 'Stay signed in',
     loadFailed: 'The data could not be loaded.',
   },
   login: {

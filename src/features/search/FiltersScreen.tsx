@@ -1,9 +1,9 @@
 import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
-import { Minus, Plus } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Chip, Divider, ListRow, PressableScale, SpecialtyIcon, Text } from '@/components';
+import { Minus, Plus } from '@/components/icons';
 import { useAvailabilitySearch } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { SPECIALTIES } from '@/domain/seed/catalog';

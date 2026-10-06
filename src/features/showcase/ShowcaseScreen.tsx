@@ -1,7 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { BottomSheetView } from '@gorhom/bottom-sheet';
-import { ArrowRight, Bell, CalendarPlus, MapPin, Moon, Sun } from 'lucide-react-native';
 
 import {
   AnimatedCheck,
@@ -36,6 +35,7 @@ import {
   useToast,
   type BottomSheetRef,
 } from '@/components';
+import { ArrowRight, Bell, CalendarPlus, MapPin, Moon, Sun } from '@/components/icons';
 import { demoCity } from '@/config/env';
 import { FixedThemeProvider, makeStyles, useTheme } from '@/design/theme';
 import type { ColorScheme, TypeVariant } from '@/design/tokens';

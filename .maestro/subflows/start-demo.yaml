@@ -1,0 +1,17 @@
+# Frischer Start im Demo-Modus, Onboarding überspringen (Standort: Demo-Stadt Fulda).
+appId: de.mednow.app
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: deny
+- extendedWaitUntil:
+    visible:
+      id: 'onboarding-welcome'
+    timeout: 30000
+- tapOn:
+    id: 'onboarding-skip-all'
+- extendedWaitUntil:
+    visible:
+      id: 'home'
+    timeout: 20000

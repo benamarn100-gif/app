@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
-import { Trash } from 'lucide-react-native';
 
 import { Avatar, Card, PressableScale, Skeleton, Text } from '@/components';
+import { Trash } from '@/components/icons';
 import { useDependents, useRemoveDependent } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { PatientPicker } from '@/features/booking/PatientPicker';

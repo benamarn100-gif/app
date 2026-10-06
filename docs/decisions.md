@@ -161,3 +161,20 @@ Status-Regeln, Zeit-Helfer, Seed-Generator, Anlass-/Altersgruppen-Texte und Desi
 
 **D-47 · Strenge Content-Security-Policy, keine eingebetteten Ressourcen.**
 Der Build setzt `default-src 'self'` plus die Supabase-Origin; Schriften liegen lokal (keine Google-Fonts-Abfragen), `assetsInlineLimit: 0` verhindert `data:`-Schriften. Zod wurde im Dashboard entfernt, weil seine JIT-Prüfung (`new Function`) CSP-Verstöße meldet.
+
+## Phase 5 – Politur
+
+**D-48 · Sentry (EU) nur nach Opt-in und erst dann geladen.**
+`@sentry/react-native` ist installiert, wird aber erst nach Einwilligung im Datenschutz-Center per `require` geladen und initialisiert; beim Widerruf wird es sofort beendet. Nur EU-DSNs (`*.de.sentry.io` oder GlitchTip). Abgeschaltet: Tracing, Sitzungen, Screenshots, View-Hierarchie, Netzwerk-/Navigations-/Konsolen-Breadcrumbs, Nutzer- und Anfragekontext; `beforeSend` bereinigt E-Mail, IDs, Telefonnummern, Koordinaten. Quellkarten-Upload über das Config-Plugin nur, wenn `SENTRY_ORG`/`SENTRY_PROJECT` gesetzt sind. Im Sentry-Projekt zusätzlich „IP-Adressen nicht speichern“ aktivieren (`TODO.md`).
+
+**D-49 · Icons und date-fns einzeln importieren, Bundle-Budget in CI.**
+Metro entfernt ungenutzte Exporte nicht. Der Lucide-Barrel brachte alle ~1 900 Icons ins Bundle. `src/components/icons.ts` exportiert die genutzten Icons über die offiziellen Unterpfade (`lucide-react-native/icons/*`), date-fns über `date-fns/<funktion>`; ESLint verbietet Barrel-Importe. Web-Bundle 7,4 → 5,1 MB. `scripts/check-bundle-size.ts` bricht in CI ab, wenn Web oder Android das Budget überschreiten. Expo-Tree-Shaking ist noch als „unstable“ markiert und wird daher nicht genutzt.
+
+**D-50 · Hoch- und Querformat.**
+WCAG 1.3.4 (BFSG) verlangt, die Ausrichtung nicht ohne Not festzulegen. `orientation: 'default'`; Inhalte sind auf 640 dp begrenzt und zentriert, niedrige Fenster bekommen einen kompakten Praxis-Kopf.
+
+**D-51 · Zeitbegrenzungen: wesentlich in der App, verlängerbar im Dashboard.**
+Die 5-Minuten-Reservierung und das 10-Minuten-Wartelisten-Angebot sind für einen fairen Zugang zu knappen Terminen wesentlich (WCAG 2.2.1, Ausnahme „essential“); die Restzeit ist sichtbar, wird eine Minute vor Ablauf für Screenreader angekündigt, und der Termin kann danach neu gewählt werden. Die automatische Abmeldung im Dashboard (30 Min.) warnt 60 Sekunden vorher mit „Angemeldet bleiben“.
+
+**D-52 · Maestro-Abläufe ohne Gerät in CI.**
+`.maestro/` enthält die drei Kernabläufe (Akut buchen, Suche & buchen inkl. Storno, Warteliste) gegen stabile `testID`s; Syntax ist mit `maestro check-syntax` geprüft. Ausführung braucht einen Development-/Preview-Build auf Simulator oder Emulator (lokal oder EAS Workflows) – in der normalen CI läuft sie nicht (`TODO.md`).

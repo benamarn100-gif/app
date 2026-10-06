@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Phone, User } from 'lucide-react-native';
 import { z } from 'zod';
 
 import { Chip, Text, TextField } from '@/components';
+import { Phone, User } from '@/components/icons';
 import { makeStyles } from '@/design/theme';
 import type { BookingContact } from '@/domain/types';
 import { useT } from '@/i18n/useT';

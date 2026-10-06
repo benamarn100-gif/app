@@ -18,7 +18,8 @@
     "check:i18n": "tsx scripts/check-i18n.ts",
     "seed:sql": "tsx scripts/generate-seed-sql.ts",
     "db:test": "bash scripts/db-test.sh",
-    "check": "npm run lint && npm run typecheck && npm run check:contrast && npm run check:i18n && npm test -- --ci"
+    "check": "npm run lint && npm run typecheck && npm run check:contrast && npm run check:i18n && npm test -- --ci",
+    "check:bundle": "tsx scripts/check-bundle-size.ts"
   },
   "dependencies": {
     "@date-fns/tz": "^1.5.0",
@@ -30,6 +31,7 @@
     "@maplibre/maplibre-react-native": "^11.5.0",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/netinfo": "12.0.1",
+    "@sentry/react-native": "~7.11.0",
     "@shopify/flash-list": "2.0.2",
     "@supabase/supabase-js": "^2.117.2",
     "@tanstack/query-async-storage-persister": "^5.104.1",

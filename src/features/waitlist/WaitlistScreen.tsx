@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Platform, ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { BellRing } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -13,6 +12,7 @@ import {
   Text,
   useToast,
 } from '@/components';
+import { BellRing } from '@/components/icons';
 import {
   useGrantConsent,
   useHasConsent,
@@ -140,7 +140,12 @@ export function WaitlistScreen() {
             }}
             testID="allow-push"
           />
-          <Button variant="text" label={t('waitlist.pushLater')} onPress={() => router.back()} />
+          <Button
+            variant="text"
+            label={t('waitlist.pushLater')}
+            onPress={() => router.back()}
+            testID="push-later"
+          />
         </View>
       </View>
     );

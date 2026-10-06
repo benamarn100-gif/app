@@ -18,7 +18,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: brand.slug,
   scheme: brand.scheme,
   version: '0.1.0',
-  orientation: 'portrait',
+  // Hoch- und Querformat (WCAG 1.3.4, BFSG) – Layouts sind flexibel, Inhalte scrollen.
+  orientation: 'default',
   icon: './assets/icon.png',
   userInterfaceStyle: 'automatic',
   backgroundColor: colors.light.background,
@@ -100,6 +101,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     ['expo-notifications', { color: colors.light.primary, defaultChannel: 'appointments' }],
     '@maplibre/maplibre-react-native',
+    // Quellkarten-Upload nur, wenn ein Sentry-Projekt (EU-Region) konfiguriert ist.
+    // Das SDK selbst startet erst nach Opt-in (src/lib/monitoring.ts).
+    ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT
+      ? [
+          [
+            '@sentry/react-native',
+            {
+              url: 'https://de.sentry.io/',
+              organization: process.env.SENTRY_ORG,
+              project: process.env.SENTRY_PROJECT,
+            },
+          ] as [string, Record<string, string>],
+        ]
+      : []),
   ],
   experiments: {
     typedRoutes: true,

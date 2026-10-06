@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { LoginScreen } from './auth/LoginScreen';
 import { MfaScreen } from './auth/MfaScreen';
 import { ErrorState, LoadingRegion } from './components/Feedback';
+import { IdleWarning } from './components/IdleWarning';
 import { ToastProvider } from './components/Toast';
 import { createQueryClient, useAuthState, usePractices } from './data/queries';
 import { RepositoryProvider, useRepository } from './data/RepositoryContext';
@@ -73,7 +74,8 @@ function AuthGate() {
   const auth = useAuthState();
   const [idleNotice, setIdleNotice] = useState(false);
   const signOutIdle = useSignOut(() => setIdleNotice(true));
-  useIdleSignOut(auth.data?.kind === 'ready' && repo.mode === 'supabase', signOutIdle);
+  const signOut = useSignOut();
+  const idle = useIdleSignOut(auth.data?.kind === 'ready' && repo.mode === 'supabase', signOutIdle);
 
   if (auth.isPending) return <LoadingRegion />;
   if (auth.isError) {
@@ -85,7 +87,12 @@ function AuthGate() {
     case 'mfa':
       return <MfaScreen enrolled={auth.data.enrolled} />;
     case 'ready':
-      return <PracticeGate email={auth.data.email} />;
+      return (
+        <>
+          <PracticeGate email={auth.data.email} />
+          <IdleWarning deadline={idle.deadline} onStay={idle.stay} onSignOut={signOut} />
+        </>
+      );
   }
 }
 

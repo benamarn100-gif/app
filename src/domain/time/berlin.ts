@@ -1,5 +1,8 @@
 import { TZDate } from '@date-fns/tz';
-import { addDays, differenceInCalendarDays, endOfDay, startOfDay } from 'date-fns';
+import { addDays } from 'date-fns/addDays';
+import { differenceInCalendarDays } from 'date-fns/differenceInCalendarDays';
+import { endOfDay } from 'date-fns/endOfDay';
+import { startOfDay } from 'date-fns/startOfDay';
 
 import type { TimeWindow } from '../types';
 

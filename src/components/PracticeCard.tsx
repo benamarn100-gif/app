@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { View } from 'react-native';
-import { MapPin, Star, Video } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { specialtyById } from '@/domain/seed/catalog';
@@ -13,6 +12,7 @@ import { Avatar } from './Avatar';
 import { Card } from './Card';
 import { DemoBadge } from './DemoBadge';
 import { FreshnessLabel } from './FreshnessLabel';
+import { MapPin, Star, Video } from './icons';
 import { StatusBadge } from './StatusBadge';
 import { Text } from './Text';
 

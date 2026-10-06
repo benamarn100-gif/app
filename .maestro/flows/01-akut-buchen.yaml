@@ -1,0 +1,21 @@
+# North Star: krank, gestresst → freier Termin in der Nähe in unter 60 Sekunden.
+appId: de.mednow.app
+name: Akut-Modus – frühesten Termin buchen
+tags:
+  - smoke
+---
+- runFlow: ../subflows/start-demo.yaml
+- assertVisible:
+    id: 'emergency-bar'
+- tapOn:
+    id: 'hero-acute'
+- extendedWaitUntil:
+    visible:
+      id: 'acute-result-0'
+    timeout: 15000
+# Jedes Ergebnis zeigt den Status als Text + Symbol (nie nur Farbe)
+- assertVisible:
+    id: 'status-.*'
+- tapOn:
+    id: 'acute-result-0'
+- runFlow: ../subflows/book-first-slot.yaml

@@ -19,12 +19,14 @@ import { fontFamily } from '@/design/tokens';
 import { NotificationBridge } from '@/features/notifications/NotificationBridge';
 import i18n, { resolveLanguage } from '@/i18n';
 import { useT } from '@/i18n/useT';
+import { bindMonitoring } from '@/lib/monitoring';
 import { setupOnlineManager } from '@/lib/network';
 import { useHasHydrated, usePreferences } from '@/state/preferences';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 SplashScreen.setOptions({ duration: 250, fade: true });
 setupOnlineManager();
+bindMonitoring();
 
 export { ErrorBoundary } from '@/features/errors/ErrorBoundary';
 

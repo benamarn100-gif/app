@@ -1,0 +1,62 @@
+# Auf dem Praxisprofil: ersten freien Termin wählen und in vier Schritten buchen.
+appId: de.mednow.app
+---
+- extendedWaitUntil:
+    visible:
+      id: 'practice-screen'
+    timeout: 15000
+- scrollUntilVisible:
+    element:
+      id: 'slot-.*'
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: 'slot-.*'
+    index: 0
+- scrollUntilVisible:
+    element:
+      id: 'book-button'
+    direction: DOWN
+- tapOn:
+    id: 'book-button'
+- extendedWaitUntil:
+    visible:
+      id: 'hold-countdown'
+    timeout: 10000
+# Schritte: Termin bestätigen → Für wen → Anlass → Zusammenfassung
+- tapOn:
+    id: 'booking-next'
+- tapOn:
+    id: 'booking-next'
+- tapOn:
+    id: 'booking-next'
+- tapOn:
+    id: 'contact-name'
+- inputText: 'Alex Beispiel'
+- tapOn:
+    id: 'contact-phone'
+- inputText: '0661 123456'
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'consent-checkbox'
+    direction: DOWN
+# Einwilligung (Art. 9 DSGVO) ist nie vorausgewählt
+- tapOn:
+    id: 'consent-checkbox'
+- tapOn:
+    id: 'booking-submit'
+- extendedWaitUntil:
+    visible:
+      id: 'booking-success'
+    timeout: 15000
+- assertVisible:
+    id: 'add-to-calendar'
+- tapOn:
+    id: 'success-done'
+- tapOn:
+    id: 'tab-appointments'
+- extendedWaitUntil:
+    visible:
+      id: 'appointment-.*'
+    timeout: 10000

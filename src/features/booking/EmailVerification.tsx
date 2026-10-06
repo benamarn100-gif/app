@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { CircleCheck, KeyRound, Mail } from 'lucide-react-native';
 
 import { Button, Card, Text, TextField } from '@/components';
+import { CircleCheck, KeyRound, Mail } from '@/components/icons';
 import { useVerifyEmail } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT } from '@/i18n/useT';

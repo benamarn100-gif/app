@@ -1,10 +1,11 @@
 import type { ComponentType, ReactNode } from 'react';
 import { Switch, View } from 'react-native';
-import { ChevronRight, type LucideProps } from 'lucide-react-native';
+import type { LucideProps } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { haptics } from '@/lib/haptics';
 
+import { ChevronRight } from './icons';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 

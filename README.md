@@ -17,7 +17,7 @@ App für iOS und Android, mit der Menschen in Deutschland freie Arzttermine in i
 - **App** (`src/`): Expo SDK 57, React Native 0.86 (New Architecture), TypeScript strict, Expo Router.
 - **Backend** (`supabase/`): Postgres + PostGIS, Row Level Security, Realtime (Broadcast), Edge Functions (Deno), pg_cron.
 - **Praxis-Dashboard** (`dashboard/`): Web-App (Vite + React) für Praxen – Slots pflegen, Buchungen sehen.
-- **Dokumentation** (`docs/`): Architektur, Entscheidungen, Datenquellen, 116117-Studie, Legal-Checkliste, Barrierefreiheits-Audit.
+- **Dokumentation** (`docs/`): Architektur, Entscheidungen, Datenquellen, 116117-Studie, Legal-Checkliste, Barrierefreiheits-Audit, Performance.
 
 ## Schnellstart (Demo ohne Backend)
 
@@ -82,10 +82,11 @@ Konfiguration: `.env.example` nach `.env.local` kopieren (Demo-Stadt, Kartenstil
 | `npm run check:contrast`                         | Alle Farbpaare gegen WCAG 2.1 AA (hell + dunkel)                                                                             |
 | `npm run check:i18n`                             | Schlüsselparität de/en, du/Sie-Varianten, unbekannte Schlüssel                                                               |
 | `npm run check`                                  | alles oben zusammen                                                                                                          |
+| `npm run check:bundle`                           | Bundle-Budget nach `npx expo export --platform web --platform android` (Web ≤ 5,6 MB, Android/Hermes ≤ 9,3 MB)               |
 | `npm run db:test`                                | Migrationen + Seed + pgTAP (RLS, Buchung, Warteliste) + 50 parallele Buchungen (braucht PostgreSQL 16 mit PostGIS und pgTAP) |
 | `cd supabase/functions && deno test --allow-env` | Edge Functions                                                                                                               |
 | `cd dashboard && npm run check`                  | Praxis-Dashboard: Lint, Typecheck, Vitest inkl. axe-Barrierefreiheitsprüfung                                                 |
-| `maestro test .maestro/`                         | E2E: Akut buchen, Suche & buchen, Warteliste (Development Build)                                                             |
+| `maestro test .maestro/`                         | E2E: Akut buchen, Suche & buchen inkl. Storno, Warteliste (Development-/Preview-Build auf Simulator/Emulator)                |
 
 CI (GitHub Actions) führt alles außer Maestro bei jedem Push aus (`.github/workflows/ci.yml`).
 

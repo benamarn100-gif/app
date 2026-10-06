@@ -34,10 +34,10 @@ jobs:
         run: npm test -- --ci --coverage
       - name: Expo-Konfiguration prüfen
         run: npx expo config --type public > /dev/null
-      - name: Bundle-Größe (Web-Export als Referenz)
+      - name: Bundle-Budget (Web + Android/Hermes)
         run: |
-          npx expo export --platform web --output-dir dist > /dev/null
-          du -sh dist/_expo/static/js/web | tee bundle-size.txt
+          npx expo export --platform web --platform android --output-dir dist > /dev/null
+          npm run check:bundle
       - uses: actions/upload-artifact@v4
         with:
           name: bundle-size

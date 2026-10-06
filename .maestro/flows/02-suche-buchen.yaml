@@ -1,0 +1,43 @@
+appId: de.mednow.app
+name: Suche mit Filter – Termin buchen und stornieren
+---
+- runFlow: ../subflows/start-demo.yaml
+- tapOn:
+    id: 'tab-search'
+# Auf Geräten mit Karte zuerst in die Listenansicht wechseln
+- runFlow:
+    when:
+      visible:
+        id: 'search-map-view'
+    commands:
+      - tapOn:
+          id: 'view-toggle'
+- extendedWaitUntil:
+    visible:
+      id: 'search-result-0'
+    timeout: 15000
+- tapOn:
+    id: 'open-filters'
+- tapOn:
+    id: 'filter-specialty-allgemeinmedizin'
+- tapOn:
+    id: 'apply-filters'
+- extendedWaitUntil:
+    visible:
+      id: 'search-result-0'
+    timeout: 15000
+- tapOn:
+    id: 'search-result-0'
+- runFlow: ../subflows/book-first-slot.yaml
+# Stornieren gibt den Platz frei (System-Dialog zur Bestätigung)
+- scrollUntilVisible:
+    element:
+      id: 'cancel-appointment'
+    direction: DOWN
+- tapOn:
+    id: 'cancel-appointment'
+    index: 0
+- tapOn: '(?i)(Ja, stornieren|Yes, cancel)'
+- extendedWaitUntil:
+    visible: '(?i)(Termin storniert.*|Appointment cancelled.*)'
+    timeout: 10000

@@ -1,8 +1,8 @@
 import { View } from 'react-native';
-import { ChevronRight } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 
+import { ChevronRight } from './icons';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 

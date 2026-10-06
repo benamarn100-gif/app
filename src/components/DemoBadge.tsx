@@ -1,9 +1,9 @@
 import { View } from 'react-native';
-import { FlaskConical } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT } from '@/i18n/useT';
 
+import { FlaskConical } from './icons';
 import { Text } from './Text';
 
 /** Kennzeichnung erfundener Demo-Daten (Vorgabe: Demo-Daten klar markieren). */

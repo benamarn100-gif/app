@@ -24,6 +24,12 @@ jest.mock('react-native-reanimated', () => {
   return { ...mock, useReducedMotion: () => false };
 });
 
+jest.mock('@sentry/react-native', () => ({
+  init: jest.fn(),
+  close: jest.fn(async () => true),
+  captureException: jest.fn(),
+}));
+
 jest.mock('expo-localization', () => ({
   getLocales: () => [{ languageCode: 'de', languageTag: 'de-DE', regionCode: 'DE' }],
   getCalendars: () => [{ timeZone: 'Europe/Berlin' }],

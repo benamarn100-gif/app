@@ -1,13 +1,9 @@
-import {
-  CircleAlert,
-  CircleCheck,
-  CircleQuestionMark,
-  CircleX,
-  type LucideIcon,
-} from 'lucide-react-native';
+import type { LucideIcon } from 'lucide-react-native';
 
 import type { ColorTokens } from '@/design/tokens';
 import type { AvailabilityStatus } from '@/domain/types';
+
+import { CircleAlert, CircleCheck, CircleQuestionMark, CircleX } from './icons';
 
 /** Status wird nie nur über Farbe vermittelt: immer Icon + Text + Farbe. */
 export const STATUS_VISUALS: Record<

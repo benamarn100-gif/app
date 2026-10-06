@@ -1,7 +1,6 @@
 import { Alert, ScrollView, Share, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { Download, MapPin, Trash, TriangleAlert } from 'lucide-react-native';
 
 import {
   Button,
@@ -13,6 +12,7 @@ import {
   Text,
   useToast,
 } from '@/components';
+import { Download, MapPin, Trash, TriangleAlert } from '@/components/icons';
 import { useConsents, useRevokeConsent } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
 import { makeStyles, useTheme } from '@/design/theme';

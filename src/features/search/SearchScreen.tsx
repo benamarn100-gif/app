@@ -11,7 +11,6 @@ import { View } from 'react-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { FlashList } from '@shopify/flash-list';
 import { router, useLocalSearchParams } from 'expo-router';
-import { List, LocateFixed, Map as MapIcon, SlidersHorizontal } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -30,6 +29,7 @@ import {
   Text,
   type BottomSheetRef,
 } from '@/components';
+import { List, LocateFixed, Map as MapIcon, SlidersHorizontal } from '@/components/icons';
 import { useAvailabilitySearch, useRealtimeSlots } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { destinationPoint, type BBox } from '@/domain/geo/distance';

@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { Alert, RefreshControl, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { BellRing, Hourglass } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -19,6 +18,7 @@ import {
   Text,
   useToast,
 } from '@/components';
+import { BellRing, Hourglass } from '@/components/icons';
 import {
   useAppointments,
   useCancelAppointment,

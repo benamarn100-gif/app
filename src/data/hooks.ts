@@ -9,7 +9,7 @@ import {
 
 import { demoCity } from '@/config/env';
 import { distanceMeters } from '@/domain/geo/distance';
-import { addDays } from 'date-fns';
+import { addDays } from 'date-fns/addDays';
 import { startOfBerlinDay } from '@/domain/time/berlin';
 import type {
   AgeGroup,

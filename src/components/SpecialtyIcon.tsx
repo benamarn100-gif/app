@@ -1,3 +1,5 @@
+import type { LucideIcon, LucideProps } from 'lucide-react-native';
+
 import {
   Baby,
   Bone,
@@ -11,10 +13,7 @@ import {
   Stethoscope,
   Toothbrush,
   Venus,
-  type LucideIcon,
-  type LucideProps,
-} from 'lucide-react-native';
-
+} from '@/components/icons';
 import type { SpecialtySlug } from '@/domain/types';
 
 export const SPECIALTY_ICONS: Record<SpecialtySlug, LucideIcon> = {

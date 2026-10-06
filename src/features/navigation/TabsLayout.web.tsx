@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
-import { CalendarDays, CircleUserRound, House, Search } from 'lucide-react-native';
 
+import { CalendarDays, CircleUserRound, House, Search } from '@/components/icons';
 import { useOffers } from '@/data/hooks';
 import { useTheme } from '@/design/theme';
 import { fontFamily } from '@/design/tokens';

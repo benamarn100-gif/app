@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { CircleCheck, LocateFixed, MapPin } from 'lucide-react-native';
 
 import { Button, Text, TextField } from '@/components';
+import { CircleCheck, LocateFixed, MapPin } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import { isValidPostalCode } from '@/domain/geo/postalCodes';
 import { useT } from '@/i18n/useT';

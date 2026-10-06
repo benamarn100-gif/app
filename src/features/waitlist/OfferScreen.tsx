@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { AccessibilityInfo, ScrollView, View } from 'react-native';
 import * as Crypto from 'expo-crypto';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Clock, MapPin, Stethoscope, Timer } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -15,6 +14,7 @@ import {
   Text,
   useToast,
 } from '@/components';
+import { Clock, MapPin, Stethoscope, Timer } from '@/components/icons';
 import { useContact, useOffers, useRespondOffer, useSession } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
 import { HEALTH_CONSENT_VERSION, isAppError } from '@/data/repository';
@@ -51,6 +51,15 @@ export function OfferScreen() {
   const msLeft = offer ? Date.parse(offer.expiresAt) - now.getTime() : 0;
   const expired = !offer || offer.status !== 'pending' || msLeft <= 0;
   const needsVerification = repo.mode === 'supabase' && (session.data?.isAnonymous ?? true);
+  // Screenreader: einmalig ankündigen, wenn das Angebot bald verfällt (WCAG 2.2.1)
+  const lastMinute = !expired && msLeft <= 60_000;
+  const announced = useRef(false);
+  useEffect(() => {
+    if (lastMinute && !announced.current) {
+      announced.current = true;
+      AccessibilityInfo.announceForAccessibility(t('offer.endingA11y'));
+    }
+  }, [lastMinute, t]);
 
   if (offers.isLoading) {
     return (

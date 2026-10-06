@@ -91,6 +91,31 @@ module.exports = defineConfig([
     },
   },
   {
+    // Metro kennt kein Tree-Shaking: Icons und date-fns-Funktionen einzeln laden.
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/components/icons.ts'],
+    rules: {
+      '@typescript-eslint/no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'lucide-react-native',
+              allowTypeImports: true,
+              message:
+                'Icons aus @/components/icons importieren (sonst landen alle Icons im Bundle).',
+            },
+            {
+              name: 'date-fns',
+              allowTypeImports: true,
+              message: "Einzelne Funktionen importieren, z. B. 'date-fns/addDays'.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/__tests__/**', '**/*.test.{ts,tsx}', 'jest.setup.ts', 'src/features/showcase/**'],
     rules: { 'i18next/no-literal-string': 'off' },
   },

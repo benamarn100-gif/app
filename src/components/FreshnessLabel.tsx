@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import { Clock } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { isStale } from '@/domain/availability/status';
@@ -7,6 +6,7 @@ import { minutesSince } from '@/domain/time/berlin';
 import { useT, type TFn } from '@/i18n/useT';
 import { useNow } from '@/lib/useNow';
 
+import { Clock } from './icons';
 import { Text } from './Text';
 
 export function freshnessText(t: TFn, lastSyncedAt: string | null, now: Date): string {

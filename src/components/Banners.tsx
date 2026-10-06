@@ -1,12 +1,12 @@
 import { Linking, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { Phone, Siren, WifiOff } from 'lucide-react-native';
 
 import { brand } from '@/config/brand';
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT } from '@/i18n/useT';
 import { useIsOnline } from '@/lib/network';
 
+import { Phone, Siren, WifiOff } from './icons';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 
