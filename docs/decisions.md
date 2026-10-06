@@ -138,3 +138,26 @@ Farbe + Symbol (✓ ! × ?) + Uhrzeit als Label – Status nie nur über Farbe, 
 
 **D-40 · Optimierter Seed-Generator.**
 Zeitzonen-Rechnungen werden je Tag/Uhrzeit gecacht, Würfe über einen Integer-Mixer: 230 ms → 70 ms (Desktop) für ~7 000 Slots. Die Erzeugung läuft erst nach dem ersten Frame.
+
+## Phase 6 – Praxis-Dashboard
+
+**D-41 · Dashboard-Zugriff über security-definer-RPCs statt Edge Functions.**
+Die App schreibt über Edge Functions (Idempotenz, Validierung, Regionsbindung). Das Dashboard ruft dagegen `public.dashboard_*`-RPCs direkt auf: Jede Funktion prüft Mitgliedschaft (`practice_members`) und zweiten Faktor (`aal2`) in der Datenbank, validiert Eingaben in SQL und schreibt ein Zugriffsprotokoll. Direkte Tabellenrechte gibt es nicht. Weniger bewegliche Teile, gleiche Sicherheitsgrenze (die Datenbank), vollständig mit pgTAP getestet (`06_dashboard.test.sql`).
+
+**D-42 · Zwei-Faktor-Pflicht (TOTP) für Praxis-Konten.**
+Das Dashboard zeigt Namen und Telefonnummern von Patient:innen (Art.-9-Kontext). Anmeldung per E-Mail-Code (kein Passwort, keine neuen Konten über das Dashboard), danach TOTP über Supabase Auth MFA. Ohne `aal2` liefert die Datenbank `mfa_required`. Konten legt das MedNow-Team nach Prüfung der Praxis an (`app.add_practice_member`).
+
+**D-43 · Datensparsame Buchungsansicht.**
+Kontaktdaten nur für bestätigte Termine; nach einer Absage werden sie in der Ansicht nicht mehr geliefert. Bei Familienmitgliedern sieht die Praxis nur die Altersgruppe (der in der App vergebene Name bleibt privat). Jeder Abruf wird in `app.practice_audit_log` protokolliert (12 Monate). Die Wochenansicht kennzeichnet über MedNow gebuchte Slots nur mit der Termin-ID.
+
+**D-44 · Absage durch die Praxis: Slot entfällt, Push ohne Details.**
+Sagt die Praxis ab, wird der Slot storniert (nicht erneut angeboten – meist fällt die Sprechzeit aus). Die Person erhält „Die Praxis hat einen Ihrer Termine abgesagt. Details in der App.“ – ohne Praxis, Arzt, Uhrzeit (Sperrbildschirm).
+
+**D-45 · Wochenvorlagen in Berliner Ortszeit, Umrechnung beim Anwenden.**
+Vorlagen speichern Wochentag (ISO) und Uhrzeiten ohne Zeitzone; `dashboard_apply_templates` rechnet je Kalendertag mit `at time zone 'Europe/Berlin'` um. 09:00 bleibt 09:00 vor und nach der Zeitumstellung (getestet in SQL und Vitest). Anwenden ist idempotent (Exclusion-Constraint, `on conflict do nothing`).
+
+**D-46 · Dashboard nutzt Domain-Code und Tokens der App direkt.**
+Status-Regeln, Zeit-Helfer, Seed-Generator, Anlass-/Altersgruppen-Texte und Design-Tokens kommen aus `../src` (Vite-Alias `@app`). Farben werden als CSS-Variablen generiert (`virtual:mednow-theme.css`), ein Test stellt sicher, dass `styles.css` keine Farbwerte enthält und nur definierte Variablen nutzt. Demo-Modus: dieselbe fiktive Praxis wie in der Demo-App; App-Demo und Dashboard-Demo teilen keine Daten (beide laufen ohne Backend). Mit Supabase sehen beide denselben Stand in Echtzeit.
+
+**D-47 · Strenge Content-Security-Policy, keine eingebetteten Ressourcen.**
+Der Build setzt `default-src 'self'` plus die Supabase-Origin; Schriften liegen lokal (keine Google-Fonts-Abfragen), `assetsInlineLimit: 0` verhindert `data:`-Schriften. Zod wurde im Dashboard entfernt, weil seine JIT-Prüfung (`new Function`) CSP-Verstöße meldet.

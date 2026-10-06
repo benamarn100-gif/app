@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+  <!--
+    Anmeldecode (Supabase-Vorlage „magic_link“). Bewusst ohne Anrede-Form (du/Sie),
+    ohne Gesundheitsbezug und ohne Link – nur der 6-stellige Code.
+    Markenname bei Umbenennung auch hier anpassen (src/config/brand.ts).
+  -->
+  <body
+    style="
+      margin: 0;
+      padding: 24px;
+      background: #f7f5f0;
+      font-family: Inter, Arial, sans-serif;
+      color: #14211f;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      style="
+        max-width: 480px;
+        margin: 0 auto;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 32px;
+      "
+    >
+      <tr>
+        <td>
+          <p style="margin: 0 0 16px; font-size: 18px; font-weight: 700">MedNow</p>
+          <p style="margin: 0 0 8px; font-size: 16px">Code für die Anmeldung:</p>
+          <p style="margin: 0 0 16px; font-size: 32px; font-weight: 700; letter-spacing: 6px">
+            {{ .Token }}
+          </p>
+          <p style="margin: 0 0 16px; font-size: 14px; color: #4a5a57">
+            Der Code ist 15 Minuten gültig. Wer ihn nicht angefordert hat, kann diese E-Mail
+            ignorieren.
+          </p>
+          <p style="margin: 0; font-size: 14px; color: #4a5a57">
+            Your sign-in code is shown above. It is valid for 15 minutes.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

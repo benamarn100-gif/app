@@ -26,6 +26,19 @@ const OFFER_TEXT = {
   },
 } as const;
 
+const CANCELLED_TEXT = {
+  de: {
+    title: 'MedNow',
+    informal: 'Die Praxis hat einen deiner Termine abgesagt. Details in der App.',
+    formal: 'Die Praxis hat einen Ihrer Termine abgesagt. Details in der App.',
+  },
+  en: {
+    title: 'MedNow',
+    informal: 'A practice cancelled one of your appointments. See the app for details.',
+    formal: 'A practice cancelled one of your appointments. See the app for details.',
+  },
+} as const;
+
 export function offerMessage(target: PushTarget, offerId: string): PushMessage {
   const text = OFFER_TEXT[target.locale] ?? OFFER_TEXT.de;
   return {
@@ -33,6 +46,29 @@ export function offerMessage(target: PushTarget, offerId: string): PushMessage {
     body: target.formal ? text.formal : text.informal,
     data: { type: 'waitlist_offer', offerId, url: `mednow://offer/${offerId}` },
   };
+}
+
+/** Absage durch die Praxis (Dashboard). Ohne Praxis, Ärztin/Arzt, Uhrzeit. */
+export function cancelledByPracticeMessage(target: PushTarget): PushMessage {
+  const text = CANCELLED_TEXT[target.locale] ?? CANCELLED_TEXT.de;
+  return {
+    title: text.title,
+    body: target.formal ? text.formal : text.informal,
+    data: { type: 'appointment_cancelled', url: 'mednow://appointments' },
+  };
+}
+
+/** Baut die Nachricht je Outbox-Art; unbekannte Arten werden nicht verschickt. */
+export function messageFor(
+  kind: string,
+  payload: { offerId?: string },
+): ((target: PushTarget) => PushMessage) | null {
+  if (kind === 'waitlist_offer' && payload.offerId) {
+    const offerId = payload.offerId;
+    return (t) => offerMessage(t, offerId);
+  }
+  if (kind === 'appointment_cancelled_by_practice') return cancelledByPracticeMessage;
+  return null;
 }
 
 export class ExpoPushSender implements PushSender {

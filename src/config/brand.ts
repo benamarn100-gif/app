@@ -4,6 +4,8 @@
  *
  * Diese Datei darf keine React-Native-Importe enthalten: Sie wird auch von
  * app.config.ts (Node) und dem Praxis-Dashboard (Web) gelesen.
+ * Serverseitig steht der Name zusätzlich in supabase/templates/*.html (E-Mail-Codes)
+ * und in den Push-Titeln (supabase/functions/_shared/push.ts).
  */
 export const brand = {
   name: 'MedNow',

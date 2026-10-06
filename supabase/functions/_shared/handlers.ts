@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { providerForSlot } from './availability.ts';
 import type { Context } from './context.ts';
 import { HttpError, json, readJson } from './http.ts';
-import { offerMessage, type PushSender, type PushTarget } from './push.ts';
+import { messageFor, type PushSender, type PushTarget } from './push.ts';
 import { bookingDetails, idempotencyKey, parse, readIdempotencyKey, uuid } from './validation.ts';
 
 /**
@@ -249,7 +249,7 @@ type OutboxRow = {
   id: number;
   user_id: string;
   kind: string;
-  payload: { offerId?: string };
+  payload: { offerId?: string; appointmentId?: string };
   tokens: PushTarget[];
 };
 
@@ -266,10 +266,9 @@ export async function handleSendNotifications(
   const failed: number[] = [];
   for (const row of rows ?? []) {
     try {
-      if (row.kind === 'waitlist_offer' && row.payload.offerId) {
-        const { invalidTokens } = await sender.send(row.tokens, (t) =>
-          offerMessage(t, row.payload.offerId!),
-        );
+      const build = messageFor(row.kind, row.payload);
+      if (build) {
+        const { invalidTokens } = await sender.send(row.tokens, build);
         if (invalidTokens.length && ctx.admin) {
           await ctx.admin.from('push_tokens').delete().in('token', invalidTokens);
         }

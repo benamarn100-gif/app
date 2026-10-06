@@ -186,6 +186,36 @@ Deno.test('send_notifications: verschickt datensparsame Texte', async () => {
   assertEquals(calls.at(-1)?.fn, 'mark_outbox');
 });
 
+Deno.test('send_notifications: Absage durch die Praxis ohne Praxisdetails', async () => {
+  const sent: { body: string; data: Record<string, string> }[] = [];
+  const { ctx } = fakeContext({
+    rpc: (fn) =>
+      fn === 'claim_outbox'
+        ? [
+            {
+              id: 2,
+              user_id: USER,
+              kind: 'appointment_cancelled_by_practice',
+              payload: { appointmentId: SLOT },
+              tokens: [{ token: 't1', locale: 'de', formal: true }],
+            },
+          ]
+        : null,
+  });
+  const sender: PushSender = {
+    send: (targets, build) => {
+      for (const t of targets) sent.push(build(t));
+      return Promise.resolve({ invalidTokens: [] });
+    },
+  };
+  const res = await serve((req) => handleSendNotifications(req, ctx, sender))(
+    post({}, { 'x-worker-secret': 'secret-123' }),
+  );
+  assertEquals(res.status, 200);
+  assertEquals(sent[0]?.body, 'Die Praxis hat einen Ihrer Termine abgesagt. Details in der App.');
+  assertEquals(sent[0]?.data.url, 'mednow://appointments');
+});
+
 Deno.test('Push-Texte: Sie-Form und Englisch', () => {
   assertEquals(
     offerMessage({ token: 't', locale: 'de', formal: true }, 'x').body.includes('Ihrer'),

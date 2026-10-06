@@ -4,8 +4,8 @@ App für iOS und Android, mit der Menschen in Deutschland freie Arzttermine in i
 
 **North Star:** Ein kranker, gestresster Mensch findet in unter 60 Sekunden einen freien Termin in seiner Nähe.
 
-| Start | Home | Akut-Modus | Praxis | Buchung | Erfolg |
-|---|---|---|---|---|---|
+| Start                                  | Home                               | Akut-Modus                          | Praxis                                   | Buchung                                  | Erfolg                                  |
+| -------------------------------------- | ---------------------------------- | ----------------------------------- | ---------------------------------------- | ---------------------------------------- | --------------------------------------- |
 | ![Start](docs/screenshots/welcome.png) | ![Home](docs/screenshots/home.png) | ![Akut](docs/screenshots/acute.png) | ![Praxis](docs/screenshots/practice.png) | ![Buchung](docs/screenshots/booking.png) | ![Erfolg](docs/screenshots/success.png) |
 
 > Screenshots aus der Web-Vorschau (Demo-Daten Fulda). Auf iOS/Android nutzt die App native Tabs und eine MapLibre-Karte.
@@ -74,17 +74,18 @@ Konfiguration: `.env.example` nach `.env.local` kopieren (Demo-Stadt, Kartenstil
 
 ## Tests und Qualität
 
-| Befehl | Prüft |
-|---|---|
-| `npm test` | Unit-, Komponenten- und Ablauftests (Jest, TZ=UTC) |
-| `npm run lint` | ESLint inkl. „keine Farb-Literale/Texte außerhalb Tokens/i18n“ |
-| `npm run typecheck` | TypeScript strict |
-| `npm run check:contrast` | Alle Farbpaare gegen WCAG 2.1 AA (hell + dunkel) |
-| `npm run check:i18n` | Schlüsselparität de/en, du/Sie-Varianten, unbekannte Schlüssel |
-| `npm run check` | alles oben zusammen |
-| `npm run db:test` | Migrationen + Seed + pgTAP (RLS, Buchung, Warteliste) + 50 parallele Buchungen (braucht PostgreSQL 16 mit PostGIS und pgTAP) |
-| `cd supabase/functions && deno test --allow-env` | Edge Functions |
-| `maestro test .maestro/` | E2E: Akut buchen, Suche & buchen, Warteliste (Development Build) |
+| Befehl                                           | Prüft                                                                                                                        |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `npm test`                                       | Unit-, Komponenten- und Ablauftests (Jest, TZ=UTC)                                                                           |
+| `npm run lint`                                   | ESLint inkl. „keine Farb-Literale/Texte außerhalb Tokens/i18n“                                                               |
+| `npm run typecheck`                              | TypeScript strict                                                                                                            |
+| `npm run check:contrast`                         | Alle Farbpaare gegen WCAG 2.1 AA (hell + dunkel)                                                                             |
+| `npm run check:i18n`                             | Schlüsselparität de/en, du/Sie-Varianten, unbekannte Schlüssel                                                               |
+| `npm run check`                                  | alles oben zusammen                                                                                                          |
+| `npm run db:test`                                | Migrationen + Seed + pgTAP (RLS, Buchung, Warteliste) + 50 parallele Buchungen (braucht PostgreSQL 16 mit PostGIS und pgTAP) |
+| `cd supabase/functions && deno test --allow-env` | Edge Functions                                                                                                               |
+| `cd dashboard && npm run check`                  | Praxis-Dashboard: Lint, Typecheck, Vitest inkl. axe-Barrierefreiheitsprüfung                                                 |
+| `maestro test .maestro/`                         | E2E: Akut buchen, Suche & buchen, Warteliste (Development Build)                                                             |
 
 CI (GitHub Actions) führt alles außer Maestro bei jedem Push aus (`.github/workflows/ci.yml`).
 
@@ -105,13 +106,18 @@ Vorher: `docs/legal-checklist.md` abarbeiten (Impressum, Datenschutz, AVV, Store
 ## Praxis-Dashboard
 
 ```bash
+npm ci                       # Hauptverzeichnis (gemeinsamer Domain-Code und Tokens)
 cd dashboard
 npm ci
-cp .env.example .env.local   # VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
-npm run dev
+npm run dev                  # http://localhost:5173 – ohne Zugangsdaten im Demo-Modus
 ```
 
-Siehe `dashboard/README.md`.
+Mit Supabase: `.env.example` nach `.env.local` kopieren (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`).
+Praxis-Zugänge, Zwei-Faktor-Pflicht und Sicherheitsmaßnahmen: siehe [`dashboard/README.md`](dashboard/README.md).
+
+| Wochenplan                                         | Buchungen                                             | Sprechzeiten                                              |
+| -------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------- |
+| ![Wochenplan](docs/screenshots/dashboard-week.png) | ![Buchungen](docs/screenshots/dashboard-bookings.png) | ![Sprechzeiten](docs/screenshots/dashboard-templates.png) |
 
 ## Projektstruktur
 

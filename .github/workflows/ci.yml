@@ -43,6 +43,35 @@ jobs:
           name: bundle-size
           path: bundle-size.txt
 
+  dashboard:
+    name: Praxis-Dashboard (Lint · Typecheck · Tests · Build)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            dashboard/package-lock.json
+      # Das Dashboard nutzt Domain-Code und Tokens der App (../src) – beide Installationen nötig.
+      - run: npm ci
+      - run: npm ci
+        working-directory: dashboard
+      - name: Lint
+        working-directory: dashboard
+        run: npm run lint
+      - name: Typecheck
+        working-directory: dashboard
+        run: npm run typecheck
+      - name: Tests (Vitest, axe)
+        working-directory: dashboard
+        run: npm test
+      - name: Build
+        working-directory: dashboard
+        run: npm run build
+
   database:
     name: Datenbank (Migrationen, RLS, pgTAP, Doppelbuchung)
     runs-on: ubuntu-24.04

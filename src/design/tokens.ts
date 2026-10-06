@@ -273,4 +273,10 @@ export const contrastPairs: ContrastPair[] = [
   { fg: 'textPrimary', bg: 'statusFewSoft', kind: 'text', usage: 'Offline-Banner' },
   { fg: 'textPrimary', bg: 'statusUnknownSoft', kind: 'text', usage: 'Banner „unbekannt“' },
   { fg: 'textOnAccent', bg: 'accent', kind: 'text', usage: 'Tab-Badge (offene Angebote)' },
+  {
+    fg: 'textOnPrimary',
+    bg: 'statusBooked',
+    kind: 'text',
+    usage: 'Praxis-Dashboard: Schaltfläche „Termin absagen“/„entfernen“',
+  },
 ];

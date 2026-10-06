@@ -21,21 +21,24 @@
 
 ## 2. Auftragsverarbeitung (Art. 28 DSGVO)
 
-| Dienstleister | Zweck | Region | AVV / DPA | Drittlandtransfer |
-|---|---|---|---|---|
-| Supabase Inc. | Datenbank, Auth, Edge Functions, Realtime | eu-central-1 (Frankfurt) | [ ] abschließen | US-Mutterkonzern → SCC/DPF prüfen |
-| Expo (650 Industries) | Push-Zustellung, Builds, Updates | USA | [ ] abschließen | SCC/DPF prüfen; Push-Inhalte datensparsam |
-| Apple (APNs) / Google (FCM) | Push-Zustellung | global | Plattformbedingungen | ja |
-| Sentry (EU-Region) oder GlitchTip (selbst gehostet) | Absturzberichte (Opt-in) | Frankfurt / eigener EU-Server | [ ] | Sentry: US-Mutterkonzern |
-| Kartenkacheln (OpenFreeMap / eigener Tileserver) | Kartendarstellung | DE/EU | [ ] bei eigenem Betrieb nicht nötig | IP-Adresse wird übertragen |
-| E-Mail-Versand für Codes (Supabase SMTP / eigener Anbieter) | Verifizierung | [ ] EU-Anbieter wählen | [ ] | |
+| Dienstleister                                               | Zweck                                      | Region                        | AVV / DPA                           | Drittlandtransfer                         |
+| ----------------------------------------------------------- | ------------------------------------------ | ----------------------------- | ----------------------------------- | ----------------------------------------- |
+| Supabase Inc.                                               | Datenbank, Auth, Edge Functions, Realtime  | eu-central-1 (Frankfurt)      | [ ] abschließen                     | US-Mutterkonzern → SCC/DPF prüfen         |
+| Expo (650 Industries)                                       | Push-Zustellung, Builds, Updates           | USA                           | [ ] abschließen                     | SCC/DPF prüfen; Push-Inhalte datensparsam |
+| Apple (APNs) / Google (FCM)                                 | Push-Zustellung                            | global                        | Plattformbedingungen                | ja                                        |
+| Sentry (EU-Region) oder GlitchTip (selbst gehostet)         | Absturzberichte (Opt-in)                   | Frankfurt / eigener EU-Server | [ ]                                 | Sentry: US-Mutterkonzern                  |
+| Kartenkacheln (OpenFreeMap / eigener Tileserver)            | Kartendarstellung                          | DE/EU                         | [ ] bei eigenem Betrieb nicht nötig | IP-Adresse wird übertragen                |
+| E-Mail-Versand für Codes (Supabase SMTP / eigener Anbieter) | Verifizierung (App), Anmeldung (Dashboard) | [ ] EU-Anbieter wählen        | [ ]                                 |                                           |
+| Hosting Praxis-Dashboard (statische Seite)                  | Auslieferung der Web-App                   | [ ] EU-Hoster wählen          | [ ]                                 |                                           |
 
 ## 3. Pflichtangaben und Texte
 
 - [ ] **Impressum** (§ 5 DDG) – Platzhalter in `legal.imprintBody`.
 - [ ] **Datenschutzerklärung** – Platzhalter in `legal.privacyBody`.
 - [ ] **Nutzungsbedingungen** – Vermittlung, Stornoregeln, Haftung, kein Behandlungsvertrag mit MedNow.
-- [ ] **Vereinbarungen mit Praxen** (Phase 6): Datenverarbeitung, Pflegepflichten für Slots, Verantwortlichkeiten (gemeinsame Verantwortlichkeit Art. 26 prüfen).
+- [ ] **Vereinbarungen mit Praxen** (Phase 6): Datenverarbeitung, Pflegepflichten für Slots, Verantwortlichkeiten (gemeinsame Verantwortlichkeit Art. 26 bzw. Auftragsverarbeitung Art. 28 prüfen), Pflicht zur Zwei-Faktor-Anmeldung, Umgang mit Absagen.
+- [ ] **Zugriffsprotokoll** der Praxen (`app.practice_audit_log`, 12 Monate) – Zweck, Frist und Auskunftsprozess festlegen.
+- [ ] **Benachrichtigung bei Praxis-Absage** (Push ohne Details) – Text und Pflicht zur direkten Information durch die Praxis klären.
 
 ## 4. Medizinprodukte, Berufs- und Wettbewerbsrecht
 
