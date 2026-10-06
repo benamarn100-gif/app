@@ -21,7 +21,7 @@ import {
   useSearchCenter,
 } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
-import { HEALTH_CONSENT_VERSION, isAppError } from '@/data/repository';
+import { ALARM_DAYS, HEALTH_CONSENT_VERSION, isAppError, type AlarmDays } from '@/data/repository';
 import { makeStyles } from '@/design/theme';
 import { SPECIALTIES } from '@/domain/seed/catalog';
 import { ConsentCheckbox } from '@/features/booking/ConsentCheckbox';
@@ -38,9 +38,13 @@ import { useSearchFilters } from '@/state/searchFilters';
 const DISTANCES = [5, 10, 25, 50] as const;
 
 /**
- * „Sag mir Bescheid“: Zeitfenster und maximale Entfernung wählen. Wird ein passender
- * Slot frei, bekommt die erste Person (FIFO) eine Push-Nachricht und 10 Minuten Reservierung.
+ * Termin-Alarm (Feature 1): Fachrichtung oder Praxis, Zeitraum (24 Std. bis 14 Tage) und
+ * Umkreis wählen. Wird ein passender Slot frei, bekommt die erste Person (FIFO) eine
+ * Push-Nachricht; ein Tipp öffnet das Angebot, der Slot ist 10 Minuten reserviert und mit
+ * einem weiteren Tipp gebucht (Direktbuchung, `/offer/[id]`).
+ * Nutzen: Niemand muss mehr stündlich nachsehen – der Termin kommt zu dir.
  * Push-Erlaubnis wird genau hier – im Moment des Nutzens – angefragt.
+ * Route-Parameter: `days` (1/3/7/14) und `specialtyId` als Voreinstellung.
  */
 export function WaitlistScreen() {
   const styles = useStyles();
@@ -48,7 +52,14 @@ export function WaitlistScreen() {
   const { t, language } = useT();
   const toast = useToast();
   const repo = useRepository();
-  const { practiceId } = useLocalSearchParams<{ practiceId: string }>();
+  const params = useLocalSearchParams<{
+    practiceId: string;
+    days?: string;
+    specialtyId?: string;
+  }>();
+  const practiceId = params.practiceId;
+  const presetDays = ALARM_DAYS.find((d) => String(d) === params.days);
+  const presetSpecialty = SPECIALTIES.find((sp) => String(sp.id) === params.specialtyId)?.id;
   const isAny = practiceId === 'any';
   const practice = usePractice(isAny ? undefined : practiceId);
   const center = useSearchCenter();
@@ -60,10 +71,14 @@ export function WaitlistScreen() {
   const join = useJoinWaitlist();
 
   const defaultSpecialty =
-    practice.data?.practice.specialtyIds[0] ?? filterSpecialties[0] ?? favorites[0] ?? 1;
+    presetSpecialty ??
+    practice.data?.practice.specialtyIds[0] ??
+    filterSpecialties[0] ??
+    favorites[0] ??
+    1;
   const [mode, setMode] = useState<'practice' | 'specialty'>(isAny ? 'specialty' : 'practice');
   const [specialtyId, setSpecialtyId] = useState<number>(defaultSpecialty);
-  const [days, setDays] = useState<3 | 7 | 14>(7);
+  const [days, setDays] = useState<AlarmDays>(presetDays ?? 7);
   const [maxKm, setMaxKm] = useState<number>(10);
   const [consent, setConsent] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
@@ -209,7 +224,7 @@ export function WaitlistScreen() {
         <View style={styles.section}>
           <Text variant="h3">{t('waitlist.window')}</Text>
           <View style={styles.wrap} accessibilityRole="radiogroup">
-            {([3, 7, 14] as const).map((d) => (
+            {ALARM_DAYS.map((d) => (
               <Chip
                 key={d}
                 role="radio"

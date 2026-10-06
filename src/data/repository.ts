@@ -62,9 +62,13 @@ export type BookInput = {
 
 export type HoldResult = { slot: Slot; heldUntil: string };
 
+export const ALARM_DAYS = [1, 3, 7, 14] as const;
+export type AlarmDays = (typeof ALARM_DAYS)[number];
+
 export type WaitlistInput = {
   target: WaitlistTarget;
-  days: 3 | 7 | 14;
+  /** 1 = nächste 24 Stunden („Heute noch frei“) */
+  days: AlarmDays;
   maxDistanceKm: number;
 };
 

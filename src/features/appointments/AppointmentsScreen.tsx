@@ -176,7 +176,10 @@ export function AppointmentsScreen() {
             }
             primaryAction={
               tab === 'upcoming'
-                ? { label: t('appointments.findAppointment'), onPress: () => router.push('/acute') }
+                ? {
+                    label: t('appointments.findAppointment'),
+                    onPress: () => router.navigate('/(tabs)/today'),
+                  }
                 : undefined
             }
             testID="appointments-empty"
@@ -223,6 +226,16 @@ export function AppointmentsScreen() {
                           date: formatBerlinDate(entry.createdAt, locale, {
                             day: 'numeric',
                             month: 'long',
+                          }),
+                        })}
+                        {' · '}
+                        {t('waitlist.until', {
+                          date: formatBerlinDate(entry.windowEnd, locale, {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
                           }),
                         })}
                       </Text>

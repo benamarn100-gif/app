@@ -17,9 +17,9 @@ import {
   Stagger,
   Text,
 } from '@/components';
-import { Bell, Phone } from '@/components/icons';
+import { Bell, BellRing, ChevronRight, Phone } from '@/components/icons';
 import { useAvailabilitySearch } from '@/data/hooks';
-import { makeStyles } from '@/design/theme';
+import { makeStyles, useTheme } from '@/design/theme';
 import { rankAcute } from '@/domain/ranking/acute';
 import type { PracticeAvailability } from '@/domain/types';
 import { useBasicSearchParams } from '@/features/search/useSearchParams';
@@ -47,7 +47,8 @@ type Row =
  * Abend sinnvoll). Ist darin nichts frei, sagen wir das ehrlich und zeigen den frühesten Termin
  * der Woche.
  */
-export function AcuteScreen() {
+export function AcuteScreen({ variant = 'stack' }: { variant?: 'stack' | 'tab' }) {
+  const theme = useTheme();
   const styles = useStyles();
   const insets = useSafeAreaInsets();
   const { t, locale } = useT();
@@ -111,7 +112,13 @@ export function AcuteScreen() {
   const openPractice = useCallback((id: string) => router.push(`/practice/${id}`), []);
 
   const header = (
-    <View style={styles.header}>
+    <View style={[styles.header, variant === 'tab' && { paddingTop: insets.top + theme.space.md }]}>
+      {/* Als Tab ohne Stack-Kopf: eigener Titel */}
+      {variant === 'tab' ? (
+        <Text variant="h1" accessibilityRole="header">
+          {t('acute.title')}
+        </Text>
+      ) : null}
       <OfflineBanner />
       <Text variant="body" color="textSecondary">
         {t('acute.subtitle')}
@@ -128,6 +135,24 @@ export function AcuteScreen() {
           {t('acute.resultCount', { count: bookableCount })}
         </Text>
       ) : null}
+      {/* „Heute noch frei“-Alarm: meldet sich, sobald in 24 Std. etwas frei wird */}
+      <Card
+        tone="muted"
+        onPress={() => router.push('/waitlist/any?days=1')}
+        accessibilityRole="button"
+        accessibilityLabel={`${t('acute.alarmTitle')}. ${t('acute.alarmBody')}`}
+        testID="acute-alarm"
+        style={styles.alarm}
+      >
+        <BellRing size={22} color={theme.colors.primary} strokeWidth={2.25} />
+        <View style={styles.flex}>
+          <Text variant="bodyStrong">{t('acute.alarmTitle')}</Text>
+          <Text variant="small" color="textSecondary">
+            {t('acute.alarmBody')}
+          </Text>
+        </View>
+        <ChevronRight size={20} color={theme.colors.primary} strokeWidth={2.25} />
+      </Card>
     </View>
   );
 
@@ -151,7 +176,10 @@ export function AcuteScreen() {
         data={loading ? [] : rows}
         keyExtractor={(row) => row.id}
         getItemType={(row) => row.kind}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: insets.bottom + 24 }}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingBottom: insets.bottom + (variant === 'tab' ? 96 : 24),
+        }}
         ListHeaderComponent={header}
         ListEmptyComponent={
           loading ? (
@@ -232,4 +260,6 @@ const useStyles = makeStyles((t) => ({
   sectionHeader: { gap: 2, paddingTop: t.space.lg, paddingBottom: t.space.sm },
   item: { gap: t.space.xs, paddingBottom: t.space.sm },
   footer: { paddingTop: t.space.lg },
+  alarm: { flexDirection: 'row', alignItems: 'center', gap: t.space.sm },
+  flex: { flex: 1, gap: 2 },
 }));

@@ -25,7 +25,7 @@ describe('Phase 2 – Entdecken (DoD: ≤ 3 Taps bis zu Praxen mit korrektem Sta
     await renderWithProviders(<HomeScreen />, { repository: createTestRepository(NOW) }).result;
     const hero = await screen.findByTestId('hero-acute');
     await fireEvent.press(hero);
-    expect(mockRouter.push).toHaveBeenCalledWith('/acute');
+    expect(mockRouter.navigate).toHaveBeenCalledWith('/(tabs)/today');
   });
 
   it('Akut-Modus zeigt Praxen mit Status, frühester Termin zuerst', async () => {

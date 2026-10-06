@@ -71,7 +71,7 @@ const waitlistSchema = z.discriminatedUnion('action', [
       z.object({ kind: z.literal('doctor'), doctorId: uuid }),
       z.object({ kind: z.literal('specialty'), specialtyId: z.number().int().min(1).max(99) }),
     ]),
-    days: z.union([z.literal(3), z.literal(7), z.literal(14)]),
+    days: z.union([z.literal(1), z.literal(3), z.literal(7), z.literal(14)]),
     maxDistanceKm: z.number().int().min(1).max(50),
     center: z
       .object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) })

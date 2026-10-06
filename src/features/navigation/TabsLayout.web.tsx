@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 
-import { CalendarDays, CircleUserRound, House, Search } from '@/components/icons';
+import { CalendarDays, CircleUserRound, House, Search, Zap } from '@/components/icons';
 import { useOffers } from '@/data/hooks';
 import { useTheme } from '@/design/theme';
 import { typography } from '@/design/tokens';
@@ -36,6 +36,14 @@ export function TabsLayout() {
           title: t('tabs.home'),
           tabBarIcon: ({ color }) => <House color={color} size={22} />,
           tabBarButtonTestID: 'tab-home',
+        }}
+      />
+      <Tabs.Screen
+        name="today"
+        options={{
+          title: t('tabs.today'),
+          tabBarIcon: ({ color }) => <Zap color={color} size={22} />,
+          tabBarButtonTestID: 'tab-today',
         }}
       />
       <Tabs.Screen

@@ -128,7 +128,7 @@ function AcuteHero({ freeSoonCount }: { freeSoonCount: number | undefined }) {
     <Card
       tone="primary"
       padding="lg"
-      onPress={() => router.push('/acute')}
+      onPress={() => router.navigate('/(tabs)/today')}
       accessibilityRole="button"
       // Alles Sichtbare in einer Ansage (WCAG 2.5.3: sichtbarer Name steht vorn).
       accessibilityLabel={[`${t('home.heroTitle')}.`, t('home.heroBody'), status]

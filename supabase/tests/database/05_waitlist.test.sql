@@ -1,7 +1,7 @@
 -- DoD Phase 4: Slot wird frei → passende Person bekommt Push (Outbox),
 -- Reservierung läuft nach 10 Minuten ab und die nächste Person rückt nach (FIFO).
 begin;
-select plan(15);
+select plan(17);
 
 insert into auth.users (id, email, is_anonymous) values
   ('00000000-0000-4000-8000-0000000000aa', 'first@example.org', false),
@@ -100,6 +100,19 @@ select is(
   (select status::text from public.waitlist_entries where user_id = '00000000-0000-4000-8000-0000000000bb'),
   'fulfilled',
   'Wartelisteneintrag von B ist erfüllt'
+);
+
+-- Termin-Alarm „nächste 24 Stunden“ (p_days = 1); andere Zeiträume bleiben ungültig
+create temp table alarm24 as
+  select app.join_waitlist('00000000-0000-4000-8000-0000000000cc', null, null, 1::smallint, 50.5558, 9.6808, 1, 10) as id;
+select ok(
+  (select upper(w.time_window) - lower(w.time_window) = interval '1 day'
+     from public.waitlist_entries w join alarm24 a on a.id = w.id),
+  'Termin-Alarm für die nächsten 24 Stunden'
+);
+select throws_ok(
+  $$ select app.join_waitlist('00000000-0000-4000-8000-0000000000cc', null, null, 1::smallint, 50.5558, 9.6808, 2, 10) $$,
+  'P0001', null, 'Zeitraum 2 Tage ist ungültig'
 );
 
 select * from finish();

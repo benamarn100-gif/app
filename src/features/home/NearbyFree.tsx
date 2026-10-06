@@ -52,7 +52,7 @@ export function NearbyFree({
       <SectionHeader
         title={t('home.nearbyTitle')}
         actionLabel={items.length ? t('common.showAll') : undefined}
-        onAction={() => router.push('/acute')}
+        onAction={() => router.navigate('/(tabs)/today')}
       />
       {/* Die Anzahl für 24 h steht schon im Hero – hier nur der ehrliche Rückfall-Hinweis */}
       {!loading && !error && items.length && window === 'week' ? (
