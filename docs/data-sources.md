@@ -1,0 +1,23 @@
+# Datenquellen und Lizenzen
+
+> Stand: 06.10.2026. Jede neue Quelle wird hier mit Lizenz, Pflichten und Speicherort eingetragen, bevor Daten importiert werden.
+
+| Quelle | Inhalt | Lizenz | Pflichten | Status | `source` / `source_license` |
+|---|---|---|---|---|---|
+| Eigener Seed-Generator (`src/domain/seed/`) | ~60 **fiktive** Praxen (Standard: Fulda), Ärzte, 12 Fachrichtungen, Slots für 14 Tage | eigenes Werk, frei verwendbar | in der UI als „Demo“ kennzeichnen; keine realen Namen/Adressen | Phase 1 | `seed` / `Fiktive Demo-Daten (MedNow)` |
+| Praxis-Dashboard | von Praxen selbst gepflegte Slots, Sprechzeiten, Leistungen | Nutzungsbedingungen für Praxen (vor Launch anwaltlich prüfen) | Praxis bestätigt Richtigkeit; `verified_at` bei Prüfung | Phase 6 | `practice_dashboard` / `Praxisangaben` |
+| OpenStreetMap (Overpass/Geofabrik-Extrakt) | Praxisverzeichnis: Name, Adresse, Koordinaten, Telefon, Website, Fachrichtung (`amenity=doctors`, `healthcare=doctor`, `healthcare:speciality=*`), ggf. `wheelchair=*`, `opening_hours=*` | **ODbL 1.0** | Quellenangabe „© OpenStreetMap-Mitwirkende, ODbL“ in App (Lizenzen-Screen + Kartenattribution); abgeleitete Datenbank unter ODbL bei Veröffentlichung (Share-Alike); keine Verfügbarkeitsangaben erfinden → Status „Unbekannt“ | geplant (frühestens Phase 6) | `osm` / `ODbL 1.0` |
+| OpenStreetMap-Vektorkacheln (Karte) | Kartendarstellung | ODbL (Daten) + Lizenz des Kachel-Stils | sichtbare Attribution auf der Karte | Phase 2 | – |
+| 116117-Terminservice (§ 370a SGB V) | Termine aus dem TSS-Pool | Zertifizierung + Verfahrensordnung der KBV | siehe `docs/116117-spike.md` | nur Machbarkeitsstudie | `tss_116117` / `KBV-Verfahrensordnung` |
+
+## Nicht verwendet
+
+- **Doctolib, Jameda, andere Buchungsportale:** keine offene API; Scraping ist ausgeschlossen (Nutzungsbedingungen, Datenbankherstellerrecht §§ 87a ff. UrhG).
+- **Arztsuchen der KVen:** Nutzungsbedingungen erlauben in der Regel keine Übernahme in Drittprodukte – vor einer Nutzung einzeln prüfen.
+- **Google Places u. ä.:** Lizenz verbietet Speicherung/Weiterverwendung außerhalb von Google-Karten.
+
+## Grundsätze
+
+1. Keine erfundenen Fakten über reale Praxen: Reale Verzeichnisdaten werden nie mit Demo-Verfügbarkeit kombiniert.
+2. Jede Praxis trägt `source`, `source_license` und – falls geprüft – `verified_at`; die App zeigt die Quelle im Praxisprofil.
+3. Verfügbarkeit ohne aktuelle Quelle (> 24 h) ist „Unbekannt“.
