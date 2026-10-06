@@ -139,14 +139,25 @@ jobs:
 
       - name: Rauchtest (Suche mit dem öffentlichen App-Schlüssel)
         run: |
+          set -o pipefail
           key="$(supabase projects api-keys --project-ref "$PROJECT_REF" -o json \
             | jq -r '[.[] | select(.type == "publishable")][0].api_key // empty')"
           [ -n "$key" ] || { echo "::error::Kein Publishable Key gefunden"; exit 1; }
-          count="$(curl -fsS -X POST "https://$PROJECT_REF.supabase.co/rest/v1/rpc/search_availability" \
+          # Genau wie die App (Rolle anon): Fehler wie fehlende Rechte sollen den Lauf rot machen.
+          body="$(curl -sS -w '\n%{http_code}' -X POST "https://$PROJECT_REF.supabase.co/rest/v1/rpc/search_availability" \
             -H "apikey: $key" -H 'Content-Type: application/json' \
-            -d '{"p_lat": 50.5558, "p_lng": 9.6808, "p_radius_km": 15}' | jq 'length')"
+            -d '{"p_lat": 50.5558, "p_lng": 9.6808, "p_radius_km": 15}')"
+          status="${body##*$'\n'}"; body="${body%$'\n'*}"
+          if [ "$status" != "200" ]; then
+            echo "::error::Suche antwortet mit HTTP $status: $(echo "$body" | head -c 300)"
+            exit 1
+          fi
+          count="$(echo "$body" | jq 'length')"
           echo "Praxen im Umkreis von Fulda: $count"
-          [ "$count" -gt 0 ] || echo "::warning::Keine Praxen gefunden – Demo-Daten eingespielt?"
+          if [ "$count" -eq 0 ]; then
+            if [ "${{ inputs.seed }}" = "true" ]; then echo "::error::Keine Praxen trotz Demo-Daten"; exit 1; fi
+            echo "::warning::Keine Praxen gefunden – Demo-Daten eingespielt?"
+          fi
 
       - name: Zusammenfassung
         run: |
