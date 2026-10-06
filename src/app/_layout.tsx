@@ -167,6 +167,7 @@ function AppStack() {
         <Stack.Screen name="settings/privacy" options={{ title: t('privacy.title') }} />
         <Stack.Screen name="settings/family" options={{ title: t('profile.family') }} />
         <Stack.Screen name="settings/legal/[page]" options={{ title: '' }} />
+        <Stack.Screen name="settings/diagnostics" options={{ title: t('diagnostics.title') }} />
         <Stack.Screen name="dev/showcase" options={{ title: t('showcase.title') }} />
       </Stack>
     </>

@@ -1,0 +1,22 @@
+name: Testversion aktualisieren (EAS Update)
+
+# Neue App-Logik (JS) ohne Neuinstallation auf die Testgeräte bringen.
+# Nur für Änderungen ohne neue native Module; sonst neuen Build erstellen.
+# Start: eas workflow:run update-preview.yml (oder über das Expo-Dashboard).
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        type: string
+        required: false
+        description: 'Was ist neu?'
+
+jobs:
+  update:
+    name: Update auf Kanal preview
+    type: update
+    environment: preview
+    params:
+      channel: preview
+      message: ${{ inputs.message || 'Testversion aktualisiert' }}

@@ -1,0 +1,29 @@
+name: Testversion bauen
+
+# Installierbare Testversion (Profil „preview“, Demo-Daten, Diagnose-Seite).
+# Android: APK zum direkten Installieren. iOS: braucht ein Apple-Developer-Konto
+# und registrierte Geräte (eas device:create) – siehe docs/test-builds.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      ios:
+        type: boolean
+        required: false
+        default: false
+        description: 'Auch iOS bauen'
+
+jobs:
+  build_android:
+    name: Android (APK)
+    type: build
+    params:
+      platform: android
+      profile: preview
+  build_ios:
+    name: iOS (intern)
+    if: ${{ inputs.ios }}
+    type: build
+    params:
+      platform: ios
+      profile: preview

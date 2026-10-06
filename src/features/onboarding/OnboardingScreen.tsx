@@ -18,6 +18,7 @@ import { SPECIALTIES } from '@/domain/seed/catalog';
 import { AGE_GROUPS, type AgeGroup } from '@/domain/types';
 import { LocationPicker } from '@/features/location/LocationPicker';
 import { useT } from '@/i18n/useT';
+import { useMarkInteractive } from '@/lib/startup';
 import { usePreferences } from '@/state/preferences';
 
 const CHILD_GROUPS: AgeGroup[] = ['child_0_5', 'child_6_12', 'teen_13_17'];
@@ -35,6 +36,7 @@ export function OnboardingScreen() {
   const reduce = useReducedMotion();
   const prefs = usePreferences();
   const [step, setStep] = useState<-1 | 0 | 1 | 2>(-1);
+  useMarkInteractive('onboarding', true);
 
   const finish = () => {
     prefs.completeOnboarding();

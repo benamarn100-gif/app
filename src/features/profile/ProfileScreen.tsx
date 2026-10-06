@@ -10,6 +10,7 @@ import {
   BookOpen,
   CircleUserRound,
   FileText,
+  FlaskConical,
   HeartHandshake,
   Info,
   Languages,
@@ -22,6 +23,7 @@ import {
   Smartphone,
   Users,
 } from '@/components/icons';
+import { env } from '@/config/env';
 import { useSearchCenter, useSession } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
 import { makeStyles } from '@/design/theme';
@@ -235,6 +237,17 @@ export function ProfileScreen() {
           />
         </Card>
       </View>
+
+      {env.diagnostics || __DEV__ ? (
+        <Card padding="none">
+          <ListRow
+            icon={FlaskConical}
+            title={t('profile.diagnostics')}
+            onPress={() => router.push('/settings/diagnostics')}
+            testID="open-diagnostics"
+          />
+        </Card>
+      ) : null}
 
       {__DEV__ ? (
         <Card padding="none">

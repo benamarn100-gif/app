@@ -1,3 +1,4 @@
+import * as Updates from 'expo-updates';
 import { z } from 'zod';
 
 import { resolveCity } from './city';
@@ -44,6 +45,13 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
   });
 }
 
+/**
+ * Testversionen erkennt die App zusätzlich am Update-Kanal des Builds (eas.json): So bleibt
+ * die Diagnose auch nach einem EAS Update an, das ohne die Build-Variablen erstellt wurde.
+ */
+const TEST_CHANNELS = ['development', 'preview', 'preview-backend'];
+const testChannel = TEST_CHANNELS.includes(Updates.channel ?? '') ? '1' : undefined;
+
 // Expo ersetzt process.env.EXPO_PUBLIC_* zur Build-Zeit nur bei direktem Zugriff.
 export const env: Env = parseEnv({
   EXPO_PUBLIC_DATA_MODE: process.env.EXPO_PUBLIC_DATA_MODE,
@@ -52,7 +60,7 @@ export const env: Env = parseEnv({
   EXPO_PUBLIC_MAP_STYLE_URL: process.env.EXPO_PUBLIC_MAP_STYLE_URL,
   EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
   EXPO_PUBLIC_DEMO_CITY: process.env.EXPO_PUBLIC_DEMO_CITY,
-  EXPO_PUBLIC_DIAGNOSTICS: process.env.EXPO_PUBLIC_DIAGNOSTICS,
+  EXPO_PUBLIC_DIAGNOSTICS: process.env.EXPO_PUBLIC_DIAGNOSTICS || testChannel,
 });
 
 export const demoCity = resolveCity(env.demoCity);

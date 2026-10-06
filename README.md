@@ -92,13 +92,15 @@ CI (GitHub Actions) führt alles außer Maestro bei jedem Push aus (`.github/wor
 
 ## Veröffentlichen mit Expo (EAS)
 
-Erst veröffentlichen, wenn alles abgenommen ist. Ablauf:
+Testversionen (Demo-Daten, Diagnose-Seite, EAS Update): **`docs/test-builds.md`**.
+Das Expo-Projekt ist in `app.config.ts` verknüpft. Erst veröffentlichen, wenn alles abgenommen ist. Ablauf:
 
 ```bash
-npx eas-cli@latest build --profile preview --platform all      # interne Testversion (TestFlight/APK)
+npx eas-cli@latest build --profile preview --platform android  # Testversion (APK mit QR-Code)
 npx eas-cli@latest build --profile production --platform all   # Store-Builds
 npx eas-cli@latest submit --platform ios                       # App Store Connect
 npx eas-cli@latest submit --platform android                   # Google Play
+npx eas-cli@latest update --channel preview                    # Testgeräte ohne Neuinstallation
 npx eas-cli@latest update --channel production                 # OTA-Updates (nur JS/Assets)
 ```
 

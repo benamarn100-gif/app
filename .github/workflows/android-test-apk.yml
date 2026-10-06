@@ -1,0 +1,61 @@
+name: Android-Test-APK (ohne EAS)
+
+# Ersatzweg, falls EAS gerade nicht verfügbar ist: baut die Testversion direkt auf
+# GitHub (Demo-Daten, Diagnose-Seite, ohne EAS Update) und legt die APK als Artefakt ab.
+# Signiert mit dem Debug-Schlüssel – nur zum Testen, nicht für den Store.
+# Hauptweg für Testversionen bleibt EAS Build (docs/test-builds.md).
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-test-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    name: APK bauen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      APP_VARIANT: preview
+      EXPO_PUBLIC_DATA_MODE: memory
+      EXPO_PUBLIC_DIAGNOSTICS: '1'
+      EXPO_NO_UPDATES: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+      - run: npm ci
+      - name: Natives Android-Projekt erzeugen
+        run: npx expo prebuild --platform android --no-install --clean
+      - name: APK bauen (arm64)
+        working-directory: android
+        run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a --no-daemon
+      - name: Dateiname
+        id: name
+        run: echo "file=mednow-test-${GITHUB_SHA::7}.apk" >> "$GITHUB_OUTPUT"
+      - run: mv android/app/build/outputs/apk/release/app-release.apk "${{ steps.name.outputs.file }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.name.outputs.file }}
+          path: ${{ steps.name.outputs.file }}
+          retention-days: 14
+          if-no-files-found: error
+      - name: Zusammenfassung
+        run: |
+          {
+            echo "### Testversion (Android, arm64)"
+            echo "APK: Artefakt **${{ steps.name.outputs.file }}** unten auf dieser Seite herunterladen, entpacken und auf dem Gerät öffnen."
+            echo "Demo-Daten, Diagnose unter Profil → Testversion & Diagnose."
+          } >> "$GITHUB_STEP_SUMMARY"

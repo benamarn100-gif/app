@@ -29,6 +29,7 @@ import { toBerlin } from '@/domain/time/berlin';
 import { AppointmentCard } from '@/features/appointments/AppointmentCard';
 import { useBasicSearchParams } from '@/features/search/useSearchParams';
 import { useT } from '@/i18n/useT';
+import { useMarkInteractive } from '@/lib/startup';
 import { useNow } from '@/lib/useNow';
 import { usePreferences } from '@/state/preferences';
 import { useSearchFilters } from '@/state/searchFilters';
@@ -100,6 +101,7 @@ export function HomeScreen() {
   };
 
   const loadError = todayQuery.isError && weekQuery.isError && !todayQuery.data;
+  useMarkInteractive('home', !todayQuery.isLoading);
 
   return (
     <View style={styles.root}>

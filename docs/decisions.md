@@ -186,3 +186,14 @@ Beim Bau der klickbaren Demo fielen Lücken der Web-Variante auf, die auch echte
 
 **D-54 · Kein „gerade vergeben“-Hinweis für die eigene Buchung.**
 Die Praxisseite liegt unter dem Buchungs-Sheet; die optimistische Markierung „gebucht“ löste dort den Hinweis für fremde Buchungen aus. Er erscheint jetzt nur, wenn die Seite im Vordergrund ist und der Termin nicht zu den eigenen Buchungen gehört (Regressionstest in `flows.test.tsx`).
+
+## Testversionen
+
+**D-55 · Testversionen über EAS mit Demo-Daten, erkennbar am Update-Kanal.**
+Profil `preview` baut eine installierbare APK bzw. interne iOS-Version mit Demo-Daten, Namen „MedNow Test“ und Diagnose-Seite. Die Projekt-ID steht fest in `app.config.ts` (wie `eas init --id`; dynamische Konfiguration kann EAS nicht selbst beschreiben) – sie ist kein Geheimnis und muss auch auf den EAS-Build-Servern vorhanden sein (Push-Token, Updates). Diagnose ist an, wenn `EXPO_PUBLIC_DIAGNOSTICS=1` gesetzt ist **oder** der Build auf einem Testkanal läuft – so bleibt sie auch nach einem EAS Update an, das ohne die Build-Variablen entsteht. Produktions-Builds werden erst nach Abnahme eingereicht (`docs/test-builds.md`).
+
+**D-56 · EAS Update ohne Wartezeit beim Start.**
+`expo-updates` mit `checkAutomatically: ON_LOAD` und `fallbackToCacheTimeout: 0`: Der Kaltstart wartet nie auf das Netz (Ziel < 2 s), ein geladenes Update gilt ab dem nächsten Start. `runtimeVersion` folgt der App-Version; neue native Module erfordern eine neue Version und einen neuen Build. Für Builds ohne EAS (GitHub-Ersatzweg) schaltet `EXPO_NO_UPDATES=1` Updates ab.
+
+**D-57 · Startzeit: in der App ab JS-Start, von außen ab Prozessstart.**
+Ohne natives Zusatzmodul kennt JS den Prozessstart nicht. Die App misst daher vom JS-Start (`performance.rnStartupTiming.startTime`, sonst erstes geladenes Modul über `index.ts`) bis zur ersten bedienbaren Ansicht (Startseite mit Daten bzw. Einführung, nach dem nächsten Frame) und speichert die letzten 20 Werte nur in Testversionen lokal. Den vollständigen Kaltstart misst `scripts/measure-startup.sh` über logcat-Zeitstempel („START u0“ bis zur Messzeile der App) – ohne Code im Produktions-Pfad, der Daten sammelt.

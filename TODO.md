@@ -25,7 +25,9 @@
 
 ### App-Auslieferung (Expo/EAS) – erst nach Abnahme
 
-- [ ] `npx eas-cli init` → `EAS_PROJECT_ID`; Bundle-ID/Package (`brand.ts`) final.
+- [x] Expo-Projekt verknüpft (`extra.eas.projectId`), Testprofile und EAS Update eingerichtet (`docs/test-builds.md`).
+- [ ] Expo-Projekt auf expo.dev mit dem GitHub-Repository verbinden (für Builds aus dem Repository).
+- [ ] Bundle-ID/Package (`brand.ts`) final, bevor die erste Store-Version entsteht.
 - [ ] Push: APNs-Key (iOS) und FCM-V1-Dienstkonto (Android) in EAS hinterlegen; Zustellung und datensparsame Sperrbildschirm-Texte auf Geräten prüfen.
 - [ ] Produktions-Kartenstil auf eigenem EU-Tileserver (`EXPO_PUBLIC_MAP_STYLE_URL`), OSM-Attribution sichtbar lassen.
 - [ ] Sentry: Organisation in der EU-Region, DSN als `EXPO_PUBLIC_SENTRY_DSN`, „Prevent Storing of IP Addresses“ aktivieren, `SENTRY_ORG`/`SENTRY_PROJECT`/`SENTRY_AUTH_TOKEN` als EAS-Secrets für Quellkarten (Metro-Konfiguration `getSentryExpoConfig` ergänzen).
@@ -40,7 +42,7 @@
 ## 2. Qualität auf echten Geräten
 
 - [ ] Barrierefreiheit: VoiceOver, TalkBack, Schaltersteuerung, 200 % Schrift, Querformat (Prüfplan `docs/accessibility-audit.md` §4) – mit Betroffenen.
-- [ ] Performance: Kaltstart < 2 s, 60 fps, Speicher (Messplan `docs/performance.md` §4).
+- [ ] Performance: Kaltstart < 2 s, 60 fps, Speicher (Messplan `docs/performance.md` §4; Messung: `scripts/measure-startup.sh` und Diagnose-Seite der Testversion).
 - [ ] Maestro-Abläufe (`.maestro/`) regelmäßig ausführen, z. B. EAS Workflows oder macOS-Runner mit Simulator in CI.
 - [ ] Lasttest `search_availability` und `book_slot` mit realistischer Datenmenge (z. B. 5 000 Praxen, 1 Mio. Slots).
 

@@ -36,8 +36,16 @@ zod (Kern, auch in `zod/mini` enthalten – Umstieg lohnt kaum), Supabase-Client
 
 ## 4. Noch zu messen (echte Geräte, Release-Build)
 
-1. **Kaltstart** bis interaktiv auf einem Mittelklasse-Android (z. B. Pixel 6a) und iPhone 12:
-   `adb shell am start -W de.mednow.app/.MainActivity` bzw. Xcode Instruments „App Launch“. Ziel < 2 s.
+Werkzeuge (D-57, `docs/test-builds.md` §6): Testversion (`preview`) installieren, dann
+
+- **Android:** `scripts/measure-startup.sh 10` – Prozessstart → erstes Bild → bedienbar, Mediane über 10 Läufe
+- **iOS:** Xcode Instruments „App Launch“; JS-Anteil auf der Diagnose-Seite (Profil → Testversion & Diagnose)
+
+| Gerät | Build | erstes Bild | bedienbar | davon JS | Datum |
+| ----- | ----- | ----------- | --------- | -------- | ----- |
+| –     | –     | –           | –         | –        | –     |
+
+1. **Kaltstart** bis bedienbar auf einem Mittelklasse-Android (z. B. Pixel 6a) und iPhone 12. Ziel < 2 s.
 2. **Scrollen** in Suche und Akut-Modus mit 60 Ergebnissen: Perf-Monitor (Entwicklermenü) bzw. Android GPU-Profiling. Ziel 60 fps, keine JS-Frame-Einbrüche > 16 ms.
 3. **Speicher** nach 10 Minuten Nutzung inkl. Karte.
 4. **Netz:** Suche bei 3G-Drosselung < 1,5 s bis zur ersten Liste (Skeletons ab 0 ms).
