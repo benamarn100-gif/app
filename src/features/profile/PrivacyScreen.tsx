@@ -1,4 +1,4 @@
-import { ScrollView, Share, View } from 'react-native';
+import { Platform, ScrollView, Share, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -58,11 +58,20 @@ export function PrivacyScreen() {
 
   const exportData = async () => {
     try {
-      const data = await repo.exportData();
-      await Share.share({ title: 'mednow-export.json', message: JSON.stringify(data, null, 2) });
+      const json = JSON.stringify(await repo.exportData(), null, 2);
+      if (Platform.OS === 'web') {
+        // Browser: kein Teilen-Dialog verlässlich verfügbar → in die Zwischenablage
+        await navigator.clipboard.writeText(json);
+        toast.show(t('privacy.exportCopied'), 'success');
+        return;
+      }
+      await Share.share({ title: 'mednow-export.json', message: json });
       toast.show(t('privacy.exportReady'), 'success');
     } catch {
-      toast.show(t('errors.generic'), 'error');
+      toast.show(
+        Platform.OS === 'web' ? t('privacy.exportUnavailable') : t('errors.generic'),
+        'error',
+      );
     }
   };
 

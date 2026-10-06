@@ -435,6 +435,8 @@
     "export": "Export my data",
     "exportHint": "A file with everything we have stored about you.",
     "exportReady": "Export created.",
+    "exportCopied": "Your data was copied to the clipboard as JSON.",
+    "exportUnavailable": "Export isn’t available in this browser. The app gives you a file.",
     "deleteAccount": "Delete account and data",
     "deleteConfirmTitle": "Really delete everything?",
     "deleteConfirmBody": "Upcoming appointments will be cancelled, waitlists ended and all data deleted. This cannot be undone.",
