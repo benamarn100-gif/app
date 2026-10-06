@@ -118,7 +118,7 @@ grant execute on function app.demo_generate_slots(integer), app.demo_touch_sourc
 do $$
 begin
   if exists (select 1 from pg_available_extensions where name = 'pg_net') then
-    create extension if not exists pg_net;
+    create extension if not exists pg_net with schema extensions;
   end if;
   if exists (select 1 from pg_available_extensions where name = 'pg_cron') then
     create extension if not exists pg_cron;

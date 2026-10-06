@@ -4,7 +4,19 @@
 > den GitHub-Workflow „Supabase bereitstellen (Frankfurt)“ (`.github/workflows/supabase-deploy.yml`).
 > Der Workflow ist wiederholbar und bricht ab, wenn das Projekt nicht in Frankfurt liegt.
 
-## 1. Projekt anlegen (einmalig)
+## Stand des Projekts
+
+| Punkt                 | Stand                                                                                                                                                                                                                                                 |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Projekt               | `mednow`, Ref `gimynoopnheaapqihsdb`, Region eu-central-1, Organisation „MedNow“ (Free-Tarif)                                                                                                                                                         |
+| Migrationen 0100–0800 | eingespielt über den Supabase-Connector, Historie passt zu den Dateinamen                                                                                                                                                                             |
+| Prüfung               | 62 Funktionen, Spalten, RLS-Regeln und Rechte per Prüfsumme identisch mit der lokal getesteten DB                                                                                                                                                     |
+| Vault-Secrets         | angelegt (Werte nur in der Datenbank erzeugt)                                                                                                                                                                                                         |
+| pg_cron / pg_net      | aktiv; 4 Jobs angelegt (`mednow-demo-roll` folgt mit 0900)                                                                                                                                                                                            |
+| Offen                 | Migration 0900 (Funktionen mit DELETE, vom Connector zurückgestellt), Demo-Daten, Auth-/API-Einstellungen (`config push`: anonyme Anmeldung, Schema `app`, E-Mail-Codes, MFA), Edge Functions, `WORKER_SECRET` → erledigt der Workflow nach Schritt 2 |
+| App                   | `eas.json`: `preview-backend` und `production` zeigen auf dieses Projekt (Publishable Key)                                                                                                                                                            |
+
+## 1. Projekt anlegen (einmalig, erledigt)
 
 **Weg A – Dashboard:** supabase.com → _New project_ → Name `mednow`, **Region: Central EU (Frankfurt)**,
 sicheres Datenbank-Passwort vergeben und im Passwort-Manager speichern. Für den Echtbetrieb mit
@@ -19,12 +31,12 @@ einspielen und den Zustand prüfen. Das Datenbank-Passwort vergibst du trotzdem 
 
 GitHub → Repository → _Settings → Secrets and variables → Actions_:
 
-| Art      | Name                    | Wert                                                           |
-| -------- | ----------------------- | -------------------------------------------------------------- |
-| Secret   | `SUPABASE_ACCESS_TOKEN` | supabase.com/dashboard/account/tokens → _Generate new token_   |
-| Secret   | `SUPABASE_DB_PASSWORD`  | Passwort aus Schritt 1                                         |
-| Secret   | `EXPO_ACCESS_TOKEN`     | optional, für Push (`docs/push-setup.md`)                      |
-| Variable | `SUPABASE_PROJECT_REF`  | die 20 Zeichen aus der Projekt-URL `https://<ref>.supabase.co` |
+| Art      | Name                    | Wert                                                                                                             |
+| -------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Secret   | `SUPABASE_ACCESS_TOKEN` | supabase.com/dashboard/account/tokens → _Generate new token_                                                     |
+| Secret   | `SUPABASE_DB_PASSWORD`  | Projekt angelegt über den Connector → einmal neu setzen: Project Settings → Database → _Reset database password_ |
+| Secret   | `EXPO_ACCESS_TOKEN`     | optional, für Push (`docs/push-setup.md`)                                                                        |
+| Variable | `SUPABASE_PROJECT_REF`  | `gimynoopnheaapqihsdb`                                                                                           |
 
 Kein Service-Role-Key – weder in GitHub noch in der App noch im Repository.
 

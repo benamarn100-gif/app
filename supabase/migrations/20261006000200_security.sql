@@ -84,7 +84,14 @@ create policy "Eigene Einwilligungen" on public.consents for select to authentic
 revoke insert, update, delete, truncate on all tables in schema public from anon, authenticated;
 
 -- Realtime: Clients dürfen Slot-Topics empfangen, aber nichts senden.
-alter table realtime.messages enable row level security;
+-- Auf gehosteten Projekten gehört realtime.messages Supabase und hat RLS bereits an;
+-- nur lokal (eigener Superuser) muss sie eingeschaltet werden.
+do $$
+begin
+  if not (select relrowsecurity from pg_class where oid = 'realtime.messages'::regclass) then
+    alter table realtime.messages enable row level security;
+  end if;
+end $$;
 create policy "Slot-Änderungen empfangen" on realtime.messages for select to anon, authenticated
   using (realtime.messages.extension = 'broadcast' and realtime.topic() like 'slots:geo:%');
 create policy "Eigene Angebote empfangen" on realtime.messages for select to authenticated

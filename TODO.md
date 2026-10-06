@@ -16,7 +16,8 @@
 
 ### Backend (Supabase, Region eu-central-1)
 
-- [ ] Projekt in Frankfurt anlegen, GitHub-Secrets setzen, Workflow „Supabase bereitstellen (Frankfurt)“ ausführen (Konfiguration, Migrationen, Vault-Secrets, Edge Functions – `docs/supabase-setup.md`).
+- [x] Projekt in Frankfurt angelegt (`gimynoopnheaapqihsdb`), Migrationen 0100–0800 und Vault-Secrets eingespielt und geprüft.
+- [ ] GitHub-Secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD` und Variable `SUPABASE_PROJECT_REF` setzen, dann Workflow „Supabase bereitstellen (Frankfurt)“ mit Demo-Daten ausführen (0900, Seed, `config push`, Edge Functions – `docs/supabase-setup.md`).
 - [ ] Danach prüfen: Erweiterungen `pg_cron`/`pg_net` aktiv, 5 Cron-Jobs angelegt, 7 Edge Functions bereit.
 - [ ] Eigenen SMTP-Anbieter mit Sitz/Servern in der EU hinterlegen (Supabase-Standard-SMTP ist nur für Tests).
 - [ ] Point-in-Time-Recovery/Backups, Auth-Rate-Limits und Log-Aufbewahrung im Projekt prüfen.
