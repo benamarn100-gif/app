@@ -147,7 +147,18 @@ export function HomeScreen() {
           padding="lg"
           onPress={() => router.push('/acute')}
           accessibilityRole="button"
-          accessibilityLabel={t('home.heroTitle')}
+          // Alles Sichtbare in einer Ansage (WCAG 2.5.3: sichtbarer Name steht vorn).
+          accessibilityLabel={[
+            `${t('home.heroTitle')}.`,
+            t('home.heroBody'),
+            todayQuery.data
+              ? todayFree.length > 0
+                ? t('home.heroCount', { count: todayFree.length })
+                : t('home.heroNone')
+              : null,
+          ]
+            .filter(Boolean)
+            .join(' ')}
           accessibilityHint={t('home.heroA11yHint')}
           testID="hero-acute"
           style={styles.hero}

@@ -1,4 +1,4 @@
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View, type AccessibilityActionEvent } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -79,13 +79,19 @@ export function FiltersScreen() {
         <Section title={t('filters.radius')}>
           <View
             style={styles.stepper}
-            accessibilityRole="adjustable"
-            accessibilityLabel={t('filters.radius')}
-            accessibilityValue={{ text: t('filters.radiusValue', { value: f.radiusKm }) }}
-            accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
-            onAccessibilityAction={(e) =>
-              stepRadius(e.nativeEvent.actionName === 'increment' ? 1 : -1)
-            }
+            // Nativ ein Regler (VoiceOver: nach oben/unten wischen, TalkBack: Lautstärketasten);
+            // die Auswahl-Chips darunter sind der direkte Weg. Web: zwei Schaltflächen.
+            {...(Platform.OS === 'web'
+              ? { role: 'group' as const, 'aria-label': t('filters.radius') }
+              : {
+                  accessible: true,
+                  accessibilityRole: 'adjustable' as const,
+                  accessibilityLabel: t('filters.radius'),
+                  accessibilityValue: { text: t('filters.radiusValue', { value: f.radiusKm }) },
+                  accessibilityActions: [{ name: 'increment' }, { name: 'decrement' }],
+                  onAccessibilityAction: (e: AccessibilityActionEvent) =>
+                    stepRadius(e.nativeEvent.actionName === 'increment' ? 1 : -1),
+                })}
           >
             <PressableScale
               onPress={() => stepRadius(-1)}
@@ -96,7 +102,12 @@ export function FiltersScreen() {
             >
               <Minus size={20} color={theme.colors.primary} strokeWidth={2.5} />
             </PressableScale>
-            <Text variant="h3" style={styles.stepValue} accessible={false}>
+            <Text
+              variant="h3"
+              style={styles.stepValue}
+              accessible={Platform.OS === 'web'}
+              accessibilityLiveRegion={Platform.OS === 'web' ? 'polite' : undefined}
+            >
               {t('filters.radiusValue', { value: f.radiusKm })}
             </Text>
             <PressableScale

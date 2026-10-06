@@ -132,6 +132,8 @@ export function SlotPicker({ slots, doctors, now, selectedId, onSelect, days = 1
                 setDay(d.offset);
               }}
               accessibilityRole="tab"
+              // Tage ohne freie Termine sind nicht wählbar (auch nicht per Screenreader).
+              disabled={d.count === 0}
               accessibilityState={{ selected: active, disabled: d.count === 0 }}
               accessibilityLabel={t('practice.weekStripA11y', {
                 date: `${label} ${date}`,

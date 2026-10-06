@@ -236,7 +236,8 @@
       "windowWeek": "diese Woche"
     },
     "pickSlot": "Termin wählen",
-    "weekStripA11y": "{{date}}, {{count}} freie Termine",
+    "weekStripA11y_one": "{{date}} {{count}} freier Termin",
+    "weekStripA11y_other": "{{date}} {{count}} freie Termine",
     "noSlotsThisDay": "An diesem Tag ist nichts frei.",
     "nextFreeDay": "Nächster freier Tag: {{day}}",
     "morning": "Vormittag",

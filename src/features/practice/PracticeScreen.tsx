@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Linking, ScrollView, useWindowDimensions, View } from 'react-native';
+import { Linking, Platform, ScrollView, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
 import { router, useIsFocused, useLocalSearchParams } from 'expo-router';
@@ -257,7 +257,8 @@ export function PracticeScreen() {
           <View
             style={[styles.banner, { backgroundColor: theme.colors[visual.bg] }]}
             accessible
-            accessibilityRole="summary"
+            // „summary“ wird im Web zu einer namenlosen Region – dort nur gruppieren.
+            accessibilityRole={Platform.OS === 'web' ? undefined : 'summary'}
             testID="availability-banner"
           >
             <BannerIcon size={24} color={theme.colors[visual.fg]} strokeWidth={2.25} />

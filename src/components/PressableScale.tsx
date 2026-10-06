@@ -1,5 +1,6 @@
 import { forwardRef, useState, type ReactNode } from 'react';
 import {
+  Platform,
   Pressable,
   type PressableProps,
   type StyleProp,
@@ -43,6 +44,7 @@ export const PressableScale = forwardRef<View, PressableScaleProps>(function Pre
     onBlur,
     children,
     disabled,
+    accessibilityState,
     ...rest
   },
   ref,
@@ -60,11 +62,26 @@ export const PressableScale = forwardRef<View, PressableScaleProps>(function Pre
       : { transform: [{ scale: 1 - progress.value * (1 - target) }] },
   );
 
+  const state = { ...accessibilityState, disabled: !!disabled || !!accessibilityState?.disabled };
+  // Web kennt keine Hinweise (accessibilityHint) – dort an den Namen anhängen, damit nichts fehlt.
+  const webLabel =
+    Platform.OS === 'web' && rest.accessibilityLabel && rest.accessibilityHint
+      ? `${rest.accessibilityLabel}, ${rest.accessibilityHint}`
+      : undefined;
+
   return (
     <AnimatedPressable
       ref={ref}
+      {...rest}
       disabled={disabled}
-      accessibilityState={{ disabled: !!disabled, ...rest.accessibilityState }}
+      accessibilityState={state}
+      // react-native-web kennt accessibilityState nicht – aria-* wirkt auf allen Plattformen.
+      aria-checked={state.checked}
+      aria-selected={state.selected}
+      aria-disabled={state.disabled || undefined}
+      aria-busy={state.busy}
+      aria-expanded={state.expanded}
+      aria-label={webLabel}
       onPressIn={(e) => {
         setPressed(true);
         progress.value = reduceMotion
@@ -88,7 +105,6 @@ export const PressableScale = forwardRef<View, PressableScaleProps>(function Pre
         onBlur?.(e);
       }}
       style={[style, animatedStyle, pressed && pressedStyle, focused && focusStyle]}
-      {...rest}
     >
       {typeof children === 'function' ? children({ pressed, focused }) : children}
     </AnimatedPressable>

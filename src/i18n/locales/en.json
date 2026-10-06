@@ -219,7 +219,8 @@
       "windowWeek": "this week"
     },
     "pickSlot": "Choose a time",
-    "weekStripA11y": "{{date}}, {{count}} free appointments",
+    "weekStripA11y_one": "{{date}} {{count}} free appointment",
+    "weekStripA11y_other": "{{date}} {{count}} free appointments",
     "noSlotsThisDay": "Nothing free on this day.",
     "nextFreeDay": "Next free day: {{day}}",
     "morning": "Morning",

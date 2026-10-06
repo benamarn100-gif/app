@@ -1,5 +1,5 @@
 import { forwardRef, useState } from 'react';
-import { Pressable, TextInput, View, type TextInputProps } from 'react-native';
+import { Platform, Pressable, TextInput, View, type TextInputProps } from 'react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
 import { maxFontScale } from '@/design/tokens';
@@ -40,7 +40,10 @@ export const SearchField = forwardRef<TextInput, Props>(function SearchField(
         onChangeText={onChangeText}
         editable={!disabled}
         accessibilityLabel={label}
-        accessibilityRole="search"
+        // Web: „search“ ist dort ein Landmark und auf Eingabefeldern unzulässig.
+        {...(Platform.OS === 'web'
+          ? { role: 'searchbox' as const }
+          : { accessibilityRole: 'search' as const })}
         placeholderTextColor={theme.colors.textSecondary}
         maxFontSizeMultiplier={maxFontScale}
         returnKeyType="search"

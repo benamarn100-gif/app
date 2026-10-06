@@ -1,5 +1,5 @@
 import type { ComponentType, ReactNode } from 'react';
-import { Switch, View } from 'react-native';
+import { Platform, Switch, View } from 'react-native';
 import type { LucideProps } from 'lucide-react-native';
 
 import { makeStyles, useTheme } from '@/design/theme';
@@ -65,7 +65,11 @@ export function ListRow(props: NavProps | SwitchProps) {
             props.onSwitch(v);
           }}
           disabled={props.disabled}
-          accessibilityLabel={props.title}
+          accessibilityLabel={
+            Platform.OS === 'web' && props.subtitle
+              ? `${props.title}, ${props.subtitle}`
+              : props.title
+          }
           accessibilityHint={props.subtitle}
           trackColor={{ false: theme.colors.borderStrong, true: theme.colors.primary }}
           thumbColor={theme.colors.surface}

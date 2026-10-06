@@ -40,7 +40,7 @@ export function SlotChip({
       disabled={disabled}
       accessibilityRole="radio"
       accessibilityLabel={accessibilityLabel ?? time}
-      accessibilityState={{ checked: !!selected, selected: !!selected, disabled: !!disabled }}
+      accessibilityState={{ checked: !!selected, disabled: !!disabled }}
       style={[styles.chip, selected && styles.selected, disabled && styles.disabled]}
       focusStyle={styles.focused}
     >

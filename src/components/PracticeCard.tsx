@@ -11,7 +11,7 @@ import { useNow } from '@/lib/useNow';
 import { Avatar } from './Avatar';
 import { Card } from './Card';
 import { DemoBadge } from './DemoBadge';
-import { FreshnessLabel } from './FreshnessLabel';
+import { FreshnessLabel, freshnessText } from './FreshnessLabel';
 import { MapPin, Star, Video } from './icons';
 import { StatusBadge } from './StatusBadge';
 import { Text } from './Text';
@@ -57,16 +57,27 @@ export const PracticeCard = memo(function PracticeCard({
       onPress={onPress ? () => onPress(practice.id) : undefined}
       style={variant === 'compact' ? styles.compact : undefined}
       testID={testID}
+      // Eine Ansage mit allem, was die Karte zeigt – in derselben Reihenfolge, der Name zuerst.
       accessibilityLabel={[
         practice.name,
         specialtyName,
-        statusText,
+        status === 'free' || status === 'few'
+          ? t('card.openSlots', { count: openCount })
+          : statusText,
+        practice.offersVideo ? t('service.video_consultation') : null,
         nextLine,
         distance && !when ? distance : null,
+        t('time.updatedA11y', { age: freshnessText(t, lastSyncedAt, now) }),
+        practice.rating
+          ? t('card.ratingA11y', {
+              value: practice.rating.average,
+              count: practice.rating.count,
+            })
+          : null,
+        practice.isDemo ? t('app.demoBadgeA11y') : null,
       ]
         .filter(Boolean)
         .join(', ')}
-      accessibilityHint={practice.isDemo ? t('app.demoBadgeA11y') : undefined}
     >
       <View style={styles.header}>
         <Avatar

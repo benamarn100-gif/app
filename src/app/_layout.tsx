@@ -56,7 +56,8 @@ export default function RootLayout() {
   if (!ready) return null;
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    // Web: alles in einem <main>-Bereich, damit Screenreader den Inhalt als Landmark finden.
+    <GestureHandlerRootView style={{ flex: 1 }} role={Platform.OS === 'web' ? 'main' : undefined}>
       <SafeAreaProvider>
         <ThemeProvider preference={themePreference}>
           <DataProvider>
@@ -106,7 +107,12 @@ function AppStack() {
         <Stack.Screen name="acute" options={{ title: t('acute.title') }} />
         <Stack.Screen
           name="practice/[id]"
-          options={{ title: '', headerStyle: { backgroundColor: theme.colors.blobTeal } }}
+          options={{
+            title: '',
+            // Der Praxisname steht als Überschrift im Inhalt – keine leere Kopf-Überschrift.
+            headerTitle: () => null,
+            headerStyle: { backgroundColor: theme.colors.blobTeal },
+          }}
         />
         <Stack.Screen
           name="booking/[slotId]"

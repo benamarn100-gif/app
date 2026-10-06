@@ -48,9 +48,7 @@ export function Chip({
       accessibilityLabel={label}
       accessibilityHint={accessibilityHint}
       accessibilityState={
-        role === 'button'
-          ? { disabled: !!disabled }
-          : { checked: selected, selected, disabled: !!disabled }
+        role === 'button' ? { disabled: !!disabled } : { checked: selected, disabled: !!disabled }
       }
       style={[
         styles.chip,

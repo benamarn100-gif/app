@@ -51,7 +51,7 @@ export function SegmentedControl<T extends string>({
             }}
             accessibilityRole="radio"
             accessibilityLabel={option.label}
-            accessibilityState={{ checked: selected, selected }}
+            accessibilityState={{ checked: selected }}
             style={[styles.segment, selected && styles.selected]}
             focusStyle={styles.focused}
           >

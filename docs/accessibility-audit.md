@@ -68,6 +68,8 @@ Haptik abschaltbar, dunkles Design mit eigenem geprüftem Farbsatz, keine Captch
 
 ## 4. Manueller Prüfplan vor Launch
 
+Schritt für Schritt mit erwarteten Ansagen: **`docs/screenreader-testplan.md`** (inkl. axe-Vorprüfung, D-58).
+
 Je Plattform (iOS + VoiceOver, Android + TalkBack, Dashboard mit NVDA/Firefox und VoiceOver/Safari):
 
 1. **Akut buchen:** Start → „Ich brauche heute einen Termin“ → erste Praxis → Termin → Buchung abschließen.
