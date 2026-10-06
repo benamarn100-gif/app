@@ -103,7 +103,7 @@ const useStyles = makeStyles((t) => ({
     gap: t.space.sm,
     boxShadow: t.shadows.sm,
   },
-  compact: { width: 260 },
+  compact: { width: 280 }, // wie PracticeCard compact
   row: { flexDirection: 'row', gap: t.space.sm, alignItems: 'center' },
   lines: { flex: 1, gap: t.space.xs },
   vList: { gap: t.space.sm },

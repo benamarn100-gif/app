@@ -122,23 +122,22 @@
     }
   },
   "home": {
-    "heroTitle": "I need an appointment today",
+    "heroTitle": "I need an appointment soon",
     "heroBody": "We'll show you right away where something is free soon.",
     "heroCount_one": "{{count}} practice with free appointments in the next 24 h",
     "heroCount_other": "{{count}} practices with free appointments in the next 24 h",
     "heroNone": "Fully booked for the next 24 hours – here are the earliest appointments.",
     "heroA11yHint": "Shows nearby practices sorted by the earliest free appointment",
-    "specialties": "Specialties",
-    "todayNearby": "Free soon near you",
-    "thisWeek": "Free this week",
-    "mapPreview": "Map",
-    "mapPreviewCount_one": "{{count}} practice nearby",
-    "mapPreviewCount_other": "{{count}} practices nearby",
-    "openMap": "Open map",
-    "nextAppointments": "My next appointments",
-    "noAppointments": "No appointments planned yet.",
-    "todayEmpty": "Nothing nearby in the next 24 hours. This week looks better.",
-    "weekEmpty": "Nothing is free nearby this week. Widen the radius or join a waitlist."
+    "nextAppointment": "Your next appointment",
+    "nextAppointmentHint": "Opens your appointments",
+    "heroFor": "For {{name}}",
+    "searchLabel": "Search practice or specialty",
+    "searchHint": "Opens search",
+    "quickFilters": "Quick filters",
+    "radiusHint": "Change the radius in filters",
+    "nearbyTitle": "Available near you",
+    "nearbyWeek_one": "Nothing in the next 24 hours – {{count}} practice this week",
+    "nearbyWeek_other": "Nothing in the next 24 hours – {{count}} practices this week"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -657,5 +656,8 @@
     "updateNone": "The app is up to date.",
     "updateReady": "Update downloaded – the app will restart.",
     "updateFailed": "The update could not be downloaded. Please try again later."
+  },
+  "alarm": {
+    "set": "Set appointment alert"
   }
 }

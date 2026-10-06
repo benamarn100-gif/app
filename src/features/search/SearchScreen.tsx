@@ -7,7 +7,7 @@ import {
   type ComponentType,
   type Ref,
 } from 'react';
-import { RefreshControl, View } from 'react-native';
+import { RefreshControl, View, type TextInput } from 'react-native';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { FlashList } from '@shopify/flash-list';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -73,7 +73,7 @@ export function SearchScreen() {
   const styles = useStyles();
   const insets = useSafeAreaInsets();
   const { t } = useT();
-  const params = useLocalSearchParams<{ view?: string }>();
+  const params = useLocalSearchParams<{ view?: string; focus?: string }>();
   const filters = useSearchFilters();
   const [text, setText] = useState(filters.text);
   const [view, setView] = useState<'map' | 'list'>(
@@ -83,13 +83,22 @@ export function SearchScreen() {
   const [region, setRegion] = useState<BBox | null>(null);
   const mapRef = useRef<PracticeMapHandle>(null);
   const sheetRef = useRef<BottomSheetRef>(null);
+  const inputRef = useRef<TextInput>(null);
 
   // Ansicht folgt dem Parameter (z. B. „Karte öffnen“ auf der Startseite) – ohne Effect
   const [viewParam, setViewParam] = useState(params.view);
   if (params.view !== viewParam) {
     setViewParam(params.view);
     if (params.view === 'map' && MapComponent) setView('map');
+    if (params.view === 'list') setView('list');
   }
+
+  // Suchfeld der Startseite: Tastatur direkt öffnen (focus ist ein Zeitstempel je Tipp)
+  useEffect(() => {
+    if (!params.focus) return;
+    const id = setTimeout(() => inputRef.current?.focus(), 350);
+    return () => clearTimeout(id);
+  }, [params.focus]);
 
   // Suchtext entprellen
   useEffect(() => {
@@ -133,6 +142,7 @@ export function SearchScreen() {
   const toolbar = (
     <View style={styles.toolbar}>
       <SearchField
+        ref={inputRef}
         value={text}
         onChangeText={setText}
         label={t('search.placeholder')}

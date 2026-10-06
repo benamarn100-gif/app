@@ -72,7 +72,7 @@ Schritt für Schritt mit erwarteten Ansagen: **`docs/screenreader-testplan.md`**
 
 Je Plattform (iOS + VoiceOver, Android + TalkBack, Dashboard mit NVDA/Firefox und VoiceOver/Safari):
 
-1. **Akut buchen:** Start → „Ich brauche heute einen Termin“ → erste Praxis → Termin → Buchung abschließen.
+1. **Akut buchen:** Start → „Ich brauche schnell einen Termin“ → erste Praxis → Termin → Buchung abschließen.
 2. **Suchen und filtern:** Fachrichtung, Umkreis, Versicherung; Liste und Karte; Ergebnis öffnen.
 3. **Warteliste:** eintragen, Mitteilung erhalten, Angebot innerhalb der Frist annehmen.
 4. **Termine verwalten:** verschieben, stornieren, in Kalender übernehmen.

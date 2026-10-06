@@ -158,7 +158,7 @@ app/
 └─ dev/showcase.tsx            Komponenten-Showcase (nur __DEV__)
 ```
 
-3-Tap-Ziel (DoD Phase 2): Start → Hero „Ich brauche heute einen Termin“ (1 Tap) → Ergebnisliste mit Status. Alternativ Fachrichtungs-Chip (1) → Liste (2).
+3-Tap-Ziel (DoD Phase 2): Start → Hero „Ich brauche schnell einen Termin“ (1 Tap) → Ergebnisliste mit Status. Alternativ Schnellfilter „Fachrichtung“ (1) → Auswahl (2) → Liste (3).
 
 ### 3.3 State
 

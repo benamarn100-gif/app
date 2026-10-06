@@ -21,7 +21,7 @@ afterAll(() => setNowOverride(null));
 jest.setTimeout(30_000);
 
 describe('Phase 2 – Entdecken (DoD: ≤ 3 Taps bis zu Praxen mit korrektem Status)', () => {
-  it('Tap 1: Hero „Ich brauche heute einen Termin“ öffnet den Akut-Modus', async () => {
+  it('Tap 1: Hero „Ich brauche schnell einen Termin“ öffnet den Akut-Modus', async () => {
     await renderWithProviders(<HomeScreen />, { repository: createTestRepository(NOW) }).result;
     const hero = await screen.findByTestId('hero-acute');
     await fireEvent.press(hero);
@@ -197,5 +197,62 @@ describe('Praxisprofil – Hinweis „gerade vergeben“', () => {
     screen.rerender(<PracticeScreen />);
     await waitFor(() => expect(screen.getByTestId('practice-screen')).toBeTruthy());
     expect(screen.queryByText(TAKEN)).toBeNull();
+  });
+});
+
+describe('Startseite – nächster Termin und freie Ärzte auf einen Blick', () => {
+  async function bookFirstFreeSlot(repository: ReturnType<typeof createTestRepository>) {
+    const results = await repository.search(
+      {
+        center: { lat: 50.5558, lng: 9.6808 },
+        radiusKm: 10,
+        window: 'week',
+        specialtyIds: [],
+        languages: [],
+        accessibility: [],
+        insurance: 'any',
+        videoOnly: false,
+        text: '',
+      },
+      NOW,
+    );
+    const target = results.find((r) => r.nextSlot && r.nextSlot.visitType !== 'video')!;
+    await repository.grantConsent('health_data', HEALTH_CONSENT_VERSION);
+    await repository.bookSlot({
+      slotId: target.nextSlot!.id,
+      idempotencyKey: 'startseite-1',
+      dependentId: null,
+      reasonCategory: null,
+      contact: { fullName: 'Alex Beispiel', phone: '0661 123456', insurance: 'public' },
+      consentVersion: HEALTH_CONSENT_VERSION,
+    });
+    return target;
+  }
+
+  it('ohne Termin: Hero führt in den Akut-Modus, darunter Suche und freie Praxen', async () => {
+    await renderWithProviders(<HomeScreen />, { repository: createTestRepository(NOW) }).result;
+    expect(await screen.findByTestId('hero-acute')).toBeTruthy();
+    expect(screen.getByTestId('home-search')).toBeTruthy();
+    expect(await screen.findByTestId('nearby-card-0')).toBeTruthy();
+    expect(screen.queryByTestId('hero-appointment')).toBeNull();
+  });
+
+  it('mit Termin: Hero zeigt Arzt, Zeitpunkt und Route', async () => {
+    const repository = createTestRepository(NOW);
+    const target = await bookFirstFreeSlot(repository);
+    await renderWithProviders(<HomeScreen />, { repository }).result;
+    const hero = await screen.findByTestId('hero-appointment');
+    expect(within(hero).getByText(new RegExp(target.practice.name))).toBeTruthy();
+    expect(screen.getByTestId('hero-route')).toBeTruthy();
+    expect(screen.queryByTestId('hero-acute')).toBeNull();
+  });
+
+  it('Schnellfilter setzt das Zeitfenster und öffnet die Suche', async () => {
+    await renderWithProviders(<HomeScreen />, { repository: createTestRepository(NOW) }).result;
+    await fireEvent.press(await screen.findByTestId('quick-week'));
+    expect(mockRouter.navigate).toHaveBeenCalledWith({
+      pathname: '/(tabs)/search',
+      params: { view: 'list' },
+    });
   });
 });

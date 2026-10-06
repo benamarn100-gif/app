@@ -133,7 +133,7 @@
     }
   },
   "home": {
-    "heroTitle": "Ich brauche heute einen Termin",
+    "heroTitle": "Ich brauche schnell einen Termin",
     "heroBody": "Wir zeigen dir sofort, wo bald etwas frei ist.",
     "heroBody_formal": "Wir zeigen Ihnen sofort, wo bald etwas frei ist.",
     "heroCount_one": "In den nächsten 24 Std. {{count}} Praxis mit freien Terminen",
@@ -141,19 +141,19 @@
     "heroNone": "In den nächsten 24 Stunden ist alles vergeben – wir zeigen dir die frühesten Termine.",
     "heroNone_formal": "In den nächsten 24 Stunden ist alles vergeben – wir zeigen Ihnen die frühesten Termine.",
     "heroA11yHint": "Zeigt Praxen in der Nähe, sortiert nach dem frühesten freien Termin",
-    "specialties": "Fachrichtungen",
-    "todayNearby": "Bald frei in deiner Nähe",
-    "todayNearby_formal": "Bald frei in Ihrer Nähe",
-    "thisWeek": "Diese Woche frei",
-    "mapPreview": "Karte",
-    "mapPreviewCount_one": "{{count}} Praxis in der Umgebung",
-    "mapPreviewCount_other": "{{count}} Praxen in der Umgebung",
-    "openMap": "Karte öffnen",
-    "nextAppointments": "Meine nächsten Termine",
-    "noAppointments": "Noch keine Termine geplant.",
-    "todayEmpty": "In den nächsten 24 Stunden ist in der Nähe nichts frei. Diese Woche sieht es besser aus.",
-    "weekEmpty": "Diese Woche ist im Umkreis nichts frei. Erweitere den Umkreis oder nutze die Warteliste.",
-    "weekEmpty_formal": "Diese Woche ist im Umkreis nichts frei. Erweitern Sie den Umkreis oder nutzen Sie die Warteliste."
+    "nextAppointment": "Dein nächster Termin",
+    "nextAppointment_formal": "Ihr nächster Termin",
+    "nextAppointmentHint": "Öffnet deine Termine",
+    "nextAppointmentHint_formal": "Öffnet Ihre Termine",
+    "heroFor": "Für {{name}}",
+    "searchLabel": "Praxis oder Fachrichtung suchen",
+    "searchHint": "Öffnet die Suche",
+    "quickFilters": "Schnellfilter",
+    "radiusHint": "Umkreis in den Filtern ändern",
+    "nearbyTitle": "Frei in deiner Nähe",
+    "nearbyTitle_formal": "Frei in Ihrer Nähe",
+    "nearbyWeek_one": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxis",
+    "nearbyWeek_other": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxen"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -717,5 +717,8 @@
     "updateNone": "Die App ist auf dem neuesten Stand.",
     "updateReady": "Update geladen – die App startet neu.",
     "updateFailed": "Update konnte nicht geladen werden. Bitte später erneut versuchen."
+  },
+  "alarm": {
+    "set": "Termin-Alarm setzen"
   }
 }
