@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Linking, ScrollView, useWindowDimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useIsFocused, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
@@ -20,7 +20,13 @@ import {
 } from '@/components';
 import { Bell, CalendarCheck, Globe, MapPin, Navigation, Phone } from '@/components/icons';
 import { STATUS_VISUALS } from '@/components/status';
-import { usePractice, usePracticeSlots, useRealtimeSlots, useSearchCenter } from '@/data/hooks';
+import {
+  useAppointments,
+  usePractice,
+  usePracticeSlots,
+  useRealtimeSlots,
+  useSearchCenter,
+} from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
 import { isSlotBookable, summarizeSlots } from '@/domain/availability/status';
 import { distanceMeters } from '@/domain/geo/distance';
@@ -59,6 +65,8 @@ export function PracticeScreen() {
   const center = useSearchCenter();
   const [pickedId, setPickedId] = useState<string | null>(preselect ?? null);
   const notifiedTaken = useRef<string | null>(null);
+  const isFocused = useIsFocused();
+  const appointments = useAppointments();
 
   const practice = detail.data?.practice;
   useRealtimeSlots(practice ? [encodeGeohash(practice.location, 5)] : null);
@@ -83,13 +91,17 @@ export function PracticeScreen() {
       candidate.holdReason === 'waitlist_offer');
   const selected = taken ? undefined : candidate;
   const selectedId = selected?.id ?? null;
+  // Selbst gebucht (Buchung läuft über dieser Seite) ist kein „vergeben“.
+  const bookedByMe =
+    !!candidate &&
+    (appointments.data ?? []).some((a) => a.slotId === candidate.id && a.status === 'confirmed');
 
   useEffect(() => {
-    if (taken && pickedId && notifiedTaken.current !== pickedId) {
+    if (taken && pickedId && isFocused && !bookedByMe && notifiedTaken.current !== pickedId) {
       notifiedTaken.current = pickedId;
       toast.show(t('booking.errors.slotTaken'), 'error');
     }
-  }, [taken, pickedId, toast, t]);
+  }, [taken, pickedId, isFocused, bookedByMe, toast, t]);
 
   if (detail.isLoading) {
     return (

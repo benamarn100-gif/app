@@ -12,7 +12,7 @@ import * as SystemUI from 'expo-system-ui';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { ToastProvider } from '@/components';
+import { ConfirmProvider, ToastProvider } from '@/components';
 import { DataProvider } from '@/data/DataProvider';
 import { ThemeProvider, useTheme } from '@/design/theme';
 import { fontFamily } from '@/design/tokens';
@@ -42,7 +42,10 @@ export default function RootLayout() {
   const language = usePreferences((s) => s.language);
 
   useEffect(() => {
-    void i18n.changeLanguage(resolveLanguage(language));
+    const resolved = resolveLanguage(language);
+    void i18n.changeLanguage(resolved);
+    // Web: Sprache des Dokuments für Screenreader und Silbentrennung (WCAG 3.1.1)
+    if (Platform.OS === 'web') document.documentElement.lang = resolved;
   }, [language]);
 
   const ready = (fontsLoaded || !!fontError) && hydrated;
@@ -58,8 +61,10 @@ export default function RootLayout() {
         <ThemeProvider preference={themePreference}>
           <DataProvider>
             <ToastProvider>
-              <AppStack />
-              <NotificationBridge />
+              <ConfirmProvider>
+                <AppStack />
+                <NotificationBridge />
+              </ConfirmProvider>
             </ToastProvider>
           </DataProvider>
         </ThemeProvider>

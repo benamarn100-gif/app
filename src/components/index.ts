@@ -5,6 +5,7 @@ export { BottomSheet, type BottomSheetRef } from './BottomSheet';
 export { Button } from './Button';
 export { Card } from './Card';
 export { Chip } from './Chip';
+export { ConfirmProvider, useConfirm, type ConfirmOptions } from './ConfirmDialog';
 export { DemoBadge } from './DemoBadge';
 export { Divider } from './Divider';
 export { EmptyState } from './EmptyState';

@@ -19,6 +19,8 @@ describe('Theme aus Design-Tokens', () => {
       }
     }
     expect(css).toContain('@media (prefers-color-scheme: dark)');
+    expect(css).toContain(':root[data-theme="dark"]');
+    expect(css).toContain(':root:not([data-theme="light"])');
   });
 
   it('styles.css nutzt keine Farbwerte, nur Variablen', () => {

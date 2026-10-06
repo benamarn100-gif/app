@@ -1,7 +1,9 @@
-import { fireEvent, screen } from '@testing-library/react-native';
+import { Platform } from 'react-native';
+import { fireEvent, screen, waitFor } from '@testing-library/react-native';
 
 import { Button } from '../Button';
 import { Chip } from '../Chip';
+import { useConfirm } from '../ConfirmDialog';
 import { FreshnessLabel } from '../FreshnessLabel';
 import { PracticeCard } from '../PracticeCard';
 import { StatusBadge } from '../StatusBadge';
@@ -130,5 +132,38 @@ describe('Avatar-Initialen', () => {
   it('ignorieren Titel und Füllwörter', () => {
     expect(initialsOf('Dr. med. Lea Brandt')).toBe('LB');
     expect(initialsOf('Hausarztpraxis am Lindenhof')).toBe('HL');
+  });
+});
+
+describe('ConfirmDialog', () => {
+  it('Web: eigener Dialog statt wirkungslosem Alert, Ergebnis als Promise', async () => {
+    const platform = jest.replaceProperty(Platform, 'OS', 'web');
+    const results: boolean[] = [];
+    function Trigger() {
+      const confirm = useConfirm();
+      return (
+        <Button
+          label="Stornieren"
+          onPress={() =>
+            void confirm({
+              title: 'Termin stornieren?',
+              confirmLabel: 'Ja',
+              destructive: true,
+            }).then((ok) => results.push(ok))
+          }
+        />
+      );
+    }
+    await renderWithProviders(<Trigger />).result;
+    await fireEvent.press(screen.getByText('Stornieren'));
+    expect(await screen.findByText('Termin stornieren?')).toBeTruthy();
+    await fireEvent.press(screen.getByTestId('confirm-accept'));
+    await waitFor(() => expect(results).toEqual([true]));
+    expect(screen.queryByTestId('confirm-dialog')).toBeNull();
+
+    await fireEvent.press(screen.getByText('Stornieren'));
+    await fireEvent.press(await screen.findByTestId('confirm-cancel'));
+    await waitFor(() => expect(results).toEqual([true, false]));
+    platform.restore();
   });
 });

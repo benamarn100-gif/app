@@ -125,6 +125,7 @@
     "heroBody": "We’ll show you right away where something is still free today.",
     "heroCount_one": "{{count}} practice with free appointments today",
     "heroCount_other": "{{count}} practices with free appointments today",
+    "heroNone": "Fully booked today – we’ll show you the earliest appointments.",
     "heroA11yHint": "Shows nearby practices sorted by the earliest free appointment",
     "specialties": "Specialties",
     "todayNearby": "Free today near you",

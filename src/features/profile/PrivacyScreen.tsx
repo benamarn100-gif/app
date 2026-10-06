@@ -1,4 +1,4 @@
-import { Alert, ScrollView, Share, View } from 'react-native';
+import { ScrollView, Share, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -10,6 +10,7 @@ import {
   SectionHeader,
   Skeleton,
   Text,
+  useConfirm,
   useToast,
 } from '@/components';
 import { Download, MapPin, Trash, TriangleAlert } from '@/components/icons';
@@ -29,6 +30,7 @@ export function PrivacyScreen() {
   const styles = useStyles();
   const { t, locale } = useT();
   const toast = useToast();
+  const confirm = useConfirm();
   const repo = useRepository();
   const client = useQueryClient();
   const consents = useConsents();
@@ -42,22 +44,17 @@ export function PrivacyScreen() {
   const date = (iso: string) =>
     formatBerlinDate(iso, locale, { day: 'numeric', month: 'long', year: 'numeric' });
 
-  const confirmRevoke = (type: ConsentType) =>
-    Alert.alert(
-      t('privacy.revokeConfirmTitle'),
-      type === 'health_data' ? t('privacy.revokeHealthBody') : '',
-      [
-        { text: t('common.cancel'), style: 'cancel' },
-        {
-          text: t('privacy.revoke'),
-          style: 'destructive',
-          onPress: async () => {
-            await revoke.mutateAsync(type);
-            toast.show(t('privacy.revoked'), 'success');
-          },
-        },
-      ],
-    );
+  const confirmRevoke = async (type: ConsentType) => {
+    const confirmed = await confirm({
+      title: t('privacy.revokeConfirmTitle'),
+      message: type === 'health_data' ? t('privacy.revokeHealthBody') : undefined,
+      confirmLabel: t('privacy.revoke'),
+      destructive: true,
+    });
+    if (!confirmed) return;
+    await revoke.mutateAsync(type);
+    toast.show(t('privacy.revoked'), 'success');
+  };
 
   const exportData = async () => {
     try {
@@ -69,25 +66,24 @@ export function PrivacyScreen() {
     }
   };
 
-  const deleteAll = () =>
-    Alert.alert(t('privacy.deleteConfirmTitle'), t('privacy.deleteConfirmBody'), [
-      { text: t('common.cancel'), style: 'cancel' },
-      {
-        text: t('privacy.deleteConfirm'),
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await repo.deleteAccount();
-            client.clear();
-            prefs.reset();
-            toast.show(t('privacy.deleted'), 'success');
-            router.replace('/onboarding');
-          } catch {
-            toast.show(t('errors.generic'), 'error');
-          }
-        },
-      },
-    ]);
+  const deleteAll = async () => {
+    const confirmed = await confirm({
+      title: t('privacy.deleteConfirmTitle'),
+      message: t('privacy.deleteConfirmBody'),
+      confirmLabel: t('privacy.deleteConfirm'),
+      destructive: true,
+    });
+    if (!confirmed) return;
+    try {
+      await repo.deleteAccount();
+      client.clear();
+      prefs.reset();
+      toast.show(t('privacy.deleted'), 'success');
+      router.replace('/onboarding');
+    } catch {
+      toast.show(t('errors.generic'), 'error');
+    }
+  };
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.content} testID="privacy-center">

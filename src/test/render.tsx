@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { ConfirmProvider } from '@/components/ConfirmDialog';
 import { ToastProvider } from '@/components/Toast';
 import { cities } from '@/config/city';
 import { createQueryClient, DataProvider } from '@/data/DataProvider';
@@ -53,7 +54,9 @@ export function renderWithProviders(
     <SafeAreaProvider initialMetrics={metrics}>
       <FixedThemeProvider scheme={options.scheme ?? 'light'}>
         <DataProvider repository={repository} queryClient={client} persist={false}>
-          <ToastProvider>{children}</ToastProvider>
+          <ToastProvider>
+            <ConfirmProvider>{children}</ConfirmProvider>
+          </ToastProvider>
         </DataProvider>
       </FixedThemeProvider>
     </SafeAreaProvider>

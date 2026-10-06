@@ -4,7 +4,7 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import { demoCity, env } from '@/config/env';
-import { AsyncStorage } from '@/lib/storage';
+import { appStorage } from '@/lib/storage';
 
 import { MemoryRepository } from './memory/MemoryRepository';
 import { PERSISTED_ROOTS } from './queryKeys';
@@ -22,7 +22,7 @@ export function getRepository(): MedNowRepository {
         : new MemoryRepository({
             city: demoCity,
             latencyMs: 280,
-            storage: AsyncStorage,
+            storage: appStorage,
             // Demo: Nach dem Eintragen in die Warteliste wird nach ~20 s ein Termin frei.
             simulateWaitlistReleaseMs: 20_000,
           });
@@ -38,7 +38,12 @@ export function useRepository(): MedNowRepository {
   return repo;
 }
 
-export function createQueryClient(): QueryClient {
+/**
+ * `mode = 'memory'` (Demo ohne Backend): Abfragen laufen auch ohne Netz – es gibt keins,
+ * auf das sie warten müssten.
+ */
+export function createQueryClient(mode: MedNowRepository['mode'] = 'supabase'): QueryClient {
+  const networkMode = mode === 'memory' ? 'always' : 'online';
   return new QueryClient({
     defaultOptions: {
       queries: {
@@ -46,14 +51,15 @@ export function createQueryClient(): QueryClient {
         gcTime: 24 * 60 * 60 * 1000,
         retry: (count, error) => !isAppError(error) && count < 2,
         refetchOnWindowFocus: true,
+        networkMode,
       },
-      mutations: { retry: false },
+      mutations: { retry: false, networkMode },
     },
   });
 }
 
 const persister = createAsyncStoragePersister({
-  storage: AsyncStorage,
+  storage: appStorage,
   key: 'mednow.query-cache.v1',
   throttleTime: 2000,
 });
@@ -68,7 +74,7 @@ type Props = {
 
 export function DataProvider({ children, repository, queryClient, persist = true }: Props) {
   const [repo] = useState(() => repository ?? getRepository());
-  const [client] = useState(() => queryClient ?? createQueryClient());
+  const [client] = useState(() => queryClient ?? createQueryClient(repo.mode));
   return (
     <RepositoryContext.Provider value={repo}>
       {persist ? (

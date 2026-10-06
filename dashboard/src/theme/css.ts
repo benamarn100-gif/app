@@ -68,10 +68,16 @@ export function staticVars(): [string, string][] {
   return vars;
 }
 
-/** Vollständiges Theme: helle Werte als Standard, dunkle per prefers-color-scheme. */
+/**
+ * Vollständiges Theme: helle Werte als Standard, dunkle per prefers-color-scheme.
+ * `data-theme="light|dark"` am Wurzelelement überschreibt die Systemeinstellung.
+ */
 export function themeCss(): string {
+  const dark = declarations([['color-scheme', 'dark'], ...schemeVars('dark')]);
   return [
     `:root {\n  color-scheme: light dark;\n${declarations(staticVars())}\n${declarations(schemeVars('light'))}\n}`,
-    `@media (prefers-color-scheme: dark) {\n:root {\n${declarations(schemeVars('dark'))}\n}\n}`,
+    `@media (prefers-color-scheme: dark) {\n:root:not([data-theme="light"]) {\n${dark}\n}\n}`,
+    `:root[data-theme="dark"] {\n${dark}\n}`,
+    `:root[data-theme="light"] {\n  color-scheme: light;\n}`,
   ].join('\n');
 }

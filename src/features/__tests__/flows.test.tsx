@@ -1,16 +1,18 @@
 import { Alert } from 'react-native';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 
+import { queryKeys } from '@/data/queryKeys';
 import { HEALTH_CONSENT_VERSION } from '@/data/repository';
 import { summarizeSlots } from '@/domain/availability/status';
 import { AcuteScreen } from '@/features/acute/AcuteScreen';
 import { AppointmentsScreen } from '@/features/appointments/AppointmentsScreen';
 import { BookingScreen } from '@/features/booking/BookingScreen';
 import { HomeScreen } from '@/features/home/HomeScreen';
+import { PracticeScreen } from '@/features/practice/PracticeScreen';
 import { setNowOverride } from '@/lib/useNow';
 import { createTestRepository, renderWithProviders } from '@/test/render';
 
-import { mockParams, mockRouter } from '../../../jest.setup';
+import { mockFocus, mockParams, mockRouter } from '../../../jest.setup';
 
 const NOW = new Date('2026-10-06T07:30:00Z'); // Dienstag, 09:30 Berlin
 
@@ -140,5 +142,60 @@ describe('Phase 3 – Buchen (DoD: buchbar und stornierbar)', () => {
     expect(
       await screen.findByText('Termin storniert. Der Platz ist jetzt für andere frei.'),
     ).toBeTruthy();
+  });
+});
+
+describe('Praxisprofil – Hinweis „gerade vergeben“', () => {
+  const TAKEN =
+    'Dieser Termin wurde gerade vergeben. Wähle einfach eine andere Zeit – die nächsten freien stehen direkt darunter.';
+
+  async function openPracticeWithSlot() {
+    const repository = createTestRepository(NOW);
+    const results = await repository.search(
+      {
+        center: { lat: 50.5558, lng: 9.6808 },
+        radiusKm: 10,
+        window: 'week',
+        specialtyIds: [],
+        languages: [],
+        accessibility: [],
+        insurance: 'any',
+        videoOnly: false,
+        text: '',
+      },
+      NOW,
+    );
+    const target = results.find((r) => r.nextSlot)!;
+    mockParams.current = { id: target.practice.id, slot: target.nextSlot!.id };
+    const view = renderWithProviders(<PracticeScreen />, { repository });
+    await view.result;
+    await screen.findByTestId('practice-screen');
+    return { repository, slotId: target.nextSlot!.id, client: view.client };
+  }
+
+  it('erscheint, wenn jemand anderes den gewählten Termin bucht', async () => {
+    const { repository, slotId } = await openPracticeWithSlot();
+    repository.bookSlotAsOtherUser(slotId);
+    expect(await screen.findByText(TAKEN)).toBeTruthy();
+  });
+
+  it('erscheint nicht für die eigene Buchung (Buchungs-Sheet liegt über der Praxis)', async () => {
+    const { repository, slotId, client } = await openPracticeWithSlot();
+    mockFocus.current = false; // Buchungs-Sheet ist geöffnet
+    await repository.grantConsent('health_data', HEALTH_CONSENT_VERSION);
+    await repository.bookSlot({
+      slotId,
+      idempotencyKey: 'eigene-buchung-1',
+      dependentId: null,
+      reasonCategory: null,
+      contact: { fullName: 'Alex Beispiel', phone: '0661 123456', insurance: 'public' },
+      consentVersion: HEALTH_CONSENT_VERSION,
+    });
+    await client.invalidateQueries({ queryKey: queryKeys.appointments });
+    await waitFor(() => expect(repository.peekSlot(slotId)?.status).toBe('booked'));
+    mockFocus.current = true; // zurück auf der Praxisseite
+    screen.rerender(<PracticeScreen />);
+    await waitFor(() => expect(screen.getByTestId('practice-screen')).toBeTruthy());
+    expect(screen.queryByText(TAKEN)).toBeNull();
   });
 });

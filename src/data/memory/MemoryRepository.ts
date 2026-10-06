@@ -28,6 +28,7 @@ import type {
   WaitlistEntry,
   WaitlistOffer,
 } from '@/domain/types';
+import type { KeyValueStorage } from '@/lib/storage';
 
 import {
   AppError,
@@ -43,12 +44,6 @@ import {
   type WaitlistEntryWithLabel,
   type WaitlistInput,
 } from '../repository';
-
-type KeyValueStorage = {
-  getItem(key: string): Promise<string | null>;
-  setItem(key: string, value: string): Promise<void>;
-  removeItem(key: string): Promise<void>;
-};
 
 type PersistedState = {
   session: SessionInfo;
@@ -808,5 +803,10 @@ export class MemoryRepository implements MedNowRepository {
   releaseSlotAsOtherUser(id: string) {
     this.updateSlot(id, { status: 'open', heldUntil: null, holdReason: null, heldBy: null });
     this.offerToWaitlist(id);
+  }
+
+  /** Nur Tests: Slot vergeben, als hätte eine andere Person gebucht. */
+  bookSlotAsOtherUser(id: string) {
+    this.updateSlot(id, { status: 'booked', heldUntil: null, holdReason: null, heldBy: null });
   }
 }

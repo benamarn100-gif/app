@@ -75,11 +75,14 @@ export const mockRouter = {
   navigate: jest.fn(),
 };
 export const mockParams: { current: Record<string, string> } = { current: {} };
+/** Ob der gerenderte Screen der vorderste ist (z. B. false, solange ein Sheet darüber liegt). */
+export const mockFocus = { current: true };
 jest.mock('expo-router', () => ({
   router: mockRouter,
   useRouter: () => mockRouter,
   useLocalSearchParams: () => mockParams.current,
   useFocusEffect: jest.fn(),
+  useIsFocused: () => mockFocus.current,
   Stack: { Screen: () => null },
   Redirect: () => null,
   Link: ({ children }: { children: unknown }) => children,
@@ -88,4 +91,5 @@ jest.mock('expo-router', () => ({
 beforeEach(() => {
   for (const fn of Object.values(mockRouter)) fn.mockClear();
   mockParams.current = {};
+  mockFocus.current = true;
 });

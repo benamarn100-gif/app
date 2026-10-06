@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Alert, RefreshControl, ScrollView, View } from 'react-native';
+import { Platform, RefreshControl, ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,6 +16,7 @@ import {
   SkeletonList,
   Stagger,
   Text,
+  useConfirm,
   useToast,
 } from '@/components';
 import { BellRing, Hourglass } from '@/components/icons';
@@ -45,6 +46,7 @@ export function AppointmentsScreen() {
   const insets = useSafeAreaInsets();
   const { t, locale } = useT();
   const toast = useToast();
+  const confirm = useConfirm();
   const client = useQueryClient();
   const now = useNow(1000);
   const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
@@ -76,23 +78,22 @@ export function AppointmentsScreen() {
     setRefreshing(false);
   }, [client]);
 
-  const confirmCancel = (a: AppointmentWithDetails) => {
-    Alert.alert(t('appointments.cancelConfirmTitle'), t('appointments.cancelConfirmBody'), [
-      { text: t('appointments.keep'), style: 'cancel' },
-      {
-        text: t('appointments.cancelConfirm'),
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await cancel.mutateAsync({ id: a.id, slotId: a.slotId });
-            void cancelReminders(a.id);
-            toast.show(t('appointments.cancelled'), 'success');
-          } catch {
-            toast.show(t('errors.generic'), 'error');
-          }
-        },
-      },
-    ]);
+  const confirmCancel = async (a: AppointmentWithDetails) => {
+    const confirmed = await confirm({
+      title: t('appointments.cancelConfirmTitle'),
+      message: t('appointments.cancelConfirmBody'),
+      cancelLabel: t('appointments.keep'),
+      confirmLabel: t('appointments.cancelConfirm'),
+      destructive: true,
+    });
+    if (!confirmed) return;
+    try {
+      await cancel.mutateAsync({ id: a.id, slotId: a.slotId });
+      void cancelReminders(a.id);
+      toast.show(t('appointments.cancelled'), 'success');
+    } catch {
+      toast.show(t('errors.generic'), 'error');
+    }
   };
 
   const list = tab === 'upcoming' ? upcoming : past;
@@ -186,7 +187,11 @@ export function AppointmentsScreen() {
               <AppointmentCard
                 appointment={a}
                 onRoute={() => void openRoute(a.practice)}
-                onCalendar={() => void addAppointmentToCalendar(a, a.practice, t)}
+                onCalendar={
+                  Platform.OS === 'web'
+                    ? undefined
+                    : () => void addAppointmentToCalendar(a, a.practice, t)
+                }
                 onReschedule={() => router.push(`/appointments/${a.id}/reschedule`)}
                 onCancel={() => confirmCancel(a)}
                 onBookAgain={() => router.push(`/practice/${a.practiceId}`)}

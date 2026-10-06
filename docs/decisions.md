@@ -178,3 +178,11 @@ Die 5-Minuten-Reservierung und das 10-Minuten-Wartelisten-Angebot sind für eine
 
 **D-52 · Maestro-Abläufe ohne Gerät in CI.**
 `.maestro/` enthält die drei Kernabläufe (Akut buchen, Suche & buchen inkl. Storno, Warteliste) gegen stabile `testID`s; Syntax ist mit `maestro check-syntax` geprüft. Ausführung braucht einen Development-/Preview-Build auf Simulator oder Emulator (lokal oder EAS Workflows) – in der normalen CI läuft sie nicht (`TODO.md`).
+
+## Nach Phase 6 – Web-Demo
+
+**D-53 · Web-Version robust gegen eingebettete und eingeschränkte Browser.**
+Beim Bau der klickbaren Demo fielen Lücken der Web-Variante auf, die auch echte Browser betreffen: (1) `Alert.alert` ist in react-native-web wirkungslos – Rückfragen (Stornieren, Widerruf, Löschen) laufen jetzt über `useConfirm()`: nativ der System-Dialog, im Web ein eigener Dialog. (2) Ist der Browser-Speicher blockiert, blieb die App leer – `createSafeStorage` fällt auf den Arbeitsspeicher zurück. (3) NetInfo prüft im Web per `HEAD /` und meldete hinter Unterpfaden „offline“ – im Web gilt `navigator.onLine`, im Demo-Modus laufen Abfragen netzunabhängig. (4) Kalender und lokale Erinnerungen werden im Web nicht angeboten. (5) Unbekannte Pfade leiten zur Startseite (`+not-found`).
+
+**D-54 · Kein „gerade vergeben“-Hinweis für die eigene Buchung.**
+Die Praxisseite liegt unter dem Buchungs-Sheet; die optimistische Markierung „gebucht“ löste dort den Hinweis für fremde Buchungen aus. Er erscheint jetzt nur, wenn die Seite im Vordergrund ist und der Termin nicht zu den eigenen Buchungen gehört (Regressionstest in `flows.test.tsx`).

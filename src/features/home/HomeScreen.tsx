@@ -167,7 +167,9 @@ export function HomeScreen() {
               <Skeleton width={180} height={16} />
             ) : todayQuery.data ? (
               <Text variant="smallStrong" color="primary">
-                {t('home.heroCount', { count: todayFree.length })}
+                {todayFree.length > 0
+                  ? t('home.heroCount', { count: todayFree.length })
+                  : t('home.heroNone')}
               </Text>
             ) : null}
           </View>

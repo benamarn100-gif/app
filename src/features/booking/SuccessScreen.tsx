@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import Animated, { FadeInDown, useReducedMotion, FadeIn } from 'react-native-reanimated';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -61,35 +61,46 @@ export function SuccessScreen() {
         {appointment ? <AppointmentCard appointment={appointment} /> : null}
         {appointment ? (
           <View style={styles.actions}>
-            <Button
-              variant="secondary"
-              icon={calendarDone ? CalendarCheck : CalendarPlus}
-              label={calendarDone ? t('booking.calendarAdded') : t('booking.addToCalendar')}
-              disabled={calendarDone}
-              onPress={async () => {
-                const result = await addAppointmentToCalendar(appointment, appointment.practice, t);
-                if (result === 'saved') setCalendarDone(true);
-              }}
-              testID="add-to-calendar"
-            />
-            <Button
-              variant="secondary"
-              icon={remindersDone ? BellRing : Bell}
-              label={remindersDone ? t('booking.remindersEnabled') : t('booking.enableReminders')}
-              disabled={remindersDone}
-              onPress={async () => {
-                const granted = await requestNotificationPermission();
-                if (!granted) {
-                  toast.show(t('booking.remindersDenied'), 'info');
-                  return;
-                }
-                setPrefs({ remindersEnabled: true });
-                await scheduleReminders(appointment, t, locale);
-                setRemindersDone(true);
-                toast.show(t('booking.remindersEnabled'), 'success');
-              }}
-              testID="enable-reminders"
-            />
+            {/* Kalender und lokale Erinnerungen gibt es nur in der App, nicht im Browser. */}
+            {Platform.OS !== 'web' ? (
+              <>
+                <Button
+                  variant="secondary"
+                  icon={calendarDone ? CalendarCheck : CalendarPlus}
+                  label={calendarDone ? t('booking.calendarAdded') : t('booking.addToCalendar')}
+                  disabled={calendarDone}
+                  onPress={async () => {
+                    const result = await addAppointmentToCalendar(
+                      appointment,
+                      appointment.practice,
+                      t,
+                    );
+                    if (result === 'saved') setCalendarDone(true);
+                  }}
+                  testID="add-to-calendar"
+                />
+                <Button
+                  variant="secondary"
+                  icon={remindersDone ? BellRing : Bell}
+                  label={
+                    remindersDone ? t('booking.remindersEnabled') : t('booking.enableReminders')
+                  }
+                  disabled={remindersDone}
+                  onPress={async () => {
+                    const granted = await requestNotificationPermission();
+                    if (!granted) {
+                      toast.show(t('booking.remindersDenied'), 'info');
+                      return;
+                    }
+                    setPrefs({ remindersEnabled: true });
+                    await scheduleReminders(appointment, t, locale);
+                    setRemindersDone(true);
+                    toast.show(t('booking.remindersEnabled'), 'success');
+                  }}
+                  testID="enable-reminders"
+                />
+              </>
+            ) : null}
             <Button
               variant="secondary"
               icon={Navigation}

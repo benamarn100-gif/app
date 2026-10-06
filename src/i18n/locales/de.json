@@ -137,6 +137,8 @@
     "heroBody_formal": "Wir zeigen Ihnen sofort, wo heute noch etwas frei ist.",
     "heroCount_one": "Heute noch {{count}} Praxis mit freien Terminen",
     "heroCount_other": "Heute noch {{count}} Praxen mit freien Terminen",
+    "heroNone": "Heute ist alles vergeben – wir zeigen dir die frühesten Termine.",
+    "heroNone_formal": "Heute ist alles vergeben – wir zeigen Ihnen die frühesten Termine.",
     "heroA11yHint": "Zeigt Praxen in der Nähe, sortiert nach dem frühesten freien Termin",
     "specialties": "Fachrichtungen",
     "todayNearby": "Heute frei in deiner Nähe",
