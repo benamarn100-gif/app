@@ -6,15 +6,22 @@
 
 ## Stand des Projekts
 
-| Punkt                 | Stand                                                                                                                                                                                                                                                 |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Projekt               | `mednow`, Ref `gimynoopnheaapqihsdb`, Region eu-central-1, Organisation „MedNow“ (Free-Tarif)                                                                                                                                                         |
-| Migrationen 0100–0800 | eingespielt über den Supabase-Connector, Historie passt zu den Dateinamen                                                                                                                                                                             |
-| Prüfung               | 62 Funktionen, Spalten, RLS-Regeln und Rechte per Prüfsumme identisch mit der lokal getesteten DB                                                                                                                                                     |
-| Vault-Secrets         | angelegt (Werte nur in der Datenbank erzeugt)                                                                                                                                                                                                         |
-| pg_cron / pg_net      | aktiv; 4 Jobs angelegt (`mednow-demo-roll` folgt mit 0900)                                                                                                                                                                                            |
-| Offen                 | Migration 0900 (Funktionen mit DELETE, vom Connector zurückgestellt), Demo-Daten, Auth-/API-Einstellungen (`config push`: anonyme Anmeldung, Schema `app`, E-Mail-Codes, MFA), Edge Functions, `WORKER_SECRET` → erledigt der Workflow nach Schritt 2 |
-| App                   | `eas.json`: `preview-backend` und `production` zeigen auf dieses Projekt (Publishable Key)                                                                                                                                                            |
+| Punkt            | Stand                                                                                                                           |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Projekt          | `mednow`, Ref `gimynoopnheaapqihsdb`, Region eu-central-1, Organisation „MedNow“ (Free-Tarif)                                   |
+| Migrationen      | 0100–1000 eingespielt (Workflow), Historie passt zu den Dateinamen                                                              |
+| Demo-Daten       | 60 Praxen rund um Fulda, Slots für 14 Tage, täglich weitergerollt (`mednow-demo-roll`)                                          |
+| Vault-Secrets    | angelegt (Werte nur in der Datenbank erzeugt)                                                                                   |
+| pg_cron / pg_net | aktiv, 5 Jobs                                                                                                                   |
+| Auth             | anonyme Anmeldung, E-Mail-Codes (6 Stellen), MFA, Rate-Limits übertragen – **ohne eigene E-Mail-Vorlagen** (siehe unten)        |
+| Edge Functions   | 7 aktiv (`account`, `book_slot`, `cancel_appointment`, `hold_slot`, `reschedule_appointment`, `send_notifications`, `waitlist`) |
+| Rauchtest        | Suche mit dem öffentlichen App-Schlüssel (Rolle `anon`) liefert 60 Praxen                                                       |
+| App              | `eas.json`: `preview-backend` und `production` zeigen auf dieses Projekt (Publishable Key)                                      |
+| Offen            | eigener EU-SMTP-Anbieter (E-Mail-Codes an beliebige Adressen), Push-Zugänge (`docs/push-setup.md`)                              |
+
+> **E-Mail-Codes:** Ohne eigenen SMTP-Anbieter verschickt Supabase nur an Adressen des eigenen Teams und erlaubt
+> keine eigenen Vorlagen. Nach dem Einrichten (z. B. ein EU-Anbieter mit AV-Vertrag) den Workflow mit
+> „E-Mail-Vorlagen übertragen“ starten.
 
 ## 1. Projekt anlegen (einmalig, erledigt)
 
