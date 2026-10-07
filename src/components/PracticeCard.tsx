@@ -12,7 +12,7 @@ import { Avatar } from './Avatar';
 import { Card } from './Card';
 import { DemoBadge } from './DemoBadge';
 import { FreshnessLabel, freshnessText } from './FreshnessLabel';
-import { MapPin, Star, Video } from './icons';
+import { Languages, MapPin, Star, Video } from './icons';
 import { StatusBadge } from './StatusBadge';
 import { Text } from './Text';
 
@@ -36,7 +36,7 @@ export const PracticeCard = memo(function PracticeCard({
 }: Props) {
   const theme = useTheme();
   const styles = useStyles();
-  const { t, locale } = useT();
+  const { t, locale, language } = useT();
   const now = useNow(60_000);
   const { practice, status, nextSlot, distanceM, lastSyncedAt, openCount } = item;
   const specialty = specialtyById(practice.specialtyIds[0] ?? 1);
@@ -51,6 +51,11 @@ export const PracticeCard = memo(function PracticeCard({
       ? t('card.callForAppointment')
       : t('card.noSlotInWindow');
   const statusText = t(`status.${status}`);
+  // Spricht die Praxis die App-Sprache (außer Deutsch)? Dann direkt auf der Karte zeigen.
+  const speaksMine =
+    language !== 'de' && practice.languages.includes(language)
+      ? t('card.speaks', { language: t(`languageName.${language as 'en'}`) })
+      : null;
 
   return (
     <Card
@@ -65,6 +70,7 @@ export const PracticeCard = memo(function PracticeCard({
           ? t('card.openSlots', { count: openCount })
           : statusText,
         practice.offersVideo ? t('service.video_consultation') : null,
+        speaksMine,
         nextLine,
         distance && !when ? distance : null,
         t('time.updatedA11y', { age: freshnessText(t, lastSyncedAt, now) }),
@@ -110,6 +116,14 @@ export const PracticeCard = memo(function PracticeCard({
             <Video size={14} color={theme.colors.textSecondary} strokeWidth={2} />
             <Text variant="caption" color="textSecondary">
               {t('card.video')}
+            </Text>
+          </View>
+        ) : null}
+        {speaksMine ? (
+          <View style={styles.meta}>
+            <Languages size={14} color={theme.colors.textSecondary} strokeWidth={2} />
+            <Text variant="caption" color="textSecondary">
+              {speaksMine}
             </Text>
           </View>
         ) : null}

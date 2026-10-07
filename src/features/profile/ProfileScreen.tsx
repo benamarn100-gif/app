@@ -42,7 +42,7 @@ import { useAppointments, useSearchCenter, useSession } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
 import { makeStyles } from '@/design/theme';
 import type { ThemePreference } from '@/design/theme';
-import type { LanguagePreference } from '@/i18n';
+import { APP_LANGUAGES, type LanguagePreference } from '@/i18n';
 import type { TravelMode } from '@/domain/geo/travel';
 import { useT } from '@/i18n/useT';
 import {
@@ -266,8 +266,8 @@ export function ProfileScreen() {
               onChange={(v) => prefs.set({ language: v })}
               options={[
                 { value: 'system', label: t('profile.languageSystem') },
-                { value: 'de', label: 'Deutsch' },
-                { value: 'en', label: 'English' },
+                // Jede Sprache in ihrem eigenen Namen (Feature 9)
+                ...APP_LANGUAGES.map((l) => ({ value: l.code, label: l.nativeName })),
               ]}
             />
           </View>

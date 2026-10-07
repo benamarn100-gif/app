@@ -58,3 +58,10 @@
    dem Gerät, neutrale Mitteilung („Eine Vorsorge steht an“), Geschlecht wird nicht gespeichert.
    Konto löschen entfernt jetzt auch alle Gerätedaten (Favoriten, Vorsorge, Kalender, Mitteilungen).
    Nutzen: Vorsorge nicht mehr vergessen. **Vor Launch fachlich prüfen lassen** (Stand 10/2026).
+9. **Mehrsprachigkeit**: Deutsch und Englisch, jetzt vorbereitet für weitere Sprachen – zentrale
+   Liste `src/i18n/languages.ts` (Sprachauswahl, Formate, Gerätesprache), die Prüfung
+   `check:i18n` prüft jede eingetragene Sprache automatisch, Anleitung in `docs/i18n.md`.
+   „Systemsprache“ prüft alle bevorzugten Gerätesprachen der Reihe nach. Filter „Sprache in der
+   Praxis“ wie bisher; neu zeigt die Praxiskarte „Spricht Englisch“, wenn die Praxis die
+   App-Sprache spricht. Nutzen: Wer wenig Deutsch spricht, findet schneller eine passende Praxis.
+   **Fehlt:** Rechts-nach-links-Layout (z. B. Arabisch), Übersetzungen weiterer Sprachen.

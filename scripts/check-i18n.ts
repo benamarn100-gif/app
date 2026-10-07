@@ -1,6 +1,7 @@
 /**
  * Prüft die Übersetzungen:
- *  1. Deutsch und Englisch haben dieselben Schlüssel (ohne _formal-Varianten).
+ *  1. Jede App-Sprache (src/i18n/languages.ts) hat eine Datei mit denselben Schlüsseln wie
+ *     Deutsch (ohne _formal-Varianten) – neue Sprachen werden automatisch mitgeprüft.
  *  2. Jeder deutsche Text mit du-Ansprache hat eine Sie-Variante (<key>_formal).
  *  3. Jede _formal-Variante hat einen Basisschlüssel.
  *  4. Keine leeren Texte.
@@ -10,8 +11,8 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { APP_LANGUAGES } from '../src/i18n/languages';
 import de from '../src/i18n/locales/de.json';
-import en from '../src/i18n/locales/en.json';
 
 type Tree = { [key: string]: string | Tree };
 
@@ -45,12 +46,25 @@ function walk(dir: string, files: string[] = []): string[] {
 export function checkI18n(): string[] {
   const errors: string[] = [];
   const fde = flatten(de as Tree);
-  const fen = flatten(en as Tree);
-
   const deKeys = new Set(Object.keys(fde).filter((k) => !/_formal(_one|_other)?$/.test(k)));
-  const enKeys = new Set(Object.keys(fen));
-  for (const k of deKeys) if (!enKeys.has(k)) errors.push(`Englisch fehlt: ${k}`);
-  for (const k of enKeys) if (!deKeys.has(k)) errors.push(`Deutsch fehlt: ${k}`);
+  const localesDir = join(__dirname, '..', 'src', 'i18n', 'locales');
+
+  for (const { code, nativeName } of APP_LANGUAGES) {
+    if (code === 'de') continue;
+    let tree: Tree;
+    try {
+      tree = JSON.parse(readFileSync(join(localesDir, `${code}.json`), 'utf8')) as Tree;
+    } catch {
+      errors.push(`Datei fehlt oder ist kein JSON: src/i18n/locales/${code}.json`);
+      continue;
+    }
+    const flat = flatten(tree);
+    const keys = new Set(Object.keys(flat));
+    for (const k of deKeys) if (!keys.has(k)) errors.push(`${nativeName} fehlt: ${k}`);
+    for (const k of keys) if (!deKeys.has(k)) errors.push(`Deutsch fehlt (aus ${code}): ${k}`);
+    for (const [k, v] of Object.entries(flat))
+      if (!v.trim()) errors.push(`Leerer Text (${code}): ${k}`);
+  }
 
   for (const [k, v] of Object.entries(fde)) {
     if (!v.trim()) errors.push(`Leerer Text (de): ${k}`);
@@ -65,7 +79,6 @@ export function checkI18n(): string[] {
       if (!(formal in fde)) errors.push(`du-Text ohne Sie-Variante: ${k} → ${formal}`);
     }
   }
-  for (const [k, v] of Object.entries(fen)) if (!v.trim()) errors.push(`Leerer Text (en): ${k}`);
 
   const known = new Set(Object.keys(fde).map(base));
   const root = join(__dirname, '..', 'src');
@@ -86,7 +99,7 @@ if (require.main === module) {
   console.log(
     errors.length
       ? `\n${errors.length} i18n-Fehler.`
-      : 'i18n: alle Schlüssel vollständig (de/en, du/Sie).',
+      : `i18n: alle Schlüssel vollständig (${APP_LANGUAGES.map((l) => l.code).join('/')}, du/Sie).`,
   );
   if (errors.length) process.exit(1);
 }

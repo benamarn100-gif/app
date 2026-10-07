@@ -11,13 +11,13 @@ import { adaptSpecialtyIds, isMinor, specialtiesFor, type Profile } from '@/doma
 import { ACCESSIBILITY_FEATURES, type AccessibilityFeature, type TimeWindow } from '@/domain/types';
 import { useProfiles } from '@/features/profile/useProfiles';
 import type { TranslationKey } from '@/i18n';
+import { PRACTICE_LANGUAGES } from '@/i18n/languages';
 import { useT } from '@/i18n/useT';
 import { useActiveProfile } from '@/state/activeProfile';
 import { RADIUS_STEPS, useSearchFilters } from '@/state/searchFilters';
 
 import { useFilteredSearchParams } from './useSearchParams';
 
-const LANGUAGES = ['en', 'tr', 'ru', 'ar', 'pl', 'uk', 'fr', 'es'] as const;
 const FILTERABLE_A11Y: AccessibilityFeature[] = ACCESSIBILITY_FEATURES.filter(
   (f) => f !== 'parking',
 );
@@ -191,7 +191,7 @@ export function FiltersScreen() {
 
         <Section title={t('filters.language')}>
           <View style={styles.wrap}>
-            {LANGUAGES.map((l) => (
+            {PRACTICE_LANGUAGES.map((l) => (
               <Chip
                 key={l}
                 label={t(`languageName.${l}`)}

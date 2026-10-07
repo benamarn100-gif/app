@@ -4,6 +4,7 @@ import { getLocales } from 'expo-localization';
 
 import de from './locales/de.json';
 import en from './locales/en.json';
+import { DEFAULT_LANGUAGE, isAppLanguage, languageInfo, type AppLanguage } from './languages';
 
 // Hermes bringt Intl.PluralRules nicht überall mit – i18next braucht es für _one/_other.
 if (typeof Intl === 'undefined' || typeof Intl.PluralRules === 'undefined') {
@@ -11,19 +12,24 @@ if (typeof Intl === 'undefined' || typeof Intl.PluralRules === 'undefined') {
   require('intl-pluralrules');
 }
 
-export const SUPPORTED_LANGUAGES = ['de', 'en'] as const;
-export type AppLanguage = (typeof SUPPORTED_LANGUAGES)[number];
+export { APP_LANGUAGES, type AppLanguage } from './languages';
 export type LanguagePreference = 'system' | AppLanguage;
 
+/** Übersetzungen je App-Sprache – neue Sprache: Datei importieren und hier eintragen. */
 export const resources = {
   de: { translation: de },
   en: { translation: en },
-} as const;
+} as const satisfies Record<AppLanguage, unknown>;
 
-/** Deutsch ist Standard; Englisch nur, wenn das Gerät auf Englisch steht. */
+/**
+ * Gerätesprache, falls die App sie kann – sonst Deutsch. Die bevorzugten Sprachen des
+ * Geräts werden der Reihe nach geprüft (z. B. „Türkisch, dann Englisch“ → Englisch).
+ */
 export function detectDeviceLanguage(): AppLanguage {
-  const code = getLocales()[0]?.languageCode;
-  return code === 'en' ? 'en' : 'de';
+  for (const l of getLocales()) {
+    if (isAppLanguage(l.languageCode)) return l.languageCode;
+  }
+  return DEFAULT_LANGUAGE;
 }
 
 export function resolveLanguage(preference: LanguagePreference): AppLanguage {
@@ -32,7 +38,7 @@ export function resolveLanguage(preference: LanguagePreference): AppLanguage {
 
 /** BCP-47-Locale für Intl-Formatierung. */
 export function localeFor(language: string): string {
-  return language === 'en' ? 'en-GB' : 'de-DE';
+  return languageInfo(language).locale;
 }
 
 if (!i18n.isInitialized) {
@@ -40,7 +46,7 @@ if (!i18n.isInitialized) {
   void i18n.use(initReactI18next).init({
     resources,
     lng: detectDeviceLanguage(),
-    fallbackLng: 'de',
+    fallbackLng: DEFAULT_LANGUAGE,
     interpolation: { escapeValue: false },
     returnNull: false,
     react: { useSuspense: false },

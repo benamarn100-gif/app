@@ -156,7 +156,8 @@
     "a11y": "{{name}}, {{specialty}}, {{status}}, {{next}}, {{distance}}",
     "rating": "{{value}} of 5",
     "ratingA11y": "Rated {{value}} of 5 from {{count}} reviews",
-    "video": "Video"
+    "video": "Video",
+    "speaks": "Speaks {{language}}"
   },
   "acute": {
     "title": "Available soon",

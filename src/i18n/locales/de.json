@@ -173,7 +173,8 @@
     "a11y": "{{name}}, {{specialty}}, {{status}}, {{next}}, {{distance}}",
     "rating": "{{value}} von 5",
     "ratingA11y": "Bewertung {{value}} von 5 bei {{count}} Bewertungen",
-    "video": "Video"
+    "video": "Video",
+    "speaks": "Spricht {{language}}"
   },
   "acute": {
     "title": "Heute noch frei",
