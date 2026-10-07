@@ -17,6 +17,12 @@ jobs:
     name: Update auf Kanal preview
     type: update
     environment: preview
+    # Gleiche Werte wie das Build-Profil „preview“ (eas.json): Demo-Daten und Diagnose.
+    # Sonst würde ein Update mit Server-Werten aus der EAS-Umgebung die Testversion umschalten.
+    env:
+      APP_VARIANT: preview
+      EXPO_PUBLIC_DATA_MODE: memory
+      EXPO_PUBLIC_DIAGNOSTICS: '1'
     params:
       channel: preview
       message: ${{ inputs.message || 'Testversion aktualisiert' }}
