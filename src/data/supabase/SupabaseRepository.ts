@@ -56,6 +56,7 @@ const ERROR_CODES = new Set<ErrorCode>([
   'offer_expired',
   'not_found',
   'rate_limited',
+  'plan_limit',
   'invalid_input',
 ]);
 

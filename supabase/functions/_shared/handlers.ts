@@ -283,3 +283,90 @@ export async function handleSendNotifications(
   if (failed.length) await ctx.rpc('mark_outbox', { p_ids: failed, p_error: 'send_failed' });
   return json({ sent, failed: failed.length });
 }
+
+// ---- Abo-Stufen (Phase 4) ---------------------------------------------------
+
+const PASS_PRODUCT = 'mednow_plus_pass_30d';
+const PASS_DAYS = 30;
+
+const billingEvent = z.object({
+  event: z
+    .object({
+      type: z.string(),
+      app_user_id: z.string(),
+      entitlement_ids: z.array(z.string()).nullable().optional(),
+      expiration_at_ms: z.number().nullable().optional(),
+      purchased_at_ms: z.number().nullable().optional(),
+      product_id: z.string().nullable().optional(),
+    })
+    .passthrough(),
+});
+
+/** Ereignisse, nach denen die Stufe aus den aktiven Entitlements neu gesetzt wird. */
+const GRANTING = new Set([
+  'INITIAL_PURCHASE',
+  'RENEWAL',
+  'PRODUCT_CHANGE',
+  'UNCANCELLATION',
+  'NON_RENEWING_PURCHASE',
+  // Kündigung/Zahlungsproblem: läuft bis zum Ablaufdatum weiter
+  'CANCELLATION',
+  'BILLING_ISSUE',
+  'SUBSCRIPTION_EXTENDED',
+  'TEMPORARY_ENTITLEMENT_GRANT',
+]);
+
+function sameSecret(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/**
+ * Webhook von RevenueCat (verify_jwt = false). Echtheit über das gemeinsame Geheimnis
+ * REVENUECAT_WEBHOOK_SECRET im Authorization-Header („Bearer <Geheimnis>“).
+ * Schreibt nur Stufe + Ablaufdatum in app.entitlements – keine Kaufdaten, kein Protokoll
+ * des Inhalts. Die App-Nutzer-ID ist die pseudonyme Supabase-ID; anonyme RevenueCat-IDs
+ * werden ignoriert.
+ */
+export async function handleBillingWebhook(req: Request, ctx: Context): Promise<Response> {
+  const secret = ctx.env('REVENUECAT_WEBHOOK_SECRET');
+  const header = req.headers.get('authorization') ?? '';
+  if (!secret || !sameSecret(header, `Bearer ${secret}`)) throw new HttpError('unauthorized');
+  const { event } = parse(billingEvent, await readJson(req));
+
+  if (!uuid.safeParse(event.app_user_id).success) return json({ ignored: 'anonymous' });
+  const user = event.app_user_id;
+
+  if (event.type === 'EXPIRATION') {
+    await ctx.rpc('set_entitlement', {
+      p_user: user,
+      p_plan: null,
+      p_expires_at: null,
+      p_product: null,
+    });
+    return json({ ok: true, plan: 'free' });
+  }
+  if (!GRANTING.has(event.type)) return json({ ignored: event.type });
+
+  const ids = event.entitlement_ids ?? [];
+  const plan = ids.includes('family') ? 'family' : ids.includes('plus') ? 'plus' : null;
+  if (!plan) return json({ ignored: 'no_entitlement' });
+
+  // Pass ohne Ablaufdatum vom Store: 30 Tage ab Kauf. Sonst nie „für immer“ freischalten.
+  const expiresMs =
+    event.expiration_at_ms ??
+    (event.product_id === PASS_PRODUCT && event.purchased_at_ms
+      ? event.purchased_at_ms + PASS_DAYS * 86_400_000
+      : null);
+  if (!expiresMs) return json({ ignored: 'no_expiration' });
+
+  await ctx.rpc('set_entitlement', {
+    p_user: user,
+    p_plan: plan,
+    p_expires_at: new Date(expiresMs).toISOString(),
+    p_product: event.product_id ?? null,
+  });
+  return json({ ok: true, plan });
+}

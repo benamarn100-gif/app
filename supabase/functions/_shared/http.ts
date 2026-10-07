@@ -16,6 +16,7 @@ export type ErrorCode =
   | 'not_found'
   | 'invalid_input'
   | 'rate_limited'
+  | 'plan_limit'
   | 'unauthorized'
   | 'not_implemented'
   | 'unknown';
@@ -29,6 +30,8 @@ const STATUS: Record<ErrorCode, number> = {
   not_found: 404,
   invalid_input: 400,
   rate_limited: 429,
+  // Grenze der Abo-Stufe (z. B. zweiter Termin-Alarm in „kostenlos“)
+  plan_limit: 402,
   unauthorized: 401,
   not_implemented: 501,
   unknown: 500,

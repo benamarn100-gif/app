@@ -83,6 +83,8 @@ export type ErrorCode =
   | 'not_found'
   | 'network'
   | 'rate_limited'
+  /** Grenze der Abo-Stufe erreicht (Termin-Alarme, Profile) */
+  | 'plan_limit'
   | 'invalid_input'
   | 'unknown';
 

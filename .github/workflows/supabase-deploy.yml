@@ -8,6 +8,7 @@ name: Supabase bereitstellen (Frankfurt)
 #   Secrets:   SUPABASE_ACCESS_TOKEN (supabase.com/dashboard/account/tokens)
 #              SUPABASE_DB_PASSWORD  (beim Anlegen des Projekts vergeben)
 #              EXPO_ACCESS_TOKEN     (optional, für Push über Expo – docs/push-setup.md)
+#              REVENUECAT_WEBHOOK_SECRET (optional, Abo-Webhook – docs/billing-setup.md)
 #   Variable:  SUPABASE_PROJECT_REF  (z. B. abcdefghijklmnopqrst)
 # Kein Service-Role-Key nötig – und er gehört nie in die App oder ins Repository.
 
@@ -123,6 +124,7 @@ jobs:
         if: inputs.functions
         env:
           EXPO_ACCESS_TOKEN: ${{ secrets.EXPO_ACCESS_TOKEN }}
+          REVENUECAT_WEBHOOK_SECRET: ${{ secrets.REVENUECAT_WEBHOOK_SECRET }}
         run: |
           worker="$(jq -n --arg q "select decrypted_secret as s from vault.decrypted_secrets where name = 'mednow_worker_secret'" '{query: $q}' \
             | curl -fsS -X POST -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
@@ -131,6 +133,7 @@ jobs:
           echo "::add-mask::$worker"
           args=("WORKER_SECRET=$worker")
           if [ -n "$EXPO_ACCESS_TOKEN" ]; then args+=("EXPO_ACCESS_TOKEN=$EXPO_ACCESS_TOKEN"); fi
+          if [ -n "$REVENUECAT_WEBHOOK_SECRET" ]; then args+=("REVENUECAT_WEBHOOK_SECRET=$REVENUECAT_WEBHOOK_SECRET"); fi
           supabase secrets set --project-ref "$PROJECT_REF" "${args[@]}"
 
       - name: Edge Functions

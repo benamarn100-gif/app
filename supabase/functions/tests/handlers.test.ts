@@ -3,6 +3,7 @@ import { assertEquals } from '@std/assert';
 import type { Context } from '../_shared/context.ts';
 import {
   handleAccount,
+  handleBillingWebhook,
   handleBookSlot,
   handleSendNotifications,
   handleWaitlist,
@@ -234,3 +235,89 @@ Deno.test('Unbekannte Fehler geben keine Details preis', async () => {
   assertEquals(res.status, 500);
   assertEquals(await res.json(), { error: 'unknown' });
 });
+
+// ---- billing_webhook (Phase 4) ----------------------------------------------
+
+function billingContext() {
+  const calls: { fn: string; params: Record<string, unknown> }[] = [];
+  const ctx: Context = {
+    admin: null,
+    env: (name) => (name === 'REVENUECAT_WEBHOOK_SECRET' ? 'rc-secret' : undefined),
+    getUser: () => Promise.reject(new Error('kein Nutzer-JWT')),
+    rpc: <T>(fn: string, params: Record<string, unknown>) => {
+      calls.push({ fn, params });
+      return Promise.resolve(null as T);
+    },
+    query: <T>() => Promise.resolve([] as T),
+  };
+  return { ctx, calls };
+}
+
+const billingPost = (event: Record<string, unknown>, auth = 'Bearer rc-secret') =>
+  new Request('https://example.org/billing_webhook', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: auth },
+    body: JSON.stringify({ event }),
+  });
+
+Deno.test('billing_webhook: ohne gültiges Geheimnis → 401, nichts geschrieben', async () => {
+  const { ctx, calls } = billingContext();
+  const res = await serve((req) => handleBillingWebhook(req, ctx))(
+    billingPost({ type: 'INITIAL_PURCHASE', app_user_id: USER }, 'Bearer falsch'),
+  );
+  assertEquals(res.status, 401);
+  assertEquals(calls.length, 0);
+});
+
+Deno.test('billing_webhook: Jahresabo Familie → Stufe family mit Ablaufdatum', async () => {
+  const { ctx, calls } = billingContext();
+  const expires = Date.UTC(2027, 9, 7);
+  const res = await serve((req) => handleBillingWebhook(req, ctx))(
+    billingPost({
+      type: 'INITIAL_PURCHASE',
+      app_user_id: USER,
+      entitlement_ids: ['plus', 'family'],
+      expiration_at_ms: expires,
+      product_id: 'mednow_family_yearly',
+    }),
+  );
+  assertEquals(res.status, 200);
+  assertEquals(calls[0]?.fn, 'set_entitlement');
+  assertEquals(calls[0]?.params.p_plan, 'family');
+  assertEquals(calls[0]?.params.p_expires_at, new Date(expires).toISOString());
+});
+
+Deno.test('billing_webhook: Pass ohne Ablauf vom Store → 30 Tage ab Kauf', async () => {
+  const { ctx, calls } = billingContext();
+  const bought = Date.UTC(2026, 9, 7);
+  await serve((req) => handleBillingWebhook(req, ctx))(
+    billingPost({
+      type: 'NON_RENEWING_PURCHASE',
+      app_user_id: USER,
+      entitlement_ids: ['plus'],
+      purchased_at_ms: bought,
+      product_id: 'mednow_plus_pass_30d',
+    }),
+  );
+  assertEquals(calls[0]?.params.p_plan, 'plus');
+  assertEquals(calls[0]?.params.p_expires_at, new Date(bought + 30 * 86_400_000).toISOString());
+});
+
+Deno.test(
+  'billing_webhook: Ablauf → zurück auf kostenlos; anonyme IDs werden ignoriert',
+  async () => {
+    const { ctx, calls } = billingContext();
+    const handler = serve((req) => handleBillingWebhook(req, ctx));
+    await handler(billingPost({ type: 'EXPIRATION', app_user_id: USER }));
+    assertEquals(calls[0]?.params.p_plan, null);
+    const res = await handler(
+      billingPost({
+        type: 'INITIAL_PURCHASE',
+        app_user_id: '$RCAnonymousID:abc',
+        entitlement_ids: ['plus'],
+      }),
+    );
+    assertEquals(res.status, 200);
+    assertEquals(calls.length, 1);
+  },
+);

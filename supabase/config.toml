@@ -118,5 +118,10 @@ verify_jwt = true
 import_map = "./functions/deno.json"
 verify_jwt = false
 
+[functions.billing_webhook]
+# Abo-Ereignisse von RevenueCat; Echtheit über REVENUECAT_WEBHOOK_SECRET (kein Nutzer-JWT)
+import_map = "./functions/deno.json"
+verify_jwt = false
+
 [analytics]
 enabled = false
