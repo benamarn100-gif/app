@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react-native';
 
 import { HEALTH_CONSENT_VERSION } from '@/data/repository';
 import { PlansScreen } from '@/features/plans/PlansScreen';
@@ -78,8 +78,14 @@ describe('Bezahlseite', () => {
     mockParams.current = { reason: 'alarms' };
     await renderWithProviders(<PlansScreen />, { repository: createTestRepository() }).result;
     expect(await screen.findByText('4,99 € einmalig')).toBeTruthy();
-    expect(screen.getByText('29,99 € pro Jahr')).toBeTruthy();
-    expect(screen.getByText('44,99 € pro Jahr')).toBeTruthy();
+    const offer = (id: string) => within(screen.getByTestId(`buy-${id}`));
+    expect(offer('mednow_plus_yearly').getByText('29,99 € pro Jahr')).toBeTruthy();
+    expect(offer('mednow_family_yearly').getByText('44,99 € pro Jahr')).toBeTruthy();
+    // Preise auch schon in der Stufen-Übersicht
+    expect(
+      within(screen.getByTestId('plan-plus')).getByText('4,99 € für 30 Tage · 29,99 € pro Jahr'),
+    ).toBeTruthy();
+    expect(within(screen.getByTestId('plan-family')).getByText('44,99 € pro Jahr')).toBeTruthy();
     expect(screen.getByText(/keinen Vorrang/)).toBeTruthy();
     expect(screen.getByTestId('plans-not-now')).toBeTruthy();
     expect(screen.getByText(/Es wird nichts berechnet/)).toBeTruthy();

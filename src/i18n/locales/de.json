@@ -980,6 +980,8 @@
       "mednow_plus_yearly": "Plus Jahresabo",
       "mednow_family_yearly": "Familie Jahresabo"
     },
+    "freePrice": "0 € – dauerhaft",
+    "passPriceShort": "{{price}} für 30 Tage",
     "passPrice": "{{price}} einmalig",
     "yearPrice": "{{price}} pro Jahr",
     "perMonth": "entspricht {{price}} im Monat",

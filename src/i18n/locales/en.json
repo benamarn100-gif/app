@@ -10,7 +10,7 @@
     "home": "Home",
     "today": "Today",
     "search": "Search",
-    "appointments": "Appointments",
+    "appointments": "Bookings",
     "profile": "Profile"
   },
   "common": {
@@ -898,6 +898,8 @@
       "mednow_plus_yearly": "Plus yearly",
       "mednow_family_yearly": "Family yearly"
     },
+    "freePrice": "€0 – always",
+    "passPriceShort": "{{price}} for 30 days",
     "passPrice": "{{price}} one-off",
     "yearPrice": "{{price}} per year",
     "perMonth": "equals {{price}} per month",

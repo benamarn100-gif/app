@@ -1,7 +1,8 @@
 name: Testversion aktualisieren (EAS Update)
 
 # Neue App-Logik (JS) ohne Neuinstallation auf die Testgeräte bringen.
-# Nur für Änderungen ohne neue native Module; sonst neuen Build erstellen.
+# Updates erreichen nur Builds mit gleichem nativen Fingerabdruck (runtimeVersion: fingerprint);
+# nach neuen nativen Modulen zuerst „Testversion bauen“.
 # Start: eas workflow:run update-preview.yml (oder über das Expo-Dashboard).
 
 on:

@@ -152,9 +152,9 @@ export function PlansScreen() {
           </Card>
         ) : null}
 
-        <PlanSummary plan="free" />
-        <PlanSummary plan="plus" highlight={!FAMILY_ONLY.includes(reason)} />
-        <PlanSummary plan="family" highlight={FAMILY_ONLY.includes(reason)} />
+        <PlanSummary plan="free" offers={offers} />
+        <PlanSummary plan="plus" offers={offers} highlight={!FAMILY_ONLY.includes(reason)} />
+        <PlanSummary plan="family" offers={offers} highlight={FAMILY_ONLY.includes(reason)} />
 
         <Card tone="muted">
           <Text variant="small">{t('plans.fairness')}</Text>
@@ -249,14 +249,35 @@ export function PlansScreen() {
   );
 }
 
-function PlanSummary({ plan, highlight }: { plan: PlanId; highlight?: boolean }) {
+function PlanSummary({
+  plan,
+  offers,
+  highlight,
+}: {
+  plan: PlanId;
+  offers: Offer[] | null;
+  highlight?: boolean;
+}) {
   const theme = useTheme();
   const styles = useStyles();
   const { t } = useT();
   const items = t(`plans.includes.${plan}`).split('\n');
+  // Preise schon in der Übersicht – nicht erst nach dem Scrollen zu den Kaufoptionen
+  const price =
+    plan === 'free'
+      ? t('plans.freePrice')
+      : (offers ?? [])
+          .filter((o) => o.plan === plan)
+          .map((o) =>
+            o.kind === 'pass'
+              ? t('plans.passPriceShort', { price: o.price })
+              : t('plans.yearPrice', { price: o.price }),
+          )
+          .join(' · ');
   return (
     <Card tone={highlight ? 'primary' : 'surface'} style={styles.gap} testID={`plan-${plan}`}>
       <Text variant="h3">{t(`plans.name.${plan}`)}</Text>
+      {price ? <Text variant="bodyStrong">{price}</Text> : null}
       {items.map((line) => (
         <View key={line} style={styles.item}>
           <Check size={18} color={theme.colors.primary} strokeWidth={2.5} />

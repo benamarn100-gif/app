@@ -142,7 +142,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   experiments: {
     typedRoutes: true,
   },
-  runtimeVersion: { policy: 'appVersion' },
+  // Fingerabdruck der nativen Teile: Ein Update erreicht nur Builds mit genau diesen nativen
+  // Modulen (z. B. nicht ältere Testversionen ohne Kauf-SDK).
+  runtimeVersion: { policy: 'fingerprint' },
   // Beim Start wird nicht auf Updates gewartet (Kaltstart < 2 s); ein neues Update
   // gilt ab dem nächsten Start. EXPO_NO_UPDATES=1 schaltet sie ab (Builds ohne EAS).
   updates:
