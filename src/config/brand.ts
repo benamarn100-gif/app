@@ -20,6 +20,16 @@ export const brand = {
     onCallService: '116117',
     /** Notruf */
     emergency: '112',
+    /**
+     * Notfall-Seite (Feature 8). Stand 10/2026, geprüft gegen aponet.de und Telefonseelsorge.
+     * Apotheken-Notdienst: Sprachdialog fragt die PLZ ab und nennt die nächsten Notapotheken.
+     */
+    pharmacyLandline: '0800 00 22833',
+    pharmacyMobile: '22833',
+    pharmacySearchUrl: 'https://www.aponet.de/apotheke/notdienstsuche',
+    onCallWebUrl: 'https://www.116117.de',
+    /** TelefonSeelsorge: kostenlos, anonym, rund um die Uhr */
+    crisisLines: ['0800 111 0 111', '0800 111 0 222', '116 123'],
   },
 } as const;
 

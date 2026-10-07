@@ -105,6 +105,7 @@ function AppStack() {
         />
         <Stack.Screen name="(tabs)" options={{ headerShown: false, animation: 'fade' }} />
         <Stack.Screen name="acute" options={{ title: t('acute.title') }} />
+        <Stack.Screen name="emergency" options={{ title: t('emergencyPage.title') }} />
         <Stack.Screen
           name="practice/[id]"
           options={{

@@ -8,7 +8,8 @@ import { PressableScale } from './PressableScale';
 import { LoadingDots } from './ProgressDots';
 import { Text } from './Text';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'text';
+/** danger: nur für Notruf-Aktionen (rot, Kontrast wie „primary“ geprüft) */
+export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'danger';
 
 export type ButtonProps = AccessibilityProps & {
   label: string;
@@ -47,12 +48,12 @@ export function Button({
   const styles = useStyles();
   const inactive = disabled || loading;
 
-  const fg =
-    variant === 'primary'
-      ? theme.colors.textOnPrimary
-      : error
-        ? theme.colors.statusBooked
-        : theme.colors.primary;
+  const filled = variant === 'primary' || variant === 'danger';
+  const fg = filled
+    ? theme.colors.textOnPrimary
+    : error
+      ? theme.colors.statusBooked
+      : theme.colors.primary;
 
   return (
     <PressableScale
@@ -68,16 +69,19 @@ export function Button({
         variant === 'primary' && styles.primary,
         variant === 'secondary' && styles.secondary,
         variant === 'text' && styles.text,
-        error && variant !== 'primary' && styles.error,
+        variant === 'danger' && styles.primaryError,
+        error && !filled && styles.error,
         error && variant === 'primary' && styles.primaryError,
         disabled && styles.disabled,
         fullWidth && styles.fullWidth,
         style,
       ]}
       pressedStyle={
-        variant === 'primary'
-          ? { backgroundColor: error ? theme.colors.statusBooked : theme.colors.primaryPressed }
-          : { backgroundColor: theme.colors.primarySoft }
+        variant === 'danger'
+          ? { opacity: 0.9 }
+          : variant === 'primary'
+            ? { backgroundColor: error ? theme.colors.statusBooked : theme.colors.primaryPressed }
+            : { backgroundColor: theme.colors.primarySoft }
       }
       focusStyle={styles.focused}
     >

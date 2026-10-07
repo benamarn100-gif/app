@@ -1,4 +1,5 @@
 import { Linking, View } from 'react-native';
+import { router } from 'expo-router';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
 import { brand } from '@/config/brand';
@@ -6,11 +7,14 @@ import { makeStyles, useTheme } from '@/design/theme';
 import { useT } from '@/i18n/useT';
 import { useIsOnline } from '@/lib/network';
 
-import { Phone, Siren, WifiOff } from './icons';
+import { ChevronRight, Phone, Siren, WifiOff } from './icons';
 import { PressableScale } from './PressableScale';
 import { Text } from './Text';
 
-/** Dezente Notfall-Leiste: „Akut? 116117 · Notfall 112“ – beide Nummern direkt anrufbar. */
+/**
+ * Dezente Notfall-Leiste: „Akut? 116117 · Notfall 112“ – beide Nummern direkt anrufbar,
+ * „Mehr Hilfe“ öffnet die Notfall-Seite (Notdienst-Apotheke, Krisentelefon).
+ */
 export function EmergencyBar() {
   const theme = useTheme();
   const styles = useStyles();
@@ -48,6 +52,18 @@ export function EmergencyBar() {
         <Text variant="smallStrong" color="statusBooked">
           {emergency}
         </Text>
+      </PressableScale>
+      <PressableScale
+        onPress={() => router.push('/emergency')}
+        accessibilityRole="link"
+        accessibilityLabel={t('emergency.moreA11y')}
+        style={styles.number}
+        testID="emergency-more"
+      >
+        <Text variant="smallStrong" color="primary">
+          {t('emergency.more')}
+        </Text>
+        <ChevronRight size={14} color={theme.colors.primary} strokeWidth={2.25} />
       </PressableScale>
     </View>
   );

@@ -44,3 +44,9 @@
    Startseiten-Block „Deine Praxen“ mit gemerkten und zuletzt gebuchten Praxen, jeweils mit dem
    nächsten freien Termin und „Buchen“-Taste direkt in die Buchung. Nutzen: Wiederbuchen in zwei
    Taps.
+7. **Notfall-Seite** („Notfall & Hilfe“, aus der Notruf-Leiste und dem Profil): 112 zuerst als
+   große rote Taste, ärztlicher Bereitschaftsdienst 116117 (Anruf + 116117.de),
+   Notdienst-Apotheke (Notdienstsuche der Apothekerkammern, 0800 00 22833 Festnetz kostenlos,
+   22833 Handy), TelefonSeelsorge (0800 111 0 111, 0800 111 0 222, 116 123). Offline, ohne
+   Anmeldung, nie Teil eines Abos, keine Diagnose. Nutzen: im Ernstfall nicht suchen müssen.
+   **Fehlt:** eigene Apothekendaten („nächste Notapotheke“ führt zu aponet.de bzw. 22833).

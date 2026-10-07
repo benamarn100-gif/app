@@ -32,6 +32,7 @@ import {
   RotateCcw,
   Scale,
   ShieldCheck,
+  Siren,
   Smartphone,
   Users,
 } from '@/components/icons';
@@ -122,6 +123,17 @@ export function ProfileScreen() {
             ) : null}
           </View>
         </View>
+      </Card>
+
+      {/* Notfall-Seite: immer erreichbar, nie Teil eines Abos */}
+      <Card padding="none">
+        <ListRow
+          icon={Siren}
+          title={t('emergencyPage.entry')}
+          subtitle={t('emergencyPage.entryHint')}
+          onPress={() => router.push('/emergency')}
+          testID="profile-emergency"
+        />
       </Card>
 
       <View style={styles.section}>

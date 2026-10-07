@@ -81,7 +81,9 @@
     "onCallA11y": "Ärztlichen Bereitschaftsdienst {{number}} anrufen",
     "emergencyA11y": "Notruf {{number}} anrufen",
     "disclaimer": "MedNow ersetzt keine ärztliche Beratung. Bei Lebensgefahr sofort 112 wählen.",
-    "disclaimer_formal": "MedNow ersetzt keine ärztliche Beratung. Bei Lebensgefahr wählen Sie sofort 112."
+    "disclaimer_formal": "MedNow ersetzt keine ärztliche Beratung. Bei Lebensgefahr wählen Sie sofort 112.",
+    "more": "Mehr Hilfe",
+    "moreA11y": "Notfall-Seite öffnen: Notdienst-Apotheke, Bereitschaftsdienst, Krisentelefon"
   },
   "location": {
     "current": "Aktueller Standort",
@@ -784,5 +786,25 @@
     "remove": "Nicht mehr merken",
     "added": "Praxis gemerkt – sie steht jetzt auf der Startseite.",
     "removed": "Praxis nicht mehr gemerkt."
+  },
+  "emergencyPage": {
+    "title": "Notfall & Hilfe",
+    "entry": "Notfall & Hilfe",
+    "entryHint": "Notruf, Bereitschaftsdienst, Notdienst-Apotheke, Krisentelefon",
+    "call": "{{number}} anrufen",
+    "lifeTitle": "Lebensgefahr: Notruf 112",
+    "lifeBody": "Bei Bewusstlosigkeit, Atemnot, starken Brustschmerzen, Anzeichen eines Schlaganfalls, schweren Unfällen oder starken Blutungen sofort 112 wählen.",
+    "onCallTitle": "Ärztlicher Bereitschaftsdienst 116117",
+    "onCallBody": "Wenn es nicht bis zur nächsten Sprechstunde warten kann, aber kein Notfall für den Rettungsdienst ist – zum Beispiel nachts, am Wochenende oder an Feiertagen. Kostenlos, bundesweit.",
+    "onCallWeb": "116117.de öffnen",
+    "pharmacyTitle": "Notdienst-Apotheke",
+    "pharmacyBody": "Welche Apotheke gerade Notdienst hat, zeigt die Notdienstsuche der Apothekerkammern. Per Telefon nennt ein Sprachdialog nach Eingabe der Postleitzahl die nächsten Notapotheken.",
+    "pharmacySearch": "Notdienst-Apotheke in der Nähe finden",
+    "pharmacyLandline": "Festnetz: {{number}} (kostenlos)",
+    "pharmacyMobile": "Handy: {{number}} (max. 69 ct/Min.)",
+    "pharmacySource": "Daten: Notdienstsuche der Apothekerkammern (aponet.de). MedNow hat keine eigenen Apothekendaten.",
+    "crisisTitle": "Seelische Krise",
+    "crisisBody": "Die TelefonSeelsorge ist rund um die Uhr erreichbar – kostenlos und anonym.",
+    "crisisA11y": "TelefonSeelsorge {{number}} anrufen"
   }
 }

@@ -79,7 +79,9 @@
     "emergencyLabel": "Emergency",
     "onCallA11y": "Call the medical on-call service {{number}}",
     "emergencyA11y": "Call emergency number {{number}}",
-    "disclaimer": "MedNow does not replace medical advice. If life is at risk, call 112 immediately."
+    "disclaimer": "MedNow does not replace medical advice. If life is at risk, call 112 immediately.",
+    "more": "More help",
+    "moreA11y": "Open emergency page: emergency pharmacy, on-call doctor, crisis line"
   },
   "location": {
     "current": "Current location",
@@ -717,5 +719,25 @@
     "remove": "Remove from saved",
     "added": "Practice saved – it’s now on your home screen.",
     "removed": "Practice removed from saved."
+  },
+  "emergencyPage": {
+    "title": "Emergency & help",
+    "entry": "Emergency & help",
+    "entryHint": "Emergency number, on-call doctor, emergency pharmacy, crisis line",
+    "call": "Call {{number}}",
+    "lifeTitle": "Life-threatening: call 112",
+    "lifeBody": "For unconsciousness, shortness of breath, severe chest pain, signs of a stroke, serious accidents or heavy bleeding, call 112 immediately.",
+    "onCallTitle": "On-call medical service 116117",
+    "onCallBody": "When it can’t wait until the next surgery hours but isn’t an emergency for the ambulance service – for example at night, at weekends or on public holidays. Free of charge, nationwide.",
+    "onCallWeb": "Open 116117.de",
+    "pharmacyTitle": "Emergency pharmacy",
+    "pharmacyBody": "The pharmacists’ chambers’ search shows which pharmacy is on duty right now. By phone, a voice service asks for your postcode and names the nearest pharmacies on duty.",
+    "pharmacySearch": "Find an emergency pharmacy nearby",
+    "pharmacyLandline": "Landline: {{number}} (free)",
+    "pharmacyMobile": "Mobile: {{number}} (max. 69 ct/min)",
+    "pharmacySource": "Data: emergency search of the pharmacists’ chambers (aponet.de). MedNow has no pharmacy data of its own.",
+    "crisisTitle": "Emotional crisis",
+    "crisisBody": "The TelefonSeelsorge crisis line is available around the clock – free and anonymous (in German).",
+    "crisisA11y": "Call TelefonSeelsorge {{number}}"
   }
 }

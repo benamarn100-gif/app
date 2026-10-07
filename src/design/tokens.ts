@@ -239,6 +239,8 @@ export const contrastPairs: ContrastPair[] = [
   ]),
   { fg: 'textOnPrimary', bg: 'primary', kind: 'text', usage: 'Primär-Button' },
   { fg: 'textOnPrimary', bg: 'primaryPressed', kind: 'text', usage: 'Primär-Button gedrückt' },
+  { fg: 'textOnPrimary', bg: 'statusBooked', kind: 'text', usage: 'Notruf-Button (danger)' },
+  { fg: 'statusBooked', bg: 'surface', kind: 'ui', usage: 'Rahmen Notruf-Karte' },
   { fg: 'primary', bg: 'primarySoft', kind: 'text', usage: 'Sekundär-Button, ausgewählter Chip' },
   { fg: 'textPrimary', bg: 'primarySoft', kind: 'text', usage: 'Text auf weicher Primärfläche' },
   { fg: 'textOnAccent', bg: 'accent', kind: 'text', usage: 'Text auf Coral-Highlight' },
