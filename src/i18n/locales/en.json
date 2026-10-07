@@ -140,7 +140,10 @@
     "nearbyWeek_one": "Nothing in the next 24 hours – {{count}} practice this week",
     "nearbyWeek_other": "Nothing in the next 24 hours – {{count}} practices this week",
     "timeToLeave": "Time to leave",
-    "forProfile": "For {{name}}"
+    "forProfile": "For {{name}}",
+    "myPractices": "Your practices",
+    "visitedBefore": "Visited before",
+    "nextFree": "next free appointment {{when}}"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -707,5 +710,12 @@
     "offTitle": "Turn off calendar sync?",
     "offBody": "The “MedNow” calendar and all its entries will be removed from this device. Your appointments stay booked.",
     "offConfirm": "Turn off"
+  },
+  "favorites": {
+    "add": "Save",
+    "saved": "Saved",
+    "remove": "Remove from saved",
+    "added": "Practice saved – it’s now on your home screen.",
+    "removed": "Practice removed from saved."
   }
 }

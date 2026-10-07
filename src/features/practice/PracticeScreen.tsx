@@ -18,7 +18,7 @@ import {
   Text,
   useToast,
 } from '@/components';
-import { Bell, CalendarCheck, Globe, MapPin, Phone } from '@/components/icons';
+import { Bell, CalendarCheck, Globe, Heart, MapPin, Phone } from '@/components/icons';
 import { STATUS_VISUALS } from '@/components/status';
 import {
   useAppointments,
@@ -38,6 +38,7 @@ import { useT } from '@/i18n/useT';
 import { formatDistance, formatSlotWhen } from '@/lib/format';
 import { callPhone } from '@/lib/maps';
 import { useNow } from '@/lib/useNow';
+import { useFavorites } from '@/state/favorites';
 
 import {
   AccessibilityInfo,
@@ -68,6 +69,8 @@ export function PracticeScreen() {
   const notifiedTaken = useRef<string | null>(null);
   const isFocused = useIsFocused();
   const appointments = useAppointments();
+  const toggleFavorite = useFavorites((st) => st.toggle);
+  const isFavorite = useFavorites((st) => !!id && st.practiceIds.includes(id));
 
   const practice = detail.data?.practice;
   useRealtimeSlots(practice ? [encodeGeohash(practice.location, 5)] : null);
@@ -231,6 +234,22 @@ export function PracticeScreen() {
           </View>
 
           <View style={styles.actions}>
+            <Button
+              variant="secondary"
+              label={isFavorite ? t('favorites.saved') : t('favorites.add')}
+              icon={Heart}
+              accessibilityLabel={isFavorite ? t('favorites.remove') : t('favorites.add')}
+              accessibilityState={{ selected: isFavorite }}
+              onPress={() => {
+                const added = toggleFavorite(practice.id);
+                toast.show(
+                  t(added ? 'favorites.added' : 'favorites.removed'),
+                  added ? 'success' : 'info',
+                );
+              }}
+              style={styles.flex}
+              testID="favorite-toggle"
+            />
             {practice.phone ? (
               <Button
                 variant="secondary"

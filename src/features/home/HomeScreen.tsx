@@ -17,6 +17,7 @@ import { useNow } from '@/lib/useNow';
 import { usePreferences } from '@/state/preferences';
 
 import { BrandRefresh } from './BrandRefresh';
+import { MyPractices } from './MyPractices';
 import { NearbyFree } from './NearbyFree';
 import { NextAppointmentHero } from './NextAppointmentHero';
 import { QuickSearch } from './QuickSearch';
@@ -31,10 +32,10 @@ function greetingKey(now: Date) {
 
 /**
  * Startseite – beantwortet in 3 Sekunden „Was ist mein nächster Termin, und wo finde ich
- * schnell einen freien Arzt?“. Bewusst nur vier Blöcke:
+ * schnell einen freien Arzt?“. Höchstens fünf Blöcke:
  * 1. Nächster Termin (oder Akut-Einstieg), 2. Suche mit Schnellfiltern,
- * 3. Frei in deiner Nähe, 4. Notruf-Leiste. Alles Weitere (Verlauf, Einstellungen, Hilfe)
- * liegt in „Termine“ und „Profil“.
+ * 3. Frei in deiner Nähe, 4. Deine Praxen (nur wenn vorhanden), 5. Notruf-Leiste.
+ * Alles Weitere (Verlauf, Einstellungen, Hilfe) liegt in „Termine“ und „Profil“.
  */
 export function HomeScreen() {
   const theme = useTheme();
@@ -150,6 +151,10 @@ export function HomeScreen() {
         </Stagger>
 
         <Stagger index={3}>
+          <MyPractices appointments={appointments.data ?? []} now={now} />
+        </Stagger>
+
+        <Stagger index={4}>
           <EmergencyBar />
         </Stagger>
       </ScrollView>

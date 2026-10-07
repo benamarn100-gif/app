@@ -156,7 +156,11 @@
     "nearbyWeek_one": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxis",
     "nearbyWeek_other": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxen",
     "timeToLeave": "Zeit loszufahren",
-    "forProfile": "Für {{name}}"
+    "forProfile": "Für {{name}}",
+    "myPractices": "Deine Praxen",
+    "myPractices_formal": "Ihre Praxen",
+    "visitedBefore": "Schon besucht",
+    "nextFree": "nächster freier Termin {{when}}"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -773,5 +777,12 @@
     "offBody": "Der Kalender „MedNow“ wird mit allen Einträgen von diesem Gerät gelöscht. Deine Termine bleiben gebucht.",
     "offBody_formal": "Der Kalender „MedNow“ wird mit allen Einträgen von diesem Gerät gelöscht. Ihre Termine bleiben gebucht.",
     "offConfirm": "Ausschalten"
+  },
+  "favorites": {
+    "add": "Merken",
+    "saved": "Gemerkt",
+    "remove": "Nicht mehr merken",
+    "added": "Praxis gemerkt – sie steht jetzt auf der Startseite.",
+    "removed": "Praxis nicht mehr gemerkt."
   }
 }

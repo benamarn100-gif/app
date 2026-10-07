@@ -40,3 +40,7 @@
    Buchung übernimmt das Profil, Termine lassen sich je Person filtern. Nutzen: Eltern buchen
    für ihr Kind ohne Umwege. **Fehlt:** Altersgrenzen der Praxen (welche Praxis behandelt
    Kinder?) gibt die Datenquelle nicht her – deshalb kein harter Altersfilter auf Praxen.
+6. **Favoriten und letzte Praxen**: „Merken“ auf der Praxisseite (nur auf dem Gerät gespeichert);
+   Startseiten-Block „Deine Praxen“ mit gemerkten und zuletzt gebuchten Praxen, jeweils mit dem
+   nächsten freien Termin und „Buchen“-Taste direkt in die Buchung. Nutzen: Wiederbuchen in zwei
+   Taps.

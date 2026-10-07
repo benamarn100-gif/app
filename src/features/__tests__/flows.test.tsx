@@ -261,6 +261,21 @@ describe('Startseite – nächster Termin und freie Ärzte auf einen Blick', () 
     }
   });
 
+  it('„Deine Praxen“: zuletzt gebuchte Praxis mit direkter Buchung des nächsten Termins', async () => {
+    const repository = createTestRepository(NOW);
+    const target = await bookFirstFreeSlot(repository);
+    await renderWithProviders(<HomeScreen />, { repository }).result;
+    const card = await screen.findByTestId('my-practice-0');
+    expect(within(card).getByText(target.practice.name)).toBeTruthy();
+    await fireEvent.press(await screen.findByTestId('my-practice-book-0'));
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      expect.objectContaining({
+        pathname: '/booking/[slotId]',
+        params: expect.objectContaining({ practiceId: target.practice.id }),
+      }),
+    );
+  });
+
   it('Schnellfilter setzt das Zeitfenster und öffnet die Suche', async () => {
     await renderWithProviders(<HomeScreen />, { repository: createTestRepository(NOW) }).result;
     await fireEvent.press(await screen.findByTestId('quick-week'));
