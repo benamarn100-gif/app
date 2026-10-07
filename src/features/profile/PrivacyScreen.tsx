@@ -20,6 +20,7 @@ import { makeStyles, useTheme } from '@/design/theme';
 import { formatBerlinDate } from '@/domain/time/berlin';
 import type { Consent, ConsentType } from '@/domain/types';
 import { useT } from '@/i18n/useT';
+import { clearLocalData } from '@/lib/clearLocalData';
 import { usePreferences } from '@/state/preferences';
 
 const SHOWN: ConsentType[] = ['health_data', 'push', 'crash_reports'];
@@ -86,7 +87,8 @@ export function PrivacyScreen() {
     try {
       await repo.deleteAccount();
       client.clear();
-      prefs.reset();
+      // Auch alles, was nur auf dem Gerät liegt (Favoriten, Vorsorge, Kalender, Erinnerungen)
+      await clearLocalData();
       toast.show(t('privacy.deleted'), 'success');
       router.replace('/onboarding');
     } catch {

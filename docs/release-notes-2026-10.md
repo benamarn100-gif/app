@@ -50,3 +50,11 @@
    22833 Handy), TelefonSeelsorge (0800 111 0 111, 0800 111 0 222, 116 123). Offline, ohne
    Anmeldung, nie Teil eines Abos, keine Diagnose. Nutzen: im Ernstfall nicht suchen müssen.
    **Fehlt:** eigene Apothekendaten („nächste Notapotheke“ führt zu aponet.de bzw. 22833).
+8. **Vorsorge-Erinnerungen** (Profil → Vorsorge): was die gesetzliche Krankenversicherung
+   übernimmt, passend zur Altersgruppe des gewählten Profils (Check-up, Hautkrebs-Screening,
+   Zahnkontrolle, Darmkrebs, Gebärmutterhals, Mammographie, Männer ab 45, Bauchschlagader ab 65,
+   U1–U9, Zahnvorsorge Kinder, J1). Erinnerung selbst gewählt, „Erledigt“ plant die nächste.
+   Nur Erinnerungen, keine Beratung; Einwilligung vor dem ersten Speichern, ausschließlich auf
+   dem Gerät, neutrale Mitteilung („Eine Vorsorge steht an“), Geschlecht wird nicht gespeichert.
+   Konto löschen entfernt jetzt auch alle Gerätedaten (Favoriten, Vorsorge, Kalender, Mitteilungen).
+   Nutzen: Vorsorge nicht mehr vergessen. **Vor Launch fachlich prüfen lassen** (Stand 10/2026).

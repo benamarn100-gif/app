@@ -806,5 +806,117 @@
     "crisisTitle": "Seelische Krise",
     "crisisBody": "Die TelefonSeelsorge ist rund um die Uhr erreichbar – kostenlos und anonym.",
     "crisisA11y": "TelefonSeelsorge {{number}} anrufen"
+  },
+  "checkups": {
+    "title": "Vorsorge",
+    "entry": "Vorsorge",
+    "entryHint": "Welche Vorsorge die Krankenkasse übernimmt – mit Erinnerung",
+    "intro": "Diese Früherkennungs- und Vorsorgeuntersuchungen übernimmt die gesetzliche Krankenversicherung. Wähle selbst, woran wir dich erinnern sollen.",
+    "intro_formal": "Diese Früherkennungs- und Vorsorgeuntersuchungen übernimmt die gesetzliche Krankenversicherung. Wählen Sie selbst, woran wir Sie erinnern sollen.",
+    "disclaimer": "Keine medizinische Beratung. Ob und wann eine Untersuchung sinnvoll ist, besprich mit deiner Praxis. Stand 10/2026; private Versicherungen können abweichen.",
+    "disclaimer_formal": "Keine medizinische Beratung. Ob und wann eine Untersuchung sinnvoll ist, besprechen Sie mit Ihrer Praxis. Stand 10/2026; private Versicherungen können abweichen.",
+    "forWhom": "Für wen?",
+    "ageMissing": "Gib dein Alter an, dann zeigen wir nur, was zu dir passt.",
+    "ageMissing_formal": "Geben Sie Ihr Alter an, dann zeigen wir nur, was zu Ihnen passt.",
+    "setAge": "Alter angeben",
+    "sectionAll": "Für alle",
+    "sectionWomen": "Für Frauen",
+    "sectionMen": "Für Männer",
+    "who": "Wer: {{value}}",
+    "often": "Wie oft: {{value}}",
+    "remind": "Erinnern",
+    "remindIn1": "In 1 Monat",
+    "remindIn6": "In 6 Monaten",
+    "remindIn12": "In 1 Jahr",
+    "remindInterval_one": "In {{count}} Monat",
+    "remindInterval_other": "In {{count}} Monaten",
+    "dueAt": "Erinnerung: {{date}}",
+    "done": "Erledigt",
+    "doneToast": "Prima. Wir erinnern dich wieder am {{date}}.",
+    "doneToast_formal": "Prima. Wir erinnern Sie wieder am {{date}}.",
+    "doneOnce": "Erledigt – keine weitere Erinnerung.",
+    "remove": "Erinnerung löschen",
+    "set": "Wir erinnern dich am {{date}}.",
+    "set_formal": "Wir erinnern Sie am {{date}}.",
+    "noPush": "Ohne Mitteilungen siehst du die Erinnerung nur hier in der App.",
+    "noPush_formal": "Ohne Mitteilungen sehen Sie die Erinnerung nur hier in der App.",
+    "consentTitle": "Erinnerungen nur auf diesem Gerät",
+    "consentBody": "Wir speichern nur, an welche Vorsorge du erinnert werden möchtest und wann – ausschließlich auf diesem Gerät, nicht auf unseren Servern. Mitteilungen nennen keine Untersuchung. Du kannst alles jederzeit löschen.",
+    "consentBody_formal": "Wir speichern nur, an welche Vorsorge Sie erinnert werden möchten und wann – ausschließlich auf diesem Gerät, nicht auf unseren Servern. Mitteilungen nennen keine Untersuchung. Sie können alles jederzeit löschen.",
+    "consentConfirm": "Einverstanden",
+    "clearAll": "Alle Vorsorge-Erinnerungen löschen",
+    "cleared": "Alle Vorsorge-Erinnerungen gelöscht.",
+    "notificationTitle": "Vorsorge-Erinnerung",
+    "notificationBody": "Eine Vorsorge steht an. Details in MedNow.",
+    "items": {
+      "checkup": {
+        "title": "Gesundheits-Check-up",
+        "who": "18–34 Jahre einmal, ab 35 Jahren regelmäßig",
+        "often": "ab 35 alle 3 Jahre",
+        "about": "Hausärztliche Untersuchung mit Blutdruck, Blutwerten und Gespräch über Vorerkrankungen."
+      },
+      "skin": {
+        "title": "Hautkrebs-Screening",
+        "who": "ab 35 Jahren",
+        "often": "alle 2 Jahre",
+        "about": "Untersuchung der gesamten Haut, z. B. in der Hautarzt- oder Hausarztpraxis."
+      },
+      "dental": {
+        "title": "Zahnärztliche Kontrolle",
+        "who": "Erwachsene",
+        "often": "zweimal im Jahr (einmal je Halbjahr)",
+        "about": "Regelmäßige Kontrollen im Bonusheft können den Zuschuss für Zahnersatz erhöhen."
+      },
+      "bowel": {
+        "title": "Darmkrebs-Früherkennung",
+        "who": "ab 50 Jahren",
+        "often": "Stuhltest alle 2 Jahre oder zwei Darmspiegelungen im Abstand von 10 Jahren",
+        "about": "Welche Variante passt, besprichst du in der Praxis.",
+        "about_formal": "Welche Variante passt, besprechen Sie in der Praxis."
+      },
+      "cervix": {
+        "title": "Gebärmutterhalskrebs-Früherkennung",
+        "who": "ab 20 Jahren",
+        "often": "jährlich; ab 35 alle 3 Jahre ein kombinierter Test",
+        "about": "Untersuchung in der Frauenarztpraxis."
+      },
+      "breast": {
+        "title": "Mammographie-Screening",
+        "who": "50–75 Jahre",
+        "often": "alle 2 Jahre",
+        "about": "Die Einladung kommt per Post von der zentralen Stelle des Screening-Programms."
+      },
+      "prostate": {
+        "title": "Krebsfrüherkennung für Männer",
+        "who": "ab 45 Jahren",
+        "often": "jährlich",
+        "about": "Untersuchung der Prostata und der äußeren Genitalien, z. B. in der Urologie- oder Hausarztpraxis."
+      },
+      "aorta": {
+        "title": "Ultraschall der Bauchschlagader",
+        "who": "ab 65 Jahren",
+        "often": "einmalig",
+        "about": "Früherkennung einer Erweiterung der Bauchschlagader (Bauchaortenaneurysma)."
+      },
+      "uExams": {
+        "title": "Kinder-Untersuchungen U1–U9",
+        "who": "bis etwa 5½ Jahre",
+        "often": "nach Plan im gelben Kinder-Untersuchungsheft",
+        "about": "Die genauen Zeiträume stehen im Heft – die Erinnerung legst du selbst fest.",
+        "about_formal": "Die genauen Zeiträume stehen im Heft – die Erinnerung legen Sie selbst fest."
+      },
+      "dentalChild": {
+        "title": "Zahnärztliche Vorsorge für Kinder",
+        "who": "ab dem 6. Lebensmonat bis 17 Jahre",
+        "often": "zweimal im Jahr",
+        "about": "Bis 6 Jahre Früherkennung, danach Individualprophylaxe."
+      },
+      "j1": {
+        "title": "Jugenduntersuchung J1",
+        "who": "12–14 Jahre",
+        "often": "einmalig",
+        "about": "Körperliche Untersuchung und Gespräch, z. B. in der Kinder- und Jugendarztpraxis."
+      }
+    }
   }
 }

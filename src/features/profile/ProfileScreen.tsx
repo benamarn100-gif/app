@@ -32,6 +32,7 @@ import {
   RotateCcw,
   Scale,
   ShieldCheck,
+  ShieldPlus,
   Siren,
   Smartphone,
   Users,
@@ -133,6 +134,14 @@ export function ProfileScreen() {
           subtitle={t('emergencyPage.entryHint')}
           onPress={() => router.push('/emergency')}
           testID="profile-emergency"
+        />
+        <Divider inset={64} />
+        <ListRow
+          icon={ShieldPlus}
+          title={t('checkups.entry')}
+          subtitle={t('checkups.entryHint')}
+          onPress={() => router.push('/checkups')}
+          testID="profile-checkups"
         />
       </Card>
 

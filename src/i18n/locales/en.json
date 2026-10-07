@@ -739,5 +739,108 @@
     "crisisTitle": "Emotional crisis",
     "crisisBody": "The TelefonSeelsorge crisis line is available around the clock – free and anonymous (in German).",
     "crisisA11y": "Call TelefonSeelsorge {{number}}"
+  },
+  "checkups": {
+    "title": "Check-ups",
+    "entry": "Check-ups",
+    "entryHint": "Which check-ups statutory insurance covers – with reminders",
+    "intro": "Statutory health insurance covers these screening and preventive check-ups. You choose what we should remind you of.",
+    "disclaimer": "Not medical advice. Whether and when a check-up makes sense is something to discuss with your practice. As of 10/2026; private insurance may differ.",
+    "forWhom": "For whom?",
+    "ageMissing": "Add your age and we’ll only show what fits you.",
+    "setAge": "Add age",
+    "sectionAll": "For everyone",
+    "sectionWomen": "For women",
+    "sectionMen": "For men",
+    "who": "Who: {{value}}",
+    "often": "How often: {{value}}",
+    "remind": "Remind me",
+    "remindIn1": "In 1 month",
+    "remindIn6": "In 6 months",
+    "remindIn12": "In 1 year",
+    "remindInterval_one": "In {{count}} month",
+    "remindInterval_other": "In {{count}} months",
+    "dueAt": "Reminder: {{date}}",
+    "done": "Done",
+    "doneToast": "Great. We’ll remind you again on {{date}}.",
+    "doneOnce": "Done – no further reminder.",
+    "remove": "Delete reminder",
+    "set": "We’ll remind you on {{date}}.",
+    "noPush": "Without notifications you’ll only see the reminder here in the app.",
+    "consentTitle": "Reminders on this device only",
+    "consentBody": "We only store which check-up you want to be reminded of and when – on this device only, not on our servers. Notifications never name the check-up. You can delete everything at any time.",
+    "consentConfirm": "Agree",
+    "clearAll": "Delete all check-up reminders",
+    "cleared": "All check-up reminders deleted.",
+    "notificationTitle": "Check-up reminder",
+    "notificationBody": "A check-up is due. Details in MedNow.",
+    "items": {
+      "checkup": {
+        "title": "Health check-up",
+        "who": "18–34 once, regularly from 35",
+        "often": "from 35 every 3 years",
+        "about": "GP examination with blood pressure, blood tests and a talk about previous illnesses."
+      },
+      "skin": {
+        "title": "Skin cancer screening",
+        "who": "from 35",
+        "often": "every 2 years",
+        "about": "Full-body skin examination, e.g. at a dermatologist or GP."
+      },
+      "dental": {
+        "title": "Dental check-up",
+        "who": "Adults",
+        "often": "twice a year (once per half-year)",
+        "about": "Regular check-ups in the bonus booklet can increase the subsidy for dentures."
+      },
+      "bowel": {
+        "title": "Bowel cancer screening",
+        "who": "from 50",
+        "often": "stool test every 2 years or two colonoscopies 10 years apart",
+        "about": "Discuss with your practice which option suits you."
+      },
+      "cervix": {
+        "title": "Cervical cancer screening",
+        "who": "from 20",
+        "often": "yearly; from 35 a combined test every 3 years",
+        "about": "Examination at a gynaecologist."
+      },
+      "breast": {
+        "title": "Mammography screening",
+        "who": "50–75",
+        "often": "every 2 years",
+        "about": "The invitation arrives by post from the screening programme’s central office."
+      },
+      "prostate": {
+        "title": "Cancer screening for men",
+        "who": "from 45",
+        "often": "yearly",
+        "about": "Examination of the prostate and external genitals, e.g. at a urologist or GP."
+      },
+      "aorta": {
+        "title": "Abdominal aorta ultrasound",
+        "who": "from 65",
+        "often": "once",
+        "about": "Early detection of an abdominal aortic aneurysm."
+      },
+      "uExams": {
+        "title": "Children’s check-ups U1–U9",
+        "who": "up to about 5½ years",
+        "often": "as scheduled in the yellow child health booklet",
+        "about": "The exact periods are in the booklet – you set the reminder yourself."
+      },
+      "dentalChild": {
+        "title": "Dental check-ups for children",
+        "who": "from 6 months to 17 years",
+        "often": "twice a year",
+        "about": "Early detection up to age 6, then individual prophylaxis."
+      },
+      "j1": {
+        "title": "Youth check-up J1",
+        "who": "12–14 years",
+        "often": "once",
+        "about": "Physical examination and a talk, e.g. at a paediatric practice."
+      }
+    }
   }
 }
