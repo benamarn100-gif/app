@@ -2,10 +2,12 @@ import { ScrollView, View } from 'react-native';
 import { router } from 'expo-router';
 
 import { Chip, PressableScale, Text } from '@/components';
-import { LocateFixed, Search, Stethoscope } from '@/components/icons';
+import { LocateFixed, Search, Stethoscope, Users } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
+import { SELF } from '@/domain/profiles';
 import { SPECIALTIES } from '@/domain/seed/catalog';
 import type { TimeWindow } from '@/domain/types';
+import { useProfiles } from '@/features/profile/useProfiles';
 import { useT } from '@/i18n/useT';
 import { useSearchFilters } from '@/state/searchFilters';
 
@@ -19,6 +21,7 @@ export function QuickSearch() {
   const theme = useTheme();
   const styles = useStyles();
   const { t } = useT();
+  const { profiles, active } = useProfiles();
   const radiusKm = useSearchFilters((s) => s.radiusKm);
   const specialtyIds = useSearchFilters((s) => s.specialtyIds);
   const setFilters = useSearchFilters((s) => s.set);
@@ -64,6 +67,20 @@ export function QuickSearch() {
         contentContainerStyle={styles.chips}
         accessibilityLabel={t('home.quickFilters')}
       >
+        {profiles.length > 1 ? (
+          <Chip
+            role="button"
+            icon={Users}
+            label={
+              active.id === SELF
+                ? t('booking.patientSelf')
+                : t('home.forProfile', { name: active.label })
+            }
+            selected={active.id !== SELF}
+            onPress={openFilters}
+            testID="quick-profile"
+          />
+        ) : null}
         <Chip
           role="button"
           icon={Stethoscope}

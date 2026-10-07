@@ -28,6 +28,8 @@ export type Preferences = {
   haptics: boolean;
   remindersEnabled: boolean;
   crashReportsOptIn: boolean;
+  /** Eigene Altersgruppe (Familienprofile, Vorsorge); null = nicht angegeben */
+  selfAgeGroup: AgeGroup | null;
   /** Bevorzugtes Verkehrsmittel für Anfahrt und „Jetzt losfahren“ */
   travelMode: TravelMode;
   /** Hinweis „Jetzt losfahren“ vor Terminen (lokal, ohne Server) */
@@ -54,6 +56,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   haptics: true,
   remindersEnabled: true,
   crashReportsOptIn: false,
+  selfAgeGroup: null,
   travelMode: 'car',
   leaveReminder: true,
 };

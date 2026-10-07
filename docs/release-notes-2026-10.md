@@ -34,3 +34,9 @@
    (Wegezeit + 10 Min. Puffer) als Mitteilung und im Termin-Hero. Nutzen: Kalender stimmt
    immer, niemand kommt zu spät. iOS braucht für den Sync den nächsten nativen Build
    (Kalender-Zugriffstext in der App-Konfiguration).
+5. **Familienprofile**: „Ich“ mit eigener Altersgruppe plus Familienmitglieder (Spitzname +
+   Altersgruppe, kein Geburtsdatum). „Für wen?“ in Filtern und Startseite: Fachrichtungen
+   altersgerecht sortiert, Hausarzt ↔ Kinder- und Jugendarzt wird beim Wechsel getauscht, die
+   Buchung übernimmt das Profil, Termine lassen sich je Person filtern. Nutzen: Eltern buchen
+   für ihr Kind ohne Umwege. **Fehlt:** Altersgrenzen der Praxen (welche Praxis behandelt
+   Kinder?) gibt die Datenquelle nicht her – deshalb kein harter Altersfilter auf Praxen.

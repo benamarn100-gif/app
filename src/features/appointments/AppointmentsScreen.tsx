@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Button,
   Card,
+  Chip,
   EmptyState,
   IllustrationCalendar,
   IllustrationOffline,
@@ -28,9 +29,11 @@ import {
   useWaitlist,
 } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
+import { SELF, type ProfileId } from '@/domain/profiles';
 import { formatBerlinDate } from '@/domain/time/berlin';
 import type { AppointmentWithDetails } from '@/domain/types';
 import { BrandRefresh } from '@/features/home/BrandRefresh';
+import { useProfiles } from '@/features/profile/useProfiles';
 import { useT } from '@/i18n/useT';
 import { addAppointmentToCalendar } from '@/lib/calendar';
 import { formatCountdown, formatSlotWhen } from '@/lib/format';
@@ -97,7 +100,12 @@ export function AppointmentsScreen() {
     }
   };
 
-  const list = tab === 'upcoming' ? upcoming : past;
+  // Termine je Person (Feature 5): Alle · Ich · Familienmitglieder
+  const [person, setPerson] = useState<'all' | ProfileId>('all');
+  const { profiles } = useProfiles();
+  const byPerson = (a: AppointmentWithDetails) =>
+    person === 'all' || (person === SELF ? a.dependentId === null : a.dependentId === person);
+  const list = (tab === 'upcoming' ? upcoming : past).filter(byPerson);
 
   return (
     <View style={styles.root} testID="appointments-screen">
@@ -159,6 +167,34 @@ export function AppointmentsScreen() {
           ]}
           testID="appointments-tabs"
         />
+
+        {profiles.length > 1 ? (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.people}
+            accessibilityRole="radiogroup"
+            accessibilityLabel={t('appointments.forWhom')}
+          >
+            <Chip
+              role="radio"
+              label={t('appointments.everyone')}
+              selected={person === 'all'}
+              onPress={() => setPerson('all')}
+              testID="person-all"
+            />
+            {profiles.map((p) => (
+              <Chip
+                key={p.id}
+                role="radio"
+                label={p.label}
+                selected={person === p.id}
+                onPress={() => setPerson(p.id)}
+                testID={`person-${p.id}`}
+              />
+            ))}
+          </ScrollView>
+        ) : null}
 
         {appointments.isLoading ? (
           <SkeletonList count={2} />
@@ -274,4 +310,5 @@ const useStyles = makeStyles((t) => ({
   flex: { flex: 1, gap: 2 },
   section: { gap: t.space.sm, marginTop: t.space.md },
   leave: { alignSelf: 'flex-start' },
+  people: { gap: t.space.xs, paddingRight: t.space.md },
 }));

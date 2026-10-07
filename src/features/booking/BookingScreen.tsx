@@ -31,10 +31,12 @@ import { makeStyles, useTheme } from '@/design/theme';
 import { isSlotBookable } from '@/domain/availability/status';
 import { formatBerlinTime } from '@/domain/time/berlin';
 import { REASON_CATEGORIES, type BookingContact, type ReasonCategory } from '@/domain/types';
+import { SELF } from '@/domain/profiles';
 import { useT } from '@/i18n/useT';
 import { formatCountdown, formatLongDate, formatSlotWhen } from '@/lib/format';
 import { haptics } from '@/lib/haptics';
 import { useAppointmentEffects } from '@/lib/useAppointmentEffects';
+import { useActiveProfile } from '@/state/activeProfile';
 import { useNow } from '@/lib/useNow';
 
 import { ConsentCheckbox } from './ConsentCheckbox';
@@ -70,7 +72,11 @@ export function BookingScreen() {
   const effects = useAppointmentEffects();
 
   const [step, setStep] = useState(0);
-  const [dependentId, setDependentId] = useState<string | null>(null);
+  // Vorauswahl: aktives Familienprofil aus der Suche (Feature 5)
+  const activeProfileId = useActiveProfile((st) => st.activeProfileId);
+  const [dependentId, setDependentId] = useState<string | null>(
+    activeProfileId === SELF ? null : activeProfileId,
+  );
   const [reason, setReason] = useState<ReasonCategory | null>(null);
   const [contactValue, setContactValue] = useState<BookingContact | null>(null);
   const [consent, setConsent] = useState(false);

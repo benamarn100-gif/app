@@ -155,7 +155,8 @@
     "nearbyTitle_formal": "Frei in Ihrer Nähe",
     "nearbyWeek_one": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxis",
     "nearbyWeek_other": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxen",
-    "timeToLeave": "Zeit loszufahren"
+    "timeToLeave": "Zeit loszufahren",
+    "forProfile": "Für {{name}}"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -224,7 +225,9 @@
     "apply_other": "{{count}} Praxen anzeigen",
     "applyNone": "Keine Treffer – Filter lockern",
     "decreaseRadius": "Umkreis verkleinern",
-    "increaseRadius": "Umkreis vergrößern"
+    "increaseRadius": "Umkreis vergrößern",
+    "forWhom": "Für wen?",
+    "ageSorted": "Passend zum Alter von {{name}} sortiert."
   },
   "practice": {
     "photoA11y": "Illustration der Praxis",
@@ -381,7 +384,9 @@
     "waitlists": "Deine Termin-Alarme",
     "waitlists_formal": "Ihre Termin-Alarme",
     "inCalendar": "In Kalender",
-    "a11y": "{{date}} um {{time}}, {{practice}}, {{doctor}}"
+    "a11y": "{{date}} um {{time}}, {{practice}}, {{doctor}}",
+    "forWhom": "Für wen?",
+    "everyone": "Alle"
   },
   "waitlist": {
     "title": "Termin-Alarm",
@@ -479,7 +484,9 @@
     "resetOnboarding": "Einführung erneut anzeigen",
     "diagnostics": "Testversion & Diagnose",
     "leaveReminder": "„Jetzt losfahren“",
-    "leaveReminderHint": "Erinnert, wenn es Zeit ist loszufahren – geschätzt aus Entfernung und Verkehrsmittel."
+    "leaveReminderHint": "Erinnert, wenn es Zeit ist loszufahren – geschätzt aus Entfernung und Verkehrsmittel.",
+    "selfAge": "Dein Alter (optional)",
+    "selfAge_formal": "Ihr Alter (optional)"
   },
   "privacy": {
     "title": "Datenschutz-Center",

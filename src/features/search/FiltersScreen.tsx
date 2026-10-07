@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Platform, ScrollView, View, type AccessibilityActionEvent } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,10 +7,12 @@ import { Button, Chip, Divider, ListRow, PressableScale, SpecialtyIcon, Text } f
 import { Minus, Plus } from '@/components/icons';
 import { useAvailabilitySearch } from '@/data/hooks';
 import { makeStyles, useTheme } from '@/design/theme';
-import { SPECIALTIES } from '@/domain/seed/catalog';
+import { adaptSpecialtyIds, isMinor, specialtiesFor, type Profile } from '@/domain/profiles';
 import { ACCESSIBILITY_FEATURES, type AccessibilityFeature, type TimeWindow } from '@/domain/types';
+import { useProfiles } from '@/features/profile/useProfiles';
 import type { TranslationKey } from '@/i18n';
 import { useT } from '@/i18n/useT';
+import { useActiveProfile } from '@/state/activeProfile';
 import { RADIUS_STEPS, useSearchFilters } from '@/state/searchFilters';
 
 import { useFilteredSearchParams } from './useSearchParams';
@@ -27,8 +30,9 @@ const WINDOW_LABEL = {
 } as const satisfies Record<TimeWindow, TranslationKey>;
 
 /**
- * Filter-Sheet: Fachrichtung, Umkreis 1–50 km, Zeitraum, Sprache, Barrierefreiheit,
- * gesetzlich/privat, Videosprechstunde. Der Button zeigt live die Trefferzahl.
+ * Filter-Sheet: Für wen (Familienprofile), Fachrichtung, Umkreis 1–50 km, Zeitraum, Sprache,
+ * Barrierefreiheit, gesetzlich/privat, Videosprechstunde. Der Button zeigt live die Trefferzahl.
+ * Das Profil passt die Fachrichtungen an (Reihenfolge, Hausarzt ↔ Kinder- und Jugendarzt).
  */
 export function FiltersScreen() {
   const theme = useTheme();
@@ -36,6 +40,13 @@ export function FiltersScreen() {
   const insets = useSafeAreaInsets();
   const { t } = useT();
   const f = useSearchFilters();
+  const { profiles, active } = useProfiles();
+  const setActiveProfile = useActiveProfile((st) => st.setActiveProfile);
+  const specialties = useMemo(() => specialtiesFor(active.ageGroup), [active.ageGroup]);
+  const pickProfile = (profile: Profile) => {
+    setActiveProfile(profile.id);
+    f.set({ specialtyIds: adaptSpecialtyIds(f.specialtyIds, profile.ageGroup) });
+  };
   const { params } = useFilteredSearchParams();
   const preview = useAvailabilitySearch(params);
   const count = preview.data?.length ?? 0;
@@ -64,6 +75,28 @@ export function FiltersScreen() {
           />
         </View>
 
+        {profiles.length > 1 ? (
+          <Section title={t('filters.forWhom')}>
+            <View style={styles.wrap} accessibilityRole="radiogroup">
+              {profiles.map((p) => (
+                <Chip
+                  key={p.id}
+                  role="radio"
+                  label={p.ageGroup ? `${p.label} · ${t(`ageGroup.${p.ageGroup}`)}` : p.label}
+                  selected={active.id === p.id}
+                  onPress={() => pickProfile(p)}
+                  testID={`filter-profile-${p.id}`}
+                />
+              ))}
+            </View>
+            {isMinor(active.ageGroup) ? (
+              <Text variant="small" color="textSecondary">
+                {t('filters.ageSorted', { name: active.label })}
+              </Text>
+            ) : null}
+          </Section>
+        ) : null}
+
         <Section title={t('filters.specialty')}>
           <View style={styles.wrap}>
             <Chip
@@ -71,7 +104,7 @@ export function FiltersScreen() {
               selected={f.specialtyIds.length === 0}
               onPress={() => f.set({ specialtyIds: [] })}
             />
-            {SPECIALTIES.map((s) => (
+            {specialties.map((s) => (
               <Chip
                 key={s.id}
                 label={t(`specialtyShort.${s.slug}`)}
