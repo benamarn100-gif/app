@@ -8,7 +8,10 @@ const localization = jest.requireMock<typeof import('expo-localization')>('expo-
 const locales = (codes: string[]) =>
   jest
     .spyOn(localization, 'getLocales')
-    .mockReturnValue(codes.map((languageCode) => ({ languageCode }) as Locale));
+    // getLocales() ist als „mindestens ein Eintrag“ typisiert; leere Liste testet den Rückfall
+    .mockReturnValue(
+      codes.map((languageCode) => ({ languageCode }) as Locale) as [Locale, ...Locale[]],
+    );
 
 describe('Mehrsprachigkeit', () => {
   afterEach(() => jest.restoreAllMocks());
