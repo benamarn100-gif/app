@@ -35,6 +35,7 @@ import {
   ShieldPlus,
   Siren,
   Smartphone,
+  Sparkles,
   Users,
 } from '@/components/icons';
 import { env } from '@/config/env';
@@ -44,6 +45,8 @@ import { makeStyles } from '@/design/theme';
 import type { ThemePreference } from '@/design/theme';
 import { APP_LANGUAGES, type LanguagePreference } from '@/i18n';
 import type { TravelMode } from '@/domain/geo/travel';
+import { openPlans } from '@/features/plans/openPlans';
+import { usePlan } from '@/features/plans/usePlan';
 import { useT } from '@/i18n/useT';
 import {
   disableCalendarSync,
@@ -66,6 +69,7 @@ export function ProfileScreen() {
   const confirm = useConfirm();
   const appointments = useAppointments();
   const calendarSync = useCalendarSync((st) => st.enabled);
+  const plan = usePlan();
   const version = Constants.expoConfig?.version ?? '0.1.0';
 
   // Kalender-Sync: beim Einschalten kommende Termine übernehmen, beim Ausschalten Kalender löschen
@@ -79,6 +83,10 @@ export function ProfileScreen() {
         destructive: true,
       });
       if (ok) await disableCalendarSync();
+      return;
+    }
+    if (!plan.isLoading && !plan.can('calendarSync')) {
+      openPlans('calendar');
       return;
     }
     const result = await enableCalendarSync();
@@ -142,6 +150,14 @@ export function ProfileScreen() {
           subtitle={t('checkups.entryHint')}
           onPress={() => router.push('/checkups')}
           testID="profile-checkups"
+        />
+        <Divider inset={64} />
+        <ListRow
+          icon={Sparkles}
+          title={t('plans.entry')}
+          subtitle={plan.plan === 'free' ? t('plans.entryHint') : t(`plans.name.${plan.plan}`)}
+          onPress={() => openPlans('overview')}
+          testID="profile-plans"
         />
       </Card>
 

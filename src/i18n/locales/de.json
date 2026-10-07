@@ -423,7 +423,9 @@
     "targetLabelPractice": "{{name}}",
     "targetLabelSpecialty": "{{specialty}} im Umkreis von {{km}} km",
     "window1": "Nächste 24 Std.",
-    "until": "bis {{date}}"
+    "until": "bis {{date}}",
+    "window30": "Nächste 30 Tage",
+    "window60": "Nächste 60 Tage"
   },
   "offer": {
     "title": "Ein Termin ist frei geworden!",
@@ -919,5 +921,97 @@
         "about": "Körperliche Untersuchung und Gespräch, z. B. in der Kinder- und Jugendarztpraxis."
       }
     }
+  },
+  "plans": {
+    "entry": "MedNow Plus",
+    "entryHint": "Mehr Termin-Alarme, Kalender-Sync, Favoriten, Vorsorge-Erinnerungen",
+    "name": {
+      "free": "Kostenlos",
+      "plus": "MedNow Plus",
+      "family": "MedNow Familie"
+    },
+    "includes": {
+      "free": "Suche, alle Filter und Karte\nBuchen – auch für ein Familienmitglied\n1 Termin-Alarm (auch „Heute noch frei“)\nErinnerungen, Kalendereintrag, Notfall-Seite",
+      "plus": "Alles aus Kostenlos\nBis zu 10 Termin-Alarme gleichzeitig, bis 60 Tage\nKalender-Sync und Favoriten\nVorsorge-Erinnerungen für dich",
+      "plus_formal": "Alles aus Kostenlos\nBis zu 10 Termin-Alarme gleichzeitig, bis 60 Tage\nKalender-Sync und Favoriten\nVorsorge-Erinnerungen für Sie",
+      "family": "Alles aus Plus\nBis zu 5 Profile\nVorsorge-Erinnerungen für alle"
+    },
+    "reason": {
+      "alarms": {
+        "title": "Mehrere Termin-Alarme gleichzeitig",
+        "body": "Kostenlos ist ein Termin-Alarm aktiv. Mit Plus beobachtest du bis zu 10 Praxen oder Fachrichtungen gleichzeitig.",
+        "body_formal": "Kostenlos ist ein Termin-Alarm aktiv. Mit Plus beobachten Sie bis zu 10 Praxen oder Fachrichtungen gleichzeitig."
+      },
+      "longAlarms": {
+        "title": "Termin-Alarm bis 60 Tage",
+        "body": "Für Fachtermine mit langem Vorlauf: Mit Plus sucht dein Termin-Alarm bis zu 60 Tage lang.",
+        "body_formal": "Für Fachtermine mit langem Vorlauf: Mit Plus sucht Ihr Termin-Alarm bis zu 60 Tage lang."
+      },
+      "calendar": {
+        "title": "Termine automatisch im Kalender",
+        "body": "Mit Plus landen Termine im Kalender „MedNow“ und werden beim Verschieben oder Absagen nachgezogen. Einzeln eintragen bleibt kostenlos."
+      },
+      "favorites": {
+        "title": "Praxen merken",
+        "body": "Mit Plus merkst du dir Praxen und buchst sie von der Startseite in zwei Taps.",
+        "body_formal": "Mit Plus merken Sie sich Praxen und buchen sie von der Startseite in zwei Taps."
+      },
+      "checkups": {
+        "title": "Vorsorge-Erinnerungen",
+        "body": "Die Übersicht bleibt kostenlos. Mit Plus erinnert MedNow dich an deine Vorsorge.",
+        "body_formal": "Die Übersicht bleibt kostenlos. Mit Plus erinnert MedNow Sie an Ihre Vorsorge."
+      },
+      "familyCheckups": {
+        "title": "Vorsorge für die ganze Familie",
+        "body": "Mit MedNow Familie gibt es Vorsorge-Erinnerungen für alle Profile – auch U-Untersuchungen und J1."
+      },
+      "profiles": {
+        "title": "Mehr Familienprofile",
+        "body": "Kostenlos sind du und ein Familienmitglied. Mit MedNow Familie verwaltest du bis zu 5 Profile.",
+        "body_formal": "Kostenlos sind Sie und ein Familienmitglied. Mit MedNow Familie verwalten Sie bis zu 5 Profile."
+      },
+      "overview": {
+        "title": "MedNow Plus und Familie",
+        "body": "Suchen, Buchen und Notfall-Hilfe bleiben immer kostenlos. Bezahlt wird Komfort: mehr Alarme, Kalender, Favoriten, Vorsorge."
+      }
+    },
+    "offer": {
+      "mednow_plus_pass_30d": "30 Tage Plus",
+      "mednow_plus_yearly": "Plus Jahresabo",
+      "mednow_family_yearly": "Familie Jahresabo"
+    },
+    "passPrice": "{{price}} einmalig",
+    "yearPrice": "{{price}} pro Jahr",
+    "perMonth": "entspricht {{price}} im Monat",
+    "trial_one": "{{count}} Tag kostenlos testen",
+    "trial_other": "{{count}} Tage kostenlos testen",
+    "passEnds": "endet von selbst nach 30 Tagen",
+    "fairness": "Bezahlen verschafft keinen Vorrang: Frei werdende Termine gehen an alle in derselben Reihenfolge, mit derselben Reservierungszeit.",
+    "cancelInfo": "Jahresabos verlängern sich nach der Testphase jährlich, bis du sie in den Einstellungen von App Store oder Google Play kündigst – jederzeit. Wir erinnern dich 3 Tage vor Ende der Testphase. Der 30-Tage-Pass endet von selbst.",
+    "cancelInfo_formal": "Jahresabos verlängern sich nach der Testphase jährlich, bis Sie sie in den Einstellungen von App Store oder Google Play kündigen – jederzeit. Wir erinnern Sie 3 Tage vor Ende der Testphase. Der 30-Tage-Pass endet von selbst.",
+    "restore": "Kauf wiederherstellen",
+    "restored": "Käufe geprüft.",
+    "manage": "Abo verwalten oder kündigen",
+    "demoEnd": "Demo-Abo beenden",
+    "notNow": "Jetzt nicht",
+    "current": "Aktiv: {{plan}}",
+    "currentUntil": "Aktiv: {{plan}} bis {{date}}",
+    "thanks": "Danke! {{plan}} ist aktiv.",
+    "purchaseFailed": "Der Kauf hat nicht geklappt. Es wurde nichts berechnet.",
+    "demoNotice": "Demo-Version: Es wird nichts berechnet. Der „Kauf“ schaltet nur auf diesem Gerät frei.",
+    "unavailable": "In dieser Version sind Käufe noch nicht möglich. Alle kostenlosen Funktionen stehen voll zur Verfügung.",
+    "trialEndingTitle": "Testphase endet bald",
+    "trialEndingBody": "In 3 Tagen endet deine kostenlose Testphase. Kündigen geht jederzeit in den Store-Einstellungen.",
+    "trialEndingBody_formal": "In 3 Tagen endet Ihre kostenlose Testphase. Kündigen geht jederzeit in den Store-Einstellungen.",
+    "badge": "Plus",
+    "limitTitle": "Ein Termin-Alarm ist schon aktiv",
+    "limitBody": "Kostenlos ist ein Termin-Alarm gleichzeitig aktiv. Du kannst den bisherigen ersetzen oder mit Plus mehrere behalten.",
+    "limitBody_formal": "Kostenlos ist ein Termin-Alarm gleichzeitig aktiv. Sie können den bisherigen ersetzen oder mit Plus mehrere behalten.",
+    "replaceAlarm": "Bisherigen Alarm ersetzen",
+    "seePlus": "Mehr Alarme mit Plus"
+  },
+  "family": {
+    "limit": "Kostenlos sind du und ein Familienmitglied gespeichert. Mehr Profile gibt es mit MedNow Familie (Profil → Familie).",
+    "limit_formal": "Kostenlos sind Sie und ein Familienmitglied gespeichert. Mehr Profile gibt es mit MedNow Familie (Profil → Familie)."
   }
 }

@@ -381,7 +381,9 @@
     "targetLabelPractice": "{{name}}",
     "targetLabelSpecialty": "{{specialty}} within {{km}} km",
     "window1": "Next 24 h",
-    "until": "until {{date}}"
+    "until": "until {{date}}",
+    "window30": "Next 30 days",
+    "window60": "Next 60 days"
   },
   "offer": {
     "title": "An appointment just opened up!",
@@ -843,5 +845,87 @@
         "about": "Physical examination and a talk, e.g. at a paediatric practice."
       }
     }
+  },
+  "plans": {
+    "entry": "MedNow Plus",
+    "entryHint": "More appointment alerts, calendar sync, saved practices, check-up reminders",
+    "name": {
+      "free": "Free",
+      "plus": "MedNow Plus",
+      "family": "MedNow Family"
+    },
+    "includes": {
+      "free": "Search, all filters and map\nBooking – also for one family member\n1 appointment alert (including “available soon”)\nReminders, calendar entry, emergency page",
+      "plus": "Everything in Free\nUp to 10 appointment alerts at once, up to 60 days\nCalendar sync and saved practices\nCheck-up reminders for you",
+      "family": "Everything in Plus\nUp to 5 profiles\nCheck-up reminders for everyone"
+    },
+    "reason": {
+      "alarms": {
+        "title": "Several appointment alerts at once",
+        "body": "Free includes one active appointment alert. With Plus you can watch up to 10 practices or specialties at once."
+      },
+      "longAlarms": {
+        "title": "Appointment alerts for up to 60 days",
+        "body": "For specialist appointments with long waits: with Plus your alert keeps searching for up to 60 days."
+      },
+      "calendar": {
+        "title": "Appointments in your calendar automatically",
+        "body": "With Plus, appointments go into the “MedNow” calendar and update when rescheduled or cancelled. Adding them one by one stays free."
+      },
+      "favorites": {
+        "title": "Save practices",
+        "body": "With Plus you save practices and book them from the home screen in two taps."
+      },
+      "checkups": {
+        "title": "Check-up reminders",
+        "body": "The overview stays free. With Plus, MedNow reminds you of your check-ups."
+      },
+      "familyCheckups": {
+        "title": "Check-ups for the whole family",
+        "body": "With MedNow Family you get check-up reminders for every profile – including children’s U-check-ups and J1."
+      },
+      "profiles": {
+        "title": "More family profiles",
+        "body": "Free covers you and one family member. With MedNow Family you manage up to 5 profiles."
+      },
+      "overview": {
+        "title": "MedNow Plus and Family",
+        "body": "Searching, booking and emergency help are always free. You pay for convenience: more alerts, calendar, saved practices, check-ups."
+      }
+    },
+    "offer": {
+      "mednow_plus_pass_30d": "30 days of Plus",
+      "mednow_plus_yearly": "Plus yearly",
+      "mednow_family_yearly": "Family yearly"
+    },
+    "passPrice": "{{price}} one-off",
+    "yearPrice": "{{price}} per year",
+    "perMonth": "equals {{price}} per month",
+    "trial_one": "{{count}}-day free trial",
+    "trial_other": "{{count}}-day free trial",
+    "passEnds": "ends automatically after 30 days",
+    "fairness": "Paying never gives priority: appointments that open up go to everyone in the same order, with the same reservation time.",
+    "cancelInfo": "Yearly plans renew every year after the trial until you cancel them in the App Store or Google Play settings – at any time. We remind you 3 days before the trial ends. The 30-day pass ends by itself.",
+    "restore": "Restore purchases",
+    "restored": "Purchases checked.",
+    "manage": "Manage or cancel subscription",
+    "demoEnd": "End demo subscription",
+    "notNow": "Not now",
+    "current": "Active: {{plan}}",
+    "currentUntil": "Active: {{plan}} until {{date}}",
+    "thanks": "Thank you! {{plan}} is active.",
+    "purchaseFailed": "The purchase didn’t work. You were not charged.",
+    "demoNotice": "Demo version: nothing is charged. The “purchase” only unlocks features on this device.",
+    "unavailable": "Purchases aren’t available in this version yet. All free features work fully.",
+    "trialEndingTitle": "Trial ending soon",
+    "trialEndingBody": "Your free trial ends in 3 days. You can cancel any time in the store settings.",
+    "badge": "Plus",
+    "limitTitle": "An appointment alert is already active",
+    "limitBody": "Free includes one active appointment alert. You can replace the current one or keep several with Plus.",
+    "replaceAlarm": "Replace current alert",
+    "seePlus": "More alerts with Plus"
+  },
+  "family": {
+    "limit": "Free covers you and one family member. More profiles come with MedNow Family (Profile → Family)."
   }
 }

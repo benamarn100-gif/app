@@ -6,12 +6,20 @@ import { UserPlus } from '@/components/icons';
 import { useAddDependent, useDependents } from '@/data/hooks';
 import { makeStyles } from '@/design/theme';
 import { AGE_GROUPS, type AgeGroup } from '@/domain/types';
+import { isAppError } from '@/data/repository';
+import { openPlans } from '@/features/plans/openPlans';
+import { usePlan } from '@/features/plans/usePlan';
 import { useT } from '@/i18n/useT';
 
-type Props = { value: string | null; onChange: (dependentId: string | null) => void };
+type Props = {
+  value: string | null;
+  onChange: (dependentId: string | null) => void;
+  /** booking: keine Bezahlseite im Buchungsablauf (Tabuzone) – nur ein sachlicher Hinweis */
+  context?: 'booking' | 'family';
+};
 
 /** Für wen ist der Termin? Ich oder ein Familienmitglied (nur Spitzname + Altersgruppe). */
-export function PatientPicker({ value, onChange }: Props) {
+export function PatientPicker({ value, onChange, context = 'booking' }: Props) {
   const styles = useStyles();
   const { t } = useT();
   const toast = useToast();
@@ -20,6 +28,9 @@ export function PatientPicker({ value, onChange }: Props) {
   const [adding, setAdding] = useState(false);
   const [label, setLabel] = useState('');
   const [ageGroup, setAgeGroup] = useState<AgeGroup>('child_0_5');
+  const { limits } = usePlan();
+  // Profile inkl. „Ich“: kostenlos/Plus 2, Familie 5 – der Server prüft dasselbe
+  const atLimit = (dependents.data ?? []).length + 1 >= limits.profiles;
 
   return (
     <View style={styles.container}>
@@ -80,19 +91,29 @@ export function PatientPicker({ value, onChange }: Props) {
                 onChange(dep.id);
                 setAdding(false);
                 setLabel('');
-              } catch {
-                toast.show(t('errors.generic'), 'error');
+              } catch (e) {
+                if (isAppError(e, 'plan_limit') && context === 'family') openPlans('profiles');
+                else
+                  toast.show(
+                    t(isAppError(e, 'plan_limit') ? 'family.limit' : 'errors.generic'),
+                    'info',
+                  );
               }
             }}
           />
         </View>
+      ) : atLimit && context === 'booking' ? (
+        <Text variant="small" color="textSecondary" testID="profiles-limit-hint">
+          {t('family.limit')}
+        </Text>
       ) : (
         <Button
           variant="text"
           icon={UserPlus}
           label={t('booking.addDependent')}
-          onPress={() => setAdding(true)}
+          onPress={() => (atLimit ? openPlans('profiles') : setAdding(true))}
           style={styles.addButton}
+          testID="add-dependent"
         />
       )}
     </View>

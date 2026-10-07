@@ -22,7 +22,10 @@ import {
   type Checkup,
   type CheckupAudience,
 } from '@/domain/checkups';
+import { SELF } from '@/domain/profiles';
 import { formatBerlinDate } from '@/domain/time/berlin';
+import { openPlans } from '@/features/plans/openPlans';
+import { usePlan } from '@/features/plans/usePlan';
 import { useProfiles } from '@/features/profile/useProfiles';
 import { useT } from '@/i18n/useT';
 import { cancelCheckupReminder, scheduleCheckupReminder } from '@/lib/checkupReminders';
@@ -114,6 +117,7 @@ export function CheckupsScreen() {
                   checkup={c}
                   storageKey={reminderKey(profile.id, c.id)}
                   needsConsent={!consentAt}
+                  forFamily={profile.id !== SELF}
                   confirmConsent={() =>
                     confirm({
                       title: t('checkups.consentTitle'),
@@ -149,12 +153,18 @@ function CheckupCard({
   storageKey,
   needsConsent,
   confirmConsent,
+  forFamily,
 }: {
   checkup: Checkup;
   storageKey: string;
   needsConsent: boolean;
   confirmConsent: () => Promise<boolean>;
+  forFamily: boolean;
 }) {
+  const plan = usePlan();
+  // Erst sperren, wenn die Stufe bekannt ist – sonst sähen Plus-Nutzer kurz die Bezahlseite
+  const locked =
+    !plan.isLoading && !plan.can(forFamily ? 'familyCheckupReminders' : 'checkupReminders');
   const theme = useTheme();
   const styles = useStyles();
   const { t, locale } = useT();
@@ -175,6 +185,11 @@ function CheckupCard({
     .sort((a, b) => a - b);
 
   const schedule = async (months: number) => {
+    // Übersicht kostenlos; Erinnerungen: eigene mit Plus, für Familienprofile mit Familie
+    if (locked) {
+      openPlans(forFamily ? 'familyCheckups' : 'checkups');
+      return;
+    }
     if (needsConsent) {
       if (!(await confirmConsent())) return;
       setConsent();
@@ -271,8 +286,8 @@ function CheckupCard({
         <Button
           variant="secondary"
           icon={Bell}
-          label={t('checkups.remind')}
-          onPress={() => setChoosing(true)}
+          label={locked ? `${t('checkups.remind')} · ${t('plans.badge')}` : t('checkups.remind')}
+          onPress={() => (locked ? void schedule(0) : setChoosing(true))}
           testID={`checkup-remind-${checkup.id}`}
         />
       )}

@@ -18,6 +18,7 @@ import type {
   WaitlistOffer,
   WaitlistTarget,
 } from '@/domain/types';
+import type { PlanId } from '@/domain/plans';
 
 /**
  * App-seitiger Datenzugriff (Ebene 2 des Adapter-Musters, siehe docs/architecture.md §2.1).
@@ -62,7 +63,8 @@ export type BookInput = {
 
 export type HoldResult = { slot: Slot; heldUntil: string };
 
-export const ALARM_DAYS = [1, 3, 7, 14] as const;
+/** Alle Alarm-Laufzeiten; welche erlaubt sind, regelt die Stufe (domain/plans.ts) */
+export const ALARM_DAYS = [1, 3, 7, 14, 30, 60] as const;
 export type AlarmDays = (typeof ALARM_DAYS)[number];
 
 export type WaitlistInput = {
@@ -73,6 +75,8 @@ export type WaitlistInput = {
 };
 
 export type WaitlistEntryWithLabel = WaitlistEntry & { label: string; practiceName: string | null };
+
+export type PlanInfo = { plan: PlanId; expiresAt: string | null };
 
 export type ErrorCode =
   | 'slot_taken'
@@ -160,4 +164,7 @@ export interface MedNowRepository {
   revokeConsent(type: ConsentType): Promise<void>;
   exportData(): Promise<Record<string, unknown>>;
   deleteAccount(): Promise<void>;
+
+  // Abo-Stufe (Phase 4): Wahrheit liegt beim Server (app.entitlements), im Demo-Modus lokal
+  getPlan(): Promise<PlanInfo>;
 }

@@ -34,4 +34,5 @@ export const queryKeys = {
   offers: ['me', 'offers'] as const,
   consents: ['me', 'consents'] as const,
   session: ['me', 'session'] as const,
+  plan: ['me', 'plan'] as const,
 };

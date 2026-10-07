@@ -39,6 +39,8 @@ import { formatDistance, formatSlotWhen } from '@/lib/format';
 import { callPhone } from '@/lib/maps';
 import { useNow } from '@/lib/useNow';
 import { useFavorites } from '@/state/favorites';
+import { openPlans } from '@/features/plans/openPlans';
+import { usePlan } from '@/features/plans/usePlan';
 
 import {
   AccessibilityInfo,
@@ -70,6 +72,7 @@ export function PracticeScreen() {
   const isFocused = useIsFocused();
   const appointments = useAppointments();
   const toggleFavorite = useFavorites((st) => st.toggle);
+  const plan = usePlan();
   const isFavorite = useFavorites((st) => !!id && st.practiceIds.includes(id));
 
   const practice = detail.data?.practice;
@@ -241,6 +244,9 @@ export function PracticeScreen() {
               accessibilityLabel={isFavorite ? t('favorites.remove') : t('favorites.add')}
               accessibilityState={{ selected: isFavorite }}
               onPress={() => {
+                // Merken mit Plus; Entfernen geht immer
+                if (!isFavorite && !plan.isLoading && !plan.can('favorites'))
+                  return openPlans('favorites');
                 const added = toggleFavorite(practice.id);
                 toast.show(
                   t(added ? 'favorites.added' : 'favorites.removed'),

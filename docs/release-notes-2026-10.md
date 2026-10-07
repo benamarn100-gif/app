@@ -65,3 +65,18 @@
    Praxis“ wie bisher; neu zeigt die Praxiskarte „Spricht Englisch“, wenn die Praxis die
    App-Sprache spricht. Nutzen: Wer wenig Deutsch spricht, findet schneller eine passende Praxis.
    **Fehlt:** Rechts-nach-links-Layout (z. B. Arabisch), Übersetzungen weiterer Sprachen.
+
+## Phase 4 – Abo und Bezahlseite
+
+- **Stufen:** Kostenlos (Suche, Filter, Karte, Buchen auch für ein Familienmitglied, 1 Termin-Alarm,
+  Erinnerungen, Kalendereintrag, Notfall-Seite), **Plus** (30-Tage-Pass 4,99 € ohne Verlängerung
+  oder 29,99 €/Jahr mit 14 Tagen Test: bis 10 Alarme, bis 60 Tage, Kalender-Sync, Favoriten,
+  Vorsorge-Erinnerungen), **Familie** (44,99 €/Jahr: alles aus Plus, 5 Profile, Vorsorge für alle).
+- **Server setzt durch** (Migration 1300, Fehler `plan_limit`), Kauf-Webhook schreibt nur Stufe und
+  Ablauf; Konto löschen entfernt auch den Datensatz beim Abo-Dienst.
+- **Ruhige Bezahlseite:** Gesamtpreis zuerst, nichts vorausgewählt, „Jetzt nicht“ gleich groß,
+  Kündigungshinweis, Kauf wiederherstellen, Bedingungen/Datenschutz, Fairness-Satz, keine
+  Countdowns. Nie in Akut/„Heute“, Notfall, Buchung, Einführung, Fehlerseiten. An der Alarm-Grenze
+  ein Hinweis mit „Bisherigen Alarm ersetzen“ gleichwertig zu Plus.
+- **Fairness:** Bezahlen verschafft keinen Vorrang (FIFO + 10 Minuten für alle, getestet).
+- Einrichtung (Produkte, Schlüssel, Webhook): `docs/billing-setup.md`.

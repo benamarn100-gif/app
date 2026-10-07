@@ -2,6 +2,7 @@ import type { CityConfig } from '@/config/city';
 import { isSlotBookable, summarizeSlots } from '@/domain/availability/status';
 import { distanceMeters } from '@/domain/geo/distance';
 import { encodeGeohash } from '@/domain/geo/geohash';
+import { PLAN_LIMITS, PRODUCTS, type PlanId } from '@/domain/plans';
 import { compareRelevance } from '@/domain/ranking/acute';
 import { SPECIALTIES } from '@/domain/seed/catalog';
 import {
@@ -31,6 +32,7 @@ import type {
 import type { KeyValueStorage } from '@/lib/storage';
 
 import {
+  ALARM_DAYS,
   AppError,
   HEALTH_CONSENT_VERSION,
   HOLD_MINUTES,
@@ -38,6 +40,7 @@ import {
   type BookInput,
   type HoldResult,
   type MedNowRepository,
+  type PlanInfo,
   type SearchParams,
   type SessionInfo,
   type SlotChange,
@@ -52,6 +55,8 @@ type PersistedState = {
   consents: Consent[];
   contact: BookingContact | null;
   waitlist: WaitlistEntry[];
+  /** Demo-Abo (Phase 4): nur lokal, kein Geld – fehlt in älteren gespeicherten Ständen */
+  plan?: { plan: Exclude<PlanId, 'free'>; expiresAt: string; productId: string } | null;
 };
 
 export type MemoryRepositoryOptions = {
@@ -507,6 +512,9 @@ export class MemoryRepository implements MedNowRepository {
     await this.delay();
     const trimmed = label.trim();
     if (!trimmed || trimmed.length > 40) throw new AppError('invalid_input');
+    // Profile inkl. „Ich“ (wie app.add_dependent)
+    if (this.state.dependents.length + 1 >= PLAN_LIMITS[this.currentPlan()].profiles)
+      throw new AppError('plan_limit');
     const dependent = {
       id: uuidFromString(`dep:${trimmed}:${Date.now()}:${Math.random()}`),
       label: trimmed,
@@ -528,6 +536,12 @@ export class MemoryRepository implements MedNowRepository {
     await this.delay();
     const now = this.now();
     if (!this.hasHealthConsent(HEALTH_CONSENT_VERSION)) throw new AppError('consent_missing');
+    // Gleiche Regeln wie app.join_waitlist (Migration 1300)
+    const limits = PLAN_LIMITS[this.currentPlan()];
+    if (!ALARM_DAYS.includes(input.days)) throw new AppError('invalid_input');
+    if (!limits.alarmDays.includes(input.days)) throw new AppError('plan_limit');
+    if (this.state.waitlist.filter((w) => w.status === 'active').length >= limits.activeAlarms)
+      throw new AppError('plan_limit');
     const target = input.target.kind === 'specialty' ? { ...input.target, center } : input.target;
     const entry: WaitlistEntry = {
       id: uuidFromString(`wl:${now.getTime()}:${Math.random()}`),
@@ -762,6 +776,37 @@ export class MemoryRepository implements MedNowRepository {
       contact: this.state.contact,
       waitlist: this.state.waitlist,
     };
+  }
+
+  // --- Abo (Demo) -----------------------------------------------------------
+  async getPlan(): Promise<PlanInfo> {
+    await this.delay();
+    const plan = this.currentPlan();
+    return { plan, expiresAt: plan === 'free' ? null : (this.state.plan?.expiresAt ?? null) };
+  }
+
+  /** Demo-Kauf: schaltet die Stufe lokal frei – es wird nichts berechnet. */
+  async demoPurchase(productId: string): Promise<PlanInfo> {
+    await this.delay();
+    const product = PRODUCTS.find((p) => p.id === productId);
+    if (!product) throw new AppError('invalid_input');
+    const expiresAt = new Date(
+      this.now().getTime() + product.durationDays * 86_400_000,
+    ).toISOString();
+    this.state.plan = { plan: product.plan, expiresAt, productId };
+    await this.persist();
+    return { plan: product.plan, expiresAt };
+  }
+
+  /** Demo: Abo beenden (zum Ausprobieren des kostenlosen Zustands). */
+  async demoEndPlan(): Promise<void> {
+    this.state.plan = null;
+    await this.persist();
+  }
+
+  private currentPlan(): PlanId {
+    const p = this.state.plan;
+    return p && Date.parse(p.expiresAt) > this.now().getTime() ? p.plan : 'free';
   }
 
   async deleteAccount(): Promise<void> {

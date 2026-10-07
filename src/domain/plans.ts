@@ -61,8 +61,9 @@ export function higherPlan(a: PlanId, b: PlanId): PlanId {
  * hinterlegte, lokalisierte Preis.
  */
 export type ProductKind = 'pass' | 'yearly';
+export type ProductId = 'mednow_plus_pass_30d' | 'mednow_plus_yearly' | 'mednow_family_yearly';
 export type Product = {
-  id: string;
+  id: ProductId;
   plan: Exclude<PlanId, 'free'>;
   kind: ProductKind;
   /** Rückfallpreis in Euro-Cent (Anzeige im Demo-Modus) */

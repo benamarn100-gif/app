@@ -3,6 +3,7 @@ import { assertEquals } from '@std/assert';
 import type { Context } from '../_shared/context.ts';
 import {
   handleAccount,
+  deleteBillingCustomer,
   handleBillingWebhook,
   handleBookSlot,
   handleSendNotifications,
@@ -121,6 +122,39 @@ Deno.test('waitlist: join mit Fachrichtung übergibt gerundete Mitte an die DB',
   assertEquals(res.status, 201);
   assertEquals(calls[0]?.fn, 'join_waitlist');
   assertEquals(calls[0]?.params.p_specialty, 3);
+});
+
+Deno.test('waitlist: 60 Tage gehen an die DB, Stufen-Grenze kommt als 402 zurück', async () => {
+  const { ctx, calls } = fakeContext({
+    rpc: () => {
+      throw { message: 'plan_limit' };
+    },
+  });
+  const res = await serve((req) => handleWaitlist(req, ctx))(
+    post({
+      action: 'join',
+      target: { kind: 'specialty', specialtyId: 3 },
+      days: 60,
+      maxDistanceKm: 10,
+    }),
+  );
+  assertEquals(calls[0]?.params.p_days, 60);
+  assertEquals(res.status, 402);
+  assertEquals((await res.json()).error, 'plan_limit');
+});
+
+Deno.test('waitlist: unbekannte Laufzeit wird abgelehnt', async () => {
+  const { ctx, calls } = fakeContext();
+  const res = await serve((req) => handleWaitlist(req, ctx))(
+    post({
+      action: 'join',
+      target: { kind: 'practice', practiceId: SLOT },
+      days: 90,
+      maxDistanceKm: 10,
+    }),
+  );
+  assertEquals(res.status, 400);
+  assertEquals(calls.length, 0);
 });
 
 Deno.test('waitlist: Angebot annehmen braucht Buchungsdaten', async () => {
@@ -319,5 +353,26 @@ Deno.test(
     );
     assertEquals(res.status, 200);
     assertEquals(calls.length, 1);
+  },
+);
+
+Deno.test(
+  'Konto löschen: Kundendatensatz beim Abo-Dienst wird gelöscht, ohne Schlüssel übersprungen',
+  async () => {
+    const seen: { url: string; method?: string; auth?: string }[] = [];
+    const fakeFetch = ((url: string, init?: RequestInit) => {
+      seen.push({
+        url,
+        method: init?.method,
+        auth: (init?.headers as Record<string, string> | undefined)?.Authorization,
+      });
+      return Promise.resolve(new Response(null, { status: 200 }));
+    }) as typeof fetch;
+    assertEquals(await deleteBillingCustomer(USER, undefined, fakeFetch), false);
+    assertEquals(seen.length, 0);
+    assertEquals(await deleteBillingCustomer(USER, 'sk_test', fakeFetch), true);
+    assertEquals(seen[0]?.method, 'DELETE');
+    assertEquals(seen[0]?.url, `https://api.revenuecat.com/v1/subscribers/${USER}`);
+    assertEquals(seen[0]?.auth, 'Bearer sk_test');
   },
 );

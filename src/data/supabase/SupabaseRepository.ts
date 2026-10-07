@@ -9,6 +9,7 @@ import {
 import { Platform } from 'react-native';
 
 import { roundLocation } from '@/domain/geo/distance';
+import type { PlanId } from '@/domain/plans';
 import type {
   AgeGroup,
   Appointment,
@@ -31,6 +32,7 @@ import {
   type ErrorCode,
   type HoldResult,
   type MedNowRepository,
+  type PlanInfo,
   type SearchParams,
   type SessionInfo,
   type SlotChange,
@@ -403,6 +405,12 @@ export class SupabaseRepository implements MedNowRepository {
       action: 'export',
     });
     return data;
+  }
+
+  async getPlan(): Promise<PlanInfo> {
+    await this.ensureSession();
+    const data = await this.rpc<{ plan: PlanId; expiresAt: string | null }>('get_my_plan', {});
+    return { plan: data?.plan ?? 'free', expiresAt: data?.expiresAt ?? null };
   }
 
   async deleteAccount(): Promise<void> {

@@ -71,7 +71,15 @@ const waitlistSchema = z.discriminatedUnion('action', [
       z.object({ kind: z.literal('doctor'), doctorId: uuid }),
       z.object({ kind: z.literal('specialty'), specialtyId: z.number().int().min(1).max(99) }),
     ]),
-    days: z.union([z.literal(1), z.literal(3), z.literal(7), z.literal(14)]),
+    // 30/60 nur mit Plus/Familie – das prüft join_waitlist (Fehler plan_limit)
+    days: z.union([
+      z.literal(1),
+      z.literal(3),
+      z.literal(7),
+      z.literal(14),
+      z.literal(30),
+      z.literal(60),
+    ]),
     maxDistanceKm: z.number().int().min(1).max(50),
     center: z
       .object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) })
@@ -236,6 +244,9 @@ export async function handleAccount(req: Request, ctx: Context): Promise<Respons
       return json({ export: await ctx.rpc('export_user_data', { p_user: user.id }) });
     case 'delete': {
       await ctx.rpc('delete_user_data', { p_user: user.id });
+      // Abo-Dienst: Kundendatensatz löschen (nur pseudonyme ID gespeichert). Ohne geheimen
+      // Schlüssel übersprungen – dann manuell im RevenueCat-Dashboard (docs/billing-setup.md).
+      await deleteBillingCustomer(user.id, ctx.env('REVENUECAT_SECRET_API_KEY'));
       if (ctx.admin) {
         const { error } = await ctx.admin.auth.admin.deleteUser(user.id);
         if (error) throw error;
@@ -285,6 +296,24 @@ export async function handleSendNotifications(
 }
 
 // ---- Abo-Stufen (Phase 4) ---------------------------------------------------
+
+/** Löscht den Kundendatensatz bei RevenueCat (DSGVO Art. 17). Fehler blockieren das Löschen nicht. */
+export async function deleteBillingCustomer(
+  userId: string,
+  secretKey: string | undefined,
+  fetcher: typeof fetch = fetch,
+): Promise<boolean> {
+  if (!secretKey) return false;
+  try {
+    const res = await fetcher(
+      `https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(userId)}`,
+      { method: 'DELETE', headers: { Authorization: `Bearer ${secretKey}` } },
+    );
+    return res.ok || res.status === 404;
+  } catch {
+    return false;
+  }
+}
 
 const PASS_PRODUCT = 'mednow_plus_pass_30d';
 const PASS_DAYS = 30;

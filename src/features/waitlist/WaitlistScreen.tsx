@@ -17,6 +17,8 @@ import {
   useGrantConsent,
   useHasConsent,
   useJoinWaitlist,
+  useLeaveWaitlist,
+  useWaitlist,
   usePractice,
   useSearchCenter,
 } from '@/data/hooks';
@@ -25,6 +27,8 @@ import { ALARM_DAYS, HEALTH_CONSENT_VERSION, isAppError, type AlarmDays } from '
 import { makeStyles } from '@/design/theme';
 import { SPECIALTIES } from '@/domain/seed/catalog';
 import { ConsentCheckbox } from '@/features/booking/ConsentCheckbox';
+import { openPlans } from '@/features/plans/openPlans';
+import { usePlan } from '@/features/plans/usePlan';
 import { useT } from '@/i18n/useT';
 import { haptics } from '@/lib/haptics';
 import {
@@ -69,6 +73,9 @@ export function WaitlistScreen() {
   const hasConsent = useHasConsent('health_data', HEALTH_CONSENT_VERSION);
   const grant = useGrantConsent();
   const join = useJoinWaitlist();
+  const leave = useLeaveWaitlist();
+  const waitlist = useWaitlist();
+  const { limits, isLoading: planLoading } = usePlan();
 
   const defaultSpecialty =
     presetSpecialty ??
@@ -83,6 +90,9 @@ export function WaitlistScreen() {
   const [consent, setConsent] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
   const [askPush, setAskPush] = useState(false);
+  // Grenze der Stufe erreicht: Hinweis statt Fehlermeldung (Abo-Konzept, Abschnitt 5)
+  const [limitReached, setLimitReached] = useState(false);
+  const active = (waitlist.data ?? []).filter((w) => w.status === 'active');
 
   async function registerPush() {
     const granted = await requestNotificationPermission();
@@ -98,11 +108,24 @@ export function WaitlistScreen() {
     }
   }
 
-  async function submit() {
+  async function submit(options: { replaceOldest?: boolean } = {}) {
     setShowErrors(true);
     if (!hasConsent && !consent) return haptics.warning();
     if (!center.center) return;
+    // Vorprüfung nur mit bekannter Stufe – sonst entscheidet der Server (plan_limit)
+    if (!options.replaceOldest && !planLoading && active.length >= limits.activeAlarms) {
+      setLimitReached(true);
+      return;
+    }
     try {
+      if (options.replaceOldest) {
+        // Ältesten Alarm beenden – ein Platz frei, keine Bevorzugung
+        const oldest = [...active].sort(
+          (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
+        )[0];
+        if (oldest) await leave.mutateAsync(oldest.id);
+        setLimitReached(false);
+      }
       if (!hasConsent)
         await grant.mutateAsync({ type: 'health_data', version: HEALTH_CONSENT_VERSION });
       await join.mutateAsync({
@@ -124,6 +147,10 @@ export function WaitlistScreen() {
       void registerPush();
       router.back();
     } catch (e) {
+      if (isAppError(e, 'plan_limit')) {
+        setLimitReached(true);
+        return;
+      }
       toast.show(
         isAppError(e, 'rate_limited') ? t('errors.rateLimited') : t('errors.generic'),
         'error',
@@ -224,15 +251,24 @@ export function WaitlistScreen() {
         <View style={styles.section}>
           <Text variant="h3">{t('waitlist.window')}</Text>
           <View style={styles.wrap} accessibilityRole="radiogroup">
-            {ALARM_DAYS.map((d) => (
-              <Chip
-                key={d}
-                role="radio"
-                label={t(`waitlist.window${d}`)}
-                selected={days === d}
-                onPress={() => setDays(d)}
-              />
-            ))}
+            {ALARM_DAYS.map((d) => {
+              // Lange Laufzeiten (30/60 Tage) mit Plus – sichtbar, aber ehrlich gekennzeichnet
+              const included = limits.alarmDays.includes(d);
+              return (
+                <Chip
+                  key={d}
+                  role="radio"
+                  label={
+                    included
+                      ? t(`waitlist.window${d}`)
+                      : `${t(`waitlist.window${d}`)} · ${t('plans.badge')}`
+                  }
+                  selected={days === d}
+                  onPress={() => (included ? setDays(d) : openPlans('longAlarms'))}
+                  testID={`alarm-days-${d}`}
+                />
+              );
+            })}
           </View>
         </View>
 
@@ -262,15 +298,41 @@ export function WaitlistScreen() {
           </Card>
         ) : null}
       </ScrollView>
-      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
-        <Button
-          label={t('waitlist.join')}
-          icon={BellRing}
-          loading={join.isPending || grant.isPending}
-          onPress={() => void submit()}
-          testID="join-waitlist"
-        />
-      </View>
+      {limitReached ? (
+        <View
+          style={[styles.footer, styles.footerCol, { paddingBottom: Math.max(insets.bottom, 16) }]}
+          testID="alarm-limit"
+        >
+          <Text variant="h3">{t('plans.limitTitle')}</Text>
+          <Text variant="small" color="textSecondary">
+            {t('plans.limitBody')}
+          </Text>
+          <Button
+            variant="secondary"
+            label={t('plans.replaceAlarm')}
+            loading={leave.isPending || join.isPending}
+            onPress={() => void submit({ replaceOldest: true })}
+            testID="alarm-replace"
+          />
+          <Button
+            variant="secondary"
+            label={t('plans.seePlus')}
+            onPress={() => openPlans('alarms')}
+            testID="alarm-see-plus"
+          />
+          <Button variant="text" label={t('plans.notNow')} onPress={() => setLimitReached(false)} />
+        </View>
+      ) : (
+        <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+          <Button
+            label={t('waitlist.join')}
+            icon={BellRing}
+            loading={join.isPending || grant.isPending}
+            onPress={() => void submit()}
+            testID="join-waitlist"
+          />
+        </View>
+      )}
     </View>
   );
 }

@@ -19,6 +19,9 @@ const schema = z.object({
   demoCity: z.string(),
   /** Testversionen: Diagnose-Seite und Startzeit-Messung (docs/test-builds.md). */
   diagnostics: z.boolean(),
+  /** In-App-Käufe (RevenueCat, öffentliche SDK-Schlüssel je Plattform, docs/billing-setup.md) */
+  revenueCatIosKey: z.string().min(10).optional(),
+  revenueCatAndroidKey: z.string().min(10).optional(),
 });
 
 export type Env = z.infer<typeof schema>;
@@ -45,6 +48,8 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
     sentryDsn: emptyToUndefined(source.EXPO_PUBLIC_SENTRY_DSN),
     demoCity: emptyToUndefined(source.EXPO_PUBLIC_DEMO_CITY) ?? 'fulda',
     diagnostics: emptyToUndefined(source.EXPO_PUBLIC_DIAGNOSTICS) === '1',
+    revenueCatIosKey: emptyToUndefined(source.EXPO_PUBLIC_REVENUECAT_IOS_KEY),
+    revenueCatAndroidKey: emptyToUndefined(source.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY),
   });
 }
 
@@ -65,6 +70,8 @@ export const env: Env = parseEnv({
   EXPO_PUBLIC_SENTRY_DSN: process.env.EXPO_PUBLIC_SENTRY_DSN,
   EXPO_PUBLIC_DEMO_CITY: process.env.EXPO_PUBLIC_DEMO_CITY,
   EXPO_PUBLIC_DIAGNOSTICS: process.env.EXPO_PUBLIC_DIAGNOSTICS || testChannel,
+  EXPO_PUBLIC_REVENUECAT_IOS_KEY: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
+  EXPO_PUBLIC_REVENUECAT_ANDROID_KEY: process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY,
 });
 
 export const demoCity = resolveCity(env.demoCity);

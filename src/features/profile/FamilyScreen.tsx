@@ -85,7 +85,7 @@ export function FamilyScreen() {
           </Stagger>
         ))
       )}
-      <PatientPicker value={null} onChange={() => undefined} />
+      <PatientPicker value={null} onChange={() => undefined} context="family" />
     </ScrollView>
   );
 }
