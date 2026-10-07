@@ -34,9 +34,8 @@ import { REASON_CATEGORIES, type BookingContact, type ReasonCategory } from '@/d
 import { useT } from '@/i18n/useT';
 import { formatCountdown, formatLongDate, formatSlotWhen } from '@/lib/format';
 import { haptics } from '@/lib/haptics';
-import { notificationPermission, scheduleReminders } from '@/lib/notifications';
+import { useAppointmentEffects } from '@/lib/useAppointmentEffects';
 import { useNow } from '@/lib/useNow';
-import { usePreferences } from '@/state/preferences';
 
 import { ConsentCheckbox } from './ConsentCheckbox';
 import { ContactForm } from './ContactForm';
@@ -68,7 +67,7 @@ export function BookingScreen() {
   const hasConsent = useHasConsent('health_data', HEALTH_CONSENT_VERSION);
   const grant = useGrantConsent();
   const book = useBookSlot();
-  const remindersEnabled = usePreferences((s) => s.remindersEnabled);
+  const effects = useAppointmentEffects();
 
   const [step, setStep] = useState(0);
   const [dependentId, setDependentId] = useState<string | null>(null);
@@ -129,9 +128,8 @@ export function BookingScreen() {
         consentVersion: HEALTH_CONSENT_VERSION,
       });
       hold.markBooked();
-      if (remindersEnabled && (await notificationPermission()) === 'granted') {
-        void scheduleReminders(appointment, t, locale);
-      }
+      // Erinnerungen, „Jetzt losfahren“, Kalender-Sync
+      if (practice.data) void effects.booked(appointment, practice.data.practice);
       router.replace({ pathname: '/booking/success', params: { appointmentId: appointment.id } });
     } catch (error) {
       const code = isAppError(error) ? error.code : 'unknown';

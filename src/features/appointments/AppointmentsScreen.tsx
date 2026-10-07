@@ -35,7 +35,7 @@ import { useT } from '@/i18n/useT';
 import { addAppointmentToCalendar } from '@/lib/calendar';
 import { formatCountdown, formatSlotWhen } from '@/lib/format';
 import { openRoute } from '@/lib/maps';
-import { cancelReminders } from '@/lib/notifications';
+import { useAppointmentEffects } from '@/lib/useAppointmentEffects';
 import { useNow } from '@/lib/useNow';
 
 import { AppointmentCard } from './AppointmentCard';
@@ -55,6 +55,7 @@ export function AppointmentsScreen() {
   const offers = useOffers();
   const waitlist = useWaitlist();
   const cancel = useCancelAppointment();
+  const effects = useAppointmentEffects();
   const leave = useLeaveWaitlist();
 
   const { upcoming, past } = useMemo(() => {
@@ -89,7 +90,7 @@ export function AppointmentsScreen() {
     if (!confirmed) return;
     try {
       await cancel.mutateAsync({ id: a.id, slotId: a.slotId });
-      void cancelReminders(a.id);
+      void effects.cancelled(a.id);
       toast.show(t('appointments.cancelled'), 'success');
     } catch {
       toast.show(t('errors.generic'), 'error');

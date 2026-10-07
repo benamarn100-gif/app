@@ -138,7 +138,8 @@
     "radiusHint": "Change the radius in filters",
     "nearbyTitle": "Available near you",
     "nearbyWeek_one": "Nothing in the next 24 hours – {{count}} practice this week",
-    "nearbyWeek_other": "Nothing in the next 24 hours – {{count}} practices this week"
+    "nearbyWeek_other": "Nothing in the next 24 hours – {{count}} practices this week",
+    "timeToLeave": "Time to leave"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -388,7 +389,9 @@
     "reminderTitle": "Reminder",
     "reminder24h": "Your doctor’s appointment is tomorrow at {{time}}.",
     "reminder2h": "Your doctor’s appointment starts in 2 hours ({{time}}).",
-    "channelName": "Appointments"
+    "channelName": "Appointments",
+    "leaveNow": "Time to leave: your doctor’s appointment starts at {{time}}.",
+    "leaveNowTravel": "Time to leave: your doctor’s appointment starts at {{time}} ({{travel}})."
   },
   "profile": {
     "title": "Profile",
@@ -424,7 +427,9 @@
     "anonymous": "No account – your data stays on this device and in your anonymous session.",
     "showcase": "Component showcase (development)",
     "resetOnboarding": "Show introduction again",
-    "diagnostics": "Test build & diagnostics"
+    "diagnostics": "Test build & diagnostics",
+    "leaveReminder": "“Time to leave”",
+    "leaveReminderHint": "Reminds you when it’s time to leave – estimated from distance and travel mode."
   },
   "privacy": {
     "title": "Privacy centre",
@@ -664,5 +669,37 @@
   },
   "alarm": {
     "set": "Set appointment alert"
+  },
+  "travel": {
+    "title": "Getting there",
+    "route": "Route",
+    "minutes_one": "approx. {{count}} min",
+    "minutes_other": "approx. {{count}} min",
+    "a11y": "{{mode}}, {{value}}",
+    "note": "Estimated from straight-line distance. Exact time in your maps app.",
+    "mode": {
+      "walk": "Walk",
+      "car": "Car",
+      "transit": "Public transport"
+    },
+    "preferred": "How do you usually get to the practice?",
+    "withMode_one": "approx. {{count}} min {{mode}}",
+    "withMode_other": "approx. {{count}} min {{mode}}",
+    "by": {
+      "walk": "on foot",
+      "car": "by car",
+      "transit": "by public transport"
+    }
+  },
+  "calendarSync": {
+    "title": "Calendar sync",
+    "hint": "Appointments automatically in a separate “MedNow” calendar on this device",
+    "enabled_one": "Calendar sync is on. {{count}} appointment added.",
+    "enabled_other": "Calendar sync is on. {{count}} appointments added.",
+    "denied": "Calendar sync needs calendar access. You can still add appointments one by one.",
+    "unavailable": "The calendar isn’t available on this device right now.",
+    "offTitle": "Turn off calendar sync?",
+    "offBody": "The “MedNow” calendar and all its entries will be removed from this device. Your appointments stay booked.",
+    "offConfirm": "Turn off"
   }
 }

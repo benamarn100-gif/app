@@ -25,9 +25,8 @@ import type { Slot } from '@/domain/types';
 import { SlotPicker } from '@/features/practice/SlotPicker';
 import { useT } from '@/i18n/useT';
 import { formatSlotWhen } from '@/lib/format';
-import { cancelReminders, notificationPermission, scheduleReminders } from '@/lib/notifications';
+import { useAppointmentEffects } from '@/lib/useAppointmentEffects';
 import { useNow } from '@/lib/useNow';
-import { usePreferences } from '@/state/preferences';
 
 /** Verschieben: neue Zeit wählen – Buchung und Storno laufen in einer Transaktion. */
 export function RescheduleScreen() {
@@ -42,7 +41,7 @@ export function RescheduleScreen() {
   const practice = usePractice(appointment?.practiceId);
   const slots = usePracticeSlots(appointment?.practiceId);
   const reschedule = useRescheduleAppointment();
-  const remindersEnabled = usePreferences((s) => s.remindersEnabled);
+  const effects = useAppointmentEffects();
   const [selected, setSelected] = useState<Slot | null>(null);
   const key = useMemo(() => Crypto.randomUUID(), []);
 
@@ -95,9 +94,7 @@ export function RescheduleScreen() {
                 newSlotId: selected.id,
                 idempotencyKey: key,
               });
-              void cancelReminders(appointment.id);
-              if (remindersEnabled && (await notificationPermission()) === 'granted')
-                void scheduleReminders(next, t, locale);
+              void effects.rescheduled(appointment.id, next, appointment.practice);
               toast.show(t('appointments.rescheduled'), 'success');
               router.back();
             } catch (e) {

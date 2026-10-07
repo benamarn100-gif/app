@@ -1,13 +1,25 @@
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Card, Chip, Divider, ListRow, SectionHeader, SegmentedControl, Text } from '@/components';
+import {
+  Card,
+  Chip,
+  Divider,
+  ListRow,
+  SectionHeader,
+  SegmentedControl,
+  Text,
+  useConfirm,
+  useToast,
+} from '@/components';
 import {
   Accessibility,
   Bell,
   BookOpen,
+  CalendarSync,
+  Car,
   CircleUserRound,
   FileText,
   FlaskConical,
@@ -24,12 +36,19 @@ import {
   Users,
 } from '@/components/icons';
 import { env } from '@/config/env';
-import { useSearchCenter, useSession } from '@/data/hooks';
+import { useAppointments, useSearchCenter, useSession } from '@/data/hooks';
 import { useRepository } from '@/data/DataProvider';
 import { makeStyles } from '@/design/theme';
 import type { ThemePreference } from '@/design/theme';
 import type { LanguagePreference } from '@/i18n';
+import type { TravelMode } from '@/domain/geo/travel';
 import { useT } from '@/i18n/useT';
+import {
+  disableCalendarSync,
+  enableCalendarSync,
+  syncAppointmentToCalendar,
+  useCalendarSync,
+} from '@/lib/calendarSync';
 import { usePreferences } from '@/state/preferences';
 import { RADIUS_STEPS } from '@/state/searchFilters';
 
@@ -41,7 +60,39 @@ export function ProfileScreen() {
   const session = useSession();
   const prefs = usePreferences();
   const center = useSearchCenter();
+  const toast = useToast();
+  const confirm = useConfirm();
+  const appointments = useAppointments();
+  const calendarSync = useCalendarSync((st) => st.enabled);
   const version = Constants.expoConfig?.version ?? '0.1.0';
+
+  // Kalender-Sync: beim Einschalten kommende Termine übernehmen, beim Ausschalten Kalender löschen
+  const toggleCalendarSync = async (on: boolean) => {
+    if (!on) {
+      const ok = await confirm({
+        title: t('calendarSync.offTitle'),
+        message: t('calendarSync.offBody'),
+        cancelLabel: t('common.cancel'),
+        confirmLabel: t('calendarSync.offConfirm'),
+        destructive: true,
+      });
+      if (ok) await disableCalendarSync();
+      return;
+    }
+    const result = await enableCalendarSync();
+    if (result !== 'enabled') {
+      toast.show(
+        t(result === 'denied' ? 'calendarSync.denied' : 'calendarSync.unavailable'),
+        'info',
+      );
+      return;
+    }
+    const upcoming = (appointments.data ?? []).filter(
+      (a) => a.status === 'confirmed' && Date.parse(a.startsAt) > Date.now(),
+    );
+    for (const a of upcoming) await syncAppointmentToCalendar(a, a.practice, t);
+    toast.show(t('calendarSync.enabled', { count: upcoming.length }), 'success');
+  };
 
   return (
     <ScrollView
@@ -124,12 +175,46 @@ export function ProfileScreen() {
           />
           <Divider inset={64} />
           <ListRow
+            icon={Car}
+            title={t('profile.leaveReminder')}
+            subtitle={t('profile.leaveReminderHint')}
+            switchValue={prefs.leaveReminder}
+            onSwitch={(v) => prefs.set({ leaveReminder: v })}
+          />
+          {Platform.OS !== 'web' ? (
+            <>
+              <Divider inset={64} />
+              <ListRow
+                icon={CalendarSync}
+                title={t('calendarSync.title')}
+                subtitle={t('calendarSync.hint')}
+                switchValue={calendarSync}
+                onSwitch={(v) => void toggleCalendarSync(v)}
+                testID="calendar-sync"
+              />
+            </>
+          ) : null}
+          <Divider inset={64} />
+          <ListRow
             icon={Smartphone}
             title={t('profile.haptics')}
             switchValue={prefs.haptics}
             onSwitch={(v) => prefs.set({ haptics: v })}
           />
         </Card>
+        <Text variant="smallStrong" color="textSecondary">
+          {t('travel.preferred')}
+        </Text>
+        <SegmentedControl<TravelMode>
+          accessibilityLabel={t('travel.preferred')}
+          value={prefs.travelMode}
+          onChange={(v) => prefs.set({ travelMode: v })}
+          options={(['walk', 'car', 'transit'] as const).map((m) => ({
+            value: m,
+            label: t(`travel.mode.${m}`),
+          }))}
+          testID="travel-mode"
+        />
       </View>
 
       <View style={styles.section}>

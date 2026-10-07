@@ -26,9 +26,8 @@ import { EmailVerification } from '@/features/booking/EmailVerification';
 import { useT } from '@/i18n/useT';
 import { formatCountdown, formatLongDate } from '@/lib/format';
 import { haptics } from '@/lib/haptics';
-import { notificationPermission, scheduleReminders } from '@/lib/notifications';
+import { useAppointmentEffects } from '@/lib/useAppointmentEffects';
 import { useNow } from '@/lib/useNow';
-import { usePreferences } from '@/state/preferences';
 
 /** Angebot aus der Warteliste: 10 Minuten reserviert – übernehmen oder weitergeben. */
 export function OfferScreen() {
@@ -44,7 +43,7 @@ export function OfferScreen() {
   const contact = useContact();
   const session = useSession();
   const respond = useRespondOffer();
-  const remindersEnabled = usePreferences((s) => s.remindersEnabled);
+  const effects = useAppointmentEffects();
   const [contactValue, setContactValue] = useState<BookingContact | null>(null);
   const key = useMemo(() => Crypto.randomUUID(), []);
   const offer = offers.data?.find((o) => o.id === offerId);
@@ -94,9 +93,7 @@ export function OfferScreen() {
           consentVersion: HEALTH_CONSENT_VERSION,
         },
       });
-      if (appointment && remindersEnabled && (await notificationPermission()) === 'granted') {
-        void scheduleReminders(appointment, t, locale);
-      }
+      if (appointment && offer) void effects.booked(appointment, offer.practice);
       if (appointment)
         router.replace({ pathname: '/booking/success', params: { appointmentId: appointment.id } });
     } catch (e) {

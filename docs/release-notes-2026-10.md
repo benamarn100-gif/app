@@ -25,3 +25,12 @@
    Direktbuchung – Nutzen: Der Termin kommt zu dir, niemand muss stündlich nachsehen.
 2. **„Heute noch frei“** als Filter und eigener Tab „Heute“ (nächste 24 Std.) inkl.
    „Benachrichtige mich“ – Nutzen: ein Tipp bis zur Liste der schnellsten Termine.
+3. **Anfahrt**: Karte/Liste wie bisher, dazu je Verkehrsmittel eine grobe Wegezeit („ca.“, aus der
+   Luftlinie mit Umwegfaktor) und Route direkt im passenden Modus der Karten-App (Apple Karten,
+   Google Maps, OpenStreetMap). ÖPNV ohne Schätzung – dafür fehlen Fahrplandaten. Nutzen: auf
+   einen Blick sehen, ob die Praxis gut erreichbar ist.
+4. **Kalender-Sync, Erinnerungen, „Jetzt losfahren“**: eigener Gerätekalender „MedNow“ (an/aus im
+   Profil, Ausschalten löscht ihn), Erinnerungen 24 h/2 h wie bisher, neu „Zeit loszufahren“
+   (Wegezeit + 10 Min. Puffer) als Mitteilung und im Termin-Hero. Nutzen: Kalender stimmt
+   immer, niemand kommt zu spät. iOS braucht für den Sync den nächsten nativen Build
+   (Kalender-Zugriffstext in der App-Konfiguration).

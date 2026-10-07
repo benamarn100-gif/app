@@ -154,7 +154,8 @@
     "nearbyTitle": "Frei in deiner Nähe",
     "nearbyTitle_formal": "Frei in Ihrer Nähe",
     "nearbyWeek_one": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxis",
-    "nearbyWeek_other": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxen"
+    "nearbyWeek_other": "In 24 Stunden ist nichts frei – diese Woche {{count}} Praxen",
+    "timeToLeave": "Zeit loszufahren"
   },
   "card": {
     "nextSlot": "{{when}} · {{distance}}",
@@ -434,7 +435,11 @@
     "reminder24h_formal": "Ihr Arzttermin ist morgen um {{time}} Uhr.",
     "reminder2h": "Dein Arzttermin beginnt in 2 Stunden ({{time}} Uhr).",
     "reminder2h_formal": "Ihr Arzttermin beginnt in 2 Stunden ({{time}} Uhr).",
-    "channelName": "Termine"
+    "channelName": "Termine",
+    "leaveNow": "Zeit loszufahren: Dein Arzttermin beginnt um {{time}} Uhr.",
+    "leaveNow_formal": "Zeit loszufahren: Ihr Arzttermin beginnt um {{time}} Uhr.",
+    "leaveNowTravel": "Zeit loszufahren: Dein Arzttermin beginnt um {{time}} Uhr ({{travel}}).",
+    "leaveNowTravel_formal": "Zeit loszufahren: Ihr Arzttermin beginnt um {{time}} Uhr ({{travel}})."
   },
   "profile": {
     "title": "Profil",
@@ -472,7 +477,9 @@
     "anonymous_formal": "Ohne Konto – Ihre Daten bleiben auf diesem Gerät und in Ihrer anonymen Sitzung.",
     "showcase": "Komponenten-Showcase (Entwicklung)",
     "resetOnboarding": "Einführung erneut anzeigen",
-    "diagnostics": "Testversion & Diagnose"
+    "diagnostics": "Testversion & Diagnose",
+    "leaveReminder": "„Jetzt losfahren“",
+    "leaveReminderHint": "Erinnert, wenn es Zeit ist loszufahren – geschätzt aus Entfernung und Verkehrsmittel."
   },
   "privacy": {
     "title": "Datenschutz-Center",
@@ -724,5 +731,40 @@
   },
   "alarm": {
     "set": "Termin-Alarm setzen"
+  },
+  "travel": {
+    "title": "Anfahrt",
+    "route": "Route",
+    "minutes_one": "ca. {{count}} Min.",
+    "minutes_other": "ca. {{count}} Min.",
+    "a11y": "{{mode}}, {{value}}",
+    "note": "Geschätzt aus der Luftlinie. Genaue Zeit in der Karten-App.",
+    "mode": {
+      "walk": "Zu Fuß",
+      "car": "Auto",
+      "transit": "Bus & Bahn"
+    },
+    "preferred": "Wie kommst du meist zur Praxis?",
+    "preferred_formal": "Wie kommen Sie meist zur Praxis?",
+    "withMode_one": "ca. {{count}} Min. {{mode}}",
+    "withMode_other": "ca. {{count}} Min. {{mode}}",
+    "by": {
+      "walk": "zu Fuß",
+      "car": "mit dem Auto",
+      "transit": "mit Bus & Bahn"
+    }
+  },
+  "calendarSync": {
+    "title": "Kalender-Sync",
+    "hint": "Termine automatisch im eigenen Kalender „MedNow“ auf diesem Gerät",
+    "enabled_one": "Kalender-Sync ist an. {{count}} Termin übernommen.",
+    "enabled_other": "Kalender-Sync ist an. {{count}} Termine übernommen.",
+    "denied": "Ohne Kalenderzugriff geht der Sync nicht. Du kannst Termine weiterhin einzeln eintragen.",
+    "denied_formal": "Ohne Kalenderzugriff geht der Sync nicht. Sie können Termine weiterhin einzeln eintragen.",
+    "unavailable": "Der Kalender ist auf diesem Gerät gerade nicht verfügbar.",
+    "offTitle": "Kalender-Sync ausschalten?",
+    "offBody": "Der Kalender „MedNow“ wird mit allen Einträgen von diesem Gerät gelöscht. Deine Termine bleiben gebucht.",
+    "offBody_formal": "Der Kalender „MedNow“ wird mit allen Einträgen von diesem Gerät gelöscht. Ihre Termine bleiben gebucht.",
+    "offConfirm": "Ausschalten"
   }
 }

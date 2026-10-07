@@ -3,6 +3,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import type { ThemePreference } from '@/design/theme';
+import type { TravelMode } from '@/domain/geo/travel';
 import type { AgeGroup } from '@/domain/types';
 import type { LanguagePreference } from '@/i18n';
 import { preferenceStorage } from '@/lib/storage';
@@ -27,6 +28,10 @@ export type Preferences = {
   haptics: boolean;
   remindersEnabled: boolean;
   crashReportsOptIn: boolean;
+  /** Bevorzugtes Verkehrsmittel für Anfahrt und „Jetzt losfahren“ */
+  travelMode: TravelMode;
+  /** Hinweis „Jetzt losfahren“ vor Terminen (lokal, ohne Server) */
+  leaveReminder: boolean;
 };
 
 type Actions = {
@@ -49,6 +54,8 @@ export const DEFAULT_PREFERENCES: Preferences = {
   haptics: true,
   remindersEnabled: true,
   crashReportsOptIn: false,
+  travelMode: 'car',
+  leaveReminder: true,
 };
 
 export const usePreferences = create<Preferences & Actions>()(

@@ -18,7 +18,7 @@ import {
   Text,
   useToast,
 } from '@/components';
-import { Bell, CalendarCheck, Globe, MapPin, Navigation, Phone } from '@/components/icons';
+import { Bell, CalendarCheck, Globe, MapPin, Phone } from '@/components/icons';
 import { STATUS_VISUALS } from '@/components/status';
 import {
   useAppointments,
@@ -36,7 +36,7 @@ import { formatBerlinTime } from '@/domain/time/berlin';
 import type { Slot } from '@/domain/types';
 import { useT } from '@/i18n/useT';
 import { formatDistance, formatSlotWhen } from '@/lib/format';
-import { callPhone, openRoute } from '@/lib/maps';
+import { callPhone } from '@/lib/maps';
 import { useNow } from '@/lib/useNow';
 
 import {
@@ -49,6 +49,7 @@ import {
   SourceInfo,
 } from './PracticeDetails';
 import { SlotPicker } from './SlotPicker';
+import { TravelOptions } from './TravelOptions';
 
 export function PracticeScreen() {
   const theme = useTheme();
@@ -134,9 +135,8 @@ export function PracticeScreen() {
   }
 
   const specialty = specialtyById(practice.specialtyIds[0] ?? 1);
-  const distance = center.center
-    ? formatDistance(distanceMeters(center.center, practice.location), t, locale)
-    : null;
+  const distanceM = center.center ? distanceMeters(center.center, practice.location) : null;
+  const distance = distanceM === null ? null : formatDistance(distanceM, t, locale);
   const visual = STATUS_VISUALS[summary.status];
   const BannerIcon = visual.icon;
   const bannerText =
@@ -231,14 +231,6 @@ export function PracticeScreen() {
           </View>
 
           <View style={styles.actions}>
-            <Button
-              variant="secondary"
-              label={t('practice.route')}
-              icon={Navigation}
-              accessibilityLabel={t('practice.routeA11y')}
-              onPress={() => void openRoute(practice)}
-              style={styles.flex}
-            />
             {practice.phone ? (
               <Button
                 variant="secondary"
@@ -301,6 +293,11 @@ export function PracticeScreen() {
               ) : null}
             </View>
           ) : null}
+
+          <View style={styles.section}>
+            <SectionHeader title={t('travel.title')} />
+            <TravelOptions practice={practice} distanceM={distanceM} />
+          </View>
 
           <View style={styles.section}>
             <SectionHeader title={t('practice.openingHours')} />

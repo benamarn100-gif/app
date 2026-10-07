@@ -10,6 +10,7 @@ import type { TFn } from '@/i18n/useT';
 /**
  * Benachrichtigungen:
  *  - Erinnerungen 24 h / 2 h vorher als LOKALE Benachrichtigungen (kein Server-Push nötig).
+ *  - „Jetzt losfahren“ (Feature 4): Wegezeit + Puffer vor dem Termin, ebenfalls lokal.
  *  - Push nur für die Warteliste; Erlaubnis erst im Moment des Nutzens.
  * Texte sind datensparsam: keine Praxis, kein Arzt, keine Fachrichtung (Sperrbildschirm).
  */
@@ -56,12 +57,17 @@ export async function requestNotificationPermission(): Promise<boolean> {
 const reminderIds = (appointmentId: string) => [
   `reminder-${appointmentId}-24h`,
   `reminder-${appointmentId}-2h`,
+  `reminder-${appointmentId}-leave`,
 ];
+
+/** „Jetzt losfahren“: Zeitpunkt und Text-Zusatz („ca. 15 Min. mit dem Auto“, sonst null). */
+export type LeaveReminder = { at: Date; travel: string | null };
 
 export async function scheduleReminders(
   appointment: Pick<Appointment, 'id' | 'startsAt'>,
   t: TFn,
   locale: string,
+  leave?: LeaveReminder | null,
 ) {
   if (Platform.OS === 'web') return;
   await cancelReminders(appointment.id);
@@ -78,6 +84,17 @@ export async function scheduleReminders(
       at: start - 2 * 3600_000,
       body: t('notifications.reminder2h', { time }),
     },
+    ...(leave
+      ? [
+          {
+            id: reminderIds(appointment.id)[2]!,
+            at: leave.at.getTime(),
+            body: leave.travel
+              ? t('notifications.leaveNowTravel', { time, travel: leave.travel })
+              : t('notifications.leaveNow', { time }),
+          },
+        ]
+      : []),
   ];
   for (const entry of entries) {
     if (entry.at <= Date.now() + 60_000) continue;

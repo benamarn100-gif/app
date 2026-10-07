@@ -247,6 +247,20 @@ describe('Startseite – nächster Termin und freie Ärzte auf einen Blick', () 
     expect(screen.queryByTestId('hero-acute')).toBeNull();
   });
 
+  it('kurz vor dem Termin: Hero zeigt „Zeit loszufahren“', async () => {
+    const repository = createTestRepository(NOW);
+    const target = await bookFirstFreeSlot(repository);
+    // 10 Minuten vor Beginn liegt immer nach dem Abfahrtszeitpunkt (mindestens 15 Min. vorher)
+    setNowOverride(new Date(Date.parse(target.nextSlot!.startsAt) - 10 * 60_000));
+    try {
+      await renderWithProviders(<HomeScreen />, { repository }).result;
+      expect(await screen.findByTestId('hero-leave-now')).toBeTruthy();
+      expect(screen.getByText('Zeit loszufahren')).toBeTruthy();
+    } finally {
+      setNowOverride(NOW);
+    }
+  });
+
   it('Schnellfilter setzt das Zeitfenster und öffnet die Suche', async () => {
     await renderWithProviders(<HomeScreen />, { repository: createTestRepository(NOW) }).result;
     await fireEvent.press(await screen.findByTestId('quick-week'));

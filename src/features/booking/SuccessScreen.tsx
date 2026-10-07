@@ -12,7 +12,8 @@ import { AppointmentCard } from '@/features/appointments/AppointmentCard';
 import { useT } from '@/i18n/useT';
 import { addAppointmentToCalendar } from '@/lib/calendar';
 import { openRoute } from '@/lib/maps';
-import { requestNotificationPermission, scheduleReminders } from '@/lib/notifications';
+import { requestNotificationPermission } from '@/lib/notifications';
+import { useAppointmentEffects } from '@/lib/useAppointmentEffects';
 import { usePreferences } from '@/state/preferences';
 
 /**
@@ -22,7 +23,8 @@ import { usePreferences } from '@/state/preferences';
 export function SuccessScreen() {
   const styles = useStyles();
   const insets = useSafeAreaInsets();
-  const { t, locale } = useT();
+  const { t } = useT();
+  const effects = useAppointmentEffects();
   const toast = useToast();
   const reduce = useReducedMotion();
   const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
@@ -93,7 +95,7 @@ export function SuccessScreen() {
                       return;
                     }
                     setPrefs({ remindersEnabled: true });
-                    await scheduleReminders(appointment, t, locale);
+                    await effects.scheduleNow(appointment, appointment.practice);
                     setRemindersDone(true);
                     toast.show(t('booking.remindersEnabled'), 'success');
                   }}

@@ -2,13 +2,15 @@ import { View } from 'react-native';
 import { router } from 'expo-router';
 
 import { Button, Card, Skeleton, Text } from '@/components';
-import { CalendarCheck, ChevronRight, Navigation, Zap } from '@/components/icons';
+import { CalendarCheck, Car, ChevronRight, Navigation, Zap } from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import { distanceMeters } from '@/domain/geo/distance';
+import { estimateTravelMinutes, leaveAt } from '@/domain/geo/travel';
 import type { AppointmentWithDetails, LatLng } from '@/domain/types';
 import { useT } from '@/i18n/useT';
 import { formatDistance, formatSlotWhen } from '@/lib/format';
 import { openRoute } from '@/lib/maps';
+import { usePreferences } from '@/state/preferences';
 
 type Props = {
   /** Nächster bestätigter Termin; null = keiner geplant */
@@ -56,12 +58,25 @@ function AppointmentHero({
   const styles = useStyles();
   const { t, locale } = useT();
   const when = formatSlotWhen(a.startsAt, now, t, locale);
-  const distance = center
-    ? formatDistance(distanceMeters(center, a.practice.location), t, locale)
-    : null;
+  const travelMode = usePreferences((s) => s.travelMode);
+  const distanceM = center ? distanceMeters(center, a.practice.location) : null;
+  const distance = distanceM === null ? null : formatDistance(distanceM, t, locale);
+  // Grobe Wegezeit mit dem bevorzugten Verkehrsmittel (ÖPNV ohne Schätzung)
+  const minutes = distanceM === null ? null : estimateTravelMinutes(distanceM, travelMode);
+  const travel =
+    minutes === null
+      ? null
+      : t('travel.withMode', { count: minutes, mode: t(`travel.by.${travelMode}`) });
   const who = [a.doctor.name, a.practice.name].join(' · ');
-  const where = [distance, a.practice.address.street].filter(Boolean).join(' · ');
+  const where = [distance, travel, a.practice.address.street].filter(Boolean).join(' · ');
   const forWhom = a.patientLabel ? t('home.heroFor', { name: a.patientLabel }) : null;
+  // „Jetzt losfahren“ (Feature 4): ab dem geschätzten Abfahrtszeitpunkt bis Terminbeginn
+  const leaveNow =
+    distanceM !== null &&
+    a.visitType !== 'video' &&
+    now >= leaveAt(new Date(a.startsAt), distanceM, travelMode) &&
+    now < new Date(a.startsAt);
+  const kicker = leaveNow ? t('home.timeToLeave') : t('home.nextAppointment');
 
   return (
     <Card
@@ -69,17 +84,22 @@ function AppointmentHero({
       padding="lg"
       onPress={() => router.push('/(tabs)/appointments')}
       accessibilityRole="button"
-      accessibilityLabel={[t('home.nextAppointment'), when, who, forWhom, where]
-        .filter(Boolean)
-        .join(', ')}
+      accessibilityLabel={[kicker, when, who, forWhom, where].filter(Boolean).join(', ')}
       accessibilityHint={t('home.nextAppointmentHint')}
       testID="hero-appointment"
       style={styles.hero}
     >
-      <View style={styles.kicker}>
-        <CalendarCheck size={18} color={theme.colors.primary} strokeWidth={2.25} />
-        <Text variant="smallStrong" color="primary">
-          {t('home.nextAppointment')}
+      <View
+        style={[styles.kicker, leaveNow && styles.leaveNow]}
+        testID={leaveNow ? 'hero-leave-now' : undefined}
+      >
+        {leaveNow ? (
+          <Car size={18} color={theme.colors.textOnAccent} strokeWidth={2.25} />
+        ) : (
+          <CalendarCheck size={18} color={theme.colors.primary} strokeWidth={2.25} />
+        )}
+        <Text variant="smallStrong" color={leaveNow ? 'textOnAccent' : 'primary'}>
+          {kicker}
         </Text>
       </View>
       <Text variant="h1" numberOfLines={2}>
@@ -106,7 +126,7 @@ function AppointmentHero({
           label={t('practice.route')}
           icon={Navigation}
           accessibilityLabel={t('practice.routeA11y')}
-          onPress={() => void openRoute(a.practice)}
+          onPress={() => void openRoute(a.practice, travelMode)}
           testID="hero-route"
         />
       ) : null}
@@ -168,6 +188,13 @@ const useStyles = makeStyles((t) => ({
   hero: { gap: t.space.sm, boxShadow: t.shadows.md },
   row: { flexDirection: 'row', alignItems: 'center', gap: t.space.md },
   kicker: { flexDirection: 'row', alignItems: 'center', gap: t.space.xxs },
+  leaveNow: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: t.space.sm,
+    paddingVertical: t.space.xxs,
+    borderRadius: t.radius.pill,
+    backgroundColor: t.colors.accent,
+  },
   lines: { gap: 2 },
   flex: { flex: 1, gap: t.space.xxs },
   heroIcon: {

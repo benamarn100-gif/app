@@ -105,7 +105,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-calendar',
       {
-        calendarPermission: false,
+        // Nur für den freiwilligen Kalender-Sync (eigener Kalender „MedNow“), Abfrage beim Einschalten
+        calendarPermission:
+          'MedNow trägt deine Termine auf Wunsch in einen eigenen Kalender „MedNow“ ein und hält ihn bei Verschieben oder Absagen aktuell.',
         remindersPermission: false,
         writeOnlyCalendarPermission:
           'MedNow trägt deinen Termin auf Wunsch in deinen Kalender ein.',
