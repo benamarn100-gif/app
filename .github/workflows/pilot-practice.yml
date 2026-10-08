@@ -1,0 +1,178 @@
+name: Pilotpraxis anlegen
+
+# Legt eine echte Praxis (keine Demo) mit Ärztinnen/Ärzten an und lädt die Praxis-E-Mail
+# ins Praxis-Dashboard ein (app.onboard_practice, Migration 20261007000100).
+# Ablauf und Felder: docs/pilot/praxis-onboarding.md. Erst „Nur prüfen“ laufen lassen.
+#
+# Voraussetzungen wie „Supabase bereitstellen“: Secret SUPABASE_ACCESS_TOKEN,
+# Variable SUPABASE_PROJECT_REF. Die Eingaben stehen im Protokoll dieses Laufs –
+# deshalb nur öffentliche Praxisangaben und die geschäftliche E-Mail der Praxis eintragen.
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name der Praxis (so wie öffentlich bekannt)'
+        required: true
+        type: string
+      address:
+        description: 'Adresse: „Straße Nr, PLZ Ort“ (z. B. Am Markt 1, 60311 Frankfurt am Main)'
+        required: true
+        type: string
+      specialties:
+        description: 'Fachrichtungen, kommagetrennt (z. B. allgemeinmedizin,innere-medizin)'
+        required: true
+        type: string
+      doctors:
+        description: 'Ärztinnen/Ärzte, mit ; getrennt (z. B. Dr. med. A. Beispiel; B. Muster)'
+        required: true
+        type: string
+      owner_email:
+        description: 'E-Mail der Praxis für die Anmeldung im Dashboard'
+        required: true
+        type: string
+      phone:
+        description: 'Telefon (optional)'
+        required: false
+        type: string
+      website:
+        description: 'Website mit https:// (optional)'
+        required: false
+        type: string
+      languages:
+        description: 'Sprachen, kommagetrennt (z. B. de,en,tr)'
+        required: false
+        default: 'de'
+        type: string
+      coordinates:
+        description: 'Optional „Breite, Länge“ – leer = automatisch über OpenStreetMap'
+        required: false
+        type: string
+      dry_run:
+        description: 'Nur prüfen (nichts anlegen)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-deploy
+  cancel-in-progress: false
+
+jobs:
+  onboard:
+    name: Praxis anlegen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+      DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+      # Eingaben nur über Umgebungsvariablen – nie direkt ins Skript einsetzen
+      IN_NAME: ${{ inputs.name }}
+      IN_ADDRESS: ${{ inputs.address }}
+      IN_SPECIALTIES: ${{ inputs.specialties }}
+      IN_DOCTORS: ${{ inputs.doctors }}
+      IN_EMAIL: ${{ inputs.owner_email }}
+      IN_PHONE: ${{ inputs.phone }}
+      IN_WEBSITE: ${{ inputs.website }}
+      IN_LANGUAGES: ${{ inputs.languages }}
+      IN_COORDS: ${{ inputs.coordinates }}
+      IN_DRY: ${{ inputs.dry_run }}
+    steps:
+      - name: Zugangsdaten prüfen
+        run: |
+          missing=0
+          for name in SUPABASE_ACCESS_TOKEN PROJECT_REF; do
+            if [ -z "${!name}" ]; then echo "::error::$name fehlt (siehe docs/supabase-setup.md)"; missing=1; fi
+          done
+          exit $missing
+
+      - name: Adresse und Koordinaten
+        id: geo
+        run: |
+          re='^(.+),[[:space:]]*([0-9]{5})[[:space:]]+(.+)$'
+          if [[ ! "$IN_ADDRESS" =~ $re ]]; then
+            echo "::error::Adresse bitte als „Straße Nr, PLZ Ort“ eingeben."
+            exit 1
+          fi
+          street="$(echo "${BASH_REMATCH[1]}" | xargs)"; postal="${BASH_REMATCH[2]}"; city="$(echo "${BASH_REMATCH[3]}" | xargs)"
+          if [ -n "$IN_COORDS" ]; then
+            lat="$(echo "$IN_COORDS" | cut -d, -f1 | xargs)"; lng="$(echo "$IN_COORDS" | cut -d, -f2 | xargs)"
+            num='^-?[0-9]+(\.[0-9]+)?$'
+            if [[ ! "$lat" =~ $num || ! "$lng" =~ $num ]]; then
+              echo "::error::Koordinaten bitte als „Breite, Länge“ mit Punkt eingeben, z. B. 50.5558, 9.6808"
+              exit 1
+            fi
+            source="eingegeben"
+          else
+            # OpenStreetMap Nominatim (eine Anfrage, Nutzungsrichtlinie: eindeutiger User-Agent)
+            res="$(curl -sS --max-time 20 -G 'https://nominatim.openstreetmap.org/search' \
+              -H 'User-Agent: MedNow-Pilotpraxis/1.0 (github.com/benamarn100-gif/app)' \
+              --data-urlencode "street=$street" --data-urlencode "postalcode=$postal" \
+              --data-urlencode "city=$city" --data-urlencode 'countrycodes=de' \
+              --data-urlencode 'format=jsonv2' --data-urlencode 'limit=1' || true)"
+            lat="$(echo "$res" | jq -r '.[0].lat // empty' 2>/dev/null || true)"
+            lng="$(echo "$res" | jq -r '.[0].lon // empty' 2>/dev/null || true)"
+            if [ -z "$lat" ] || [ -z "$lng" ]; then
+              echo "::error::Adresse nicht automatisch gefunden. Koordinaten von openstreetmap.org (Rechtsklick → „Adresse anzeigen“) als „Breite, Länge“ eintragen."
+              exit 1
+            fi
+            source="OpenStreetMap: $(echo "$res" | jq -r '.[0].display_name')"
+          fi
+          {
+            echo "street=$street"; echo "postal=$postal"; echo "city=$city"; echo "lat=$lat"; echo "lng=$lng"
+          } >> "$GITHUB_OUTPUT"
+          echo "Koordinaten: $lat, $lng ($source)"
+          echo "Karte: https://www.openstreetmap.org/?mlat=$lat&mlon=$lng#map=18/$lat/$lng"
+
+      - name: Praxis in der Datenbank anlegen
+        env:
+          STREET: ${{ steps.geo.outputs.street }}
+          POSTAL: ${{ steps.geo.outputs.postal }}
+          CITY: ${{ steps.geo.outputs.city }}
+          LAT: ${{ steps.geo.outputs.lat }}
+          LNG: ${{ steps.geo.outputs.lng }}
+        run: |
+          payload="$(jq -n \
+            --arg name "$IN_NAME" --arg street "$STREET" --arg postal "$POSTAL" --arg city "$CITY" \
+            --arg lat "$LAT" --arg lng "$LNG" --arg phone "$IN_PHONE" --arg website "$IN_WEBSITE" \
+            --arg email "$IN_EMAIL" --arg specialties "$IN_SPECIALTIES" --arg doctors "$IN_DOCTORS" \
+            --arg languages "$IN_LANGUAGES" --arg dry "$IN_DRY" '
+            def list($s; $sep): $s | split($sep) | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0));
+            { name: $name, street: $street, postal_code: $postal, city: $city,
+              lat: ($lat | tonumber), lng: ($lng | tonumber), phone: $phone, website: $website,
+              owner_email: $email, specialties: list($specialties; ","), doctors: list($doctors; ";"),
+              languages: list(if $languages == "" then "de" else $languages end; ","),
+              dry_run: ($dry == "true") }')"
+          # Zufälliges Dollar-Quoting: Eingaben können den SQL-Text nicht verlassen
+          tag="mn$(openssl rand -hex 8)"
+          sql="select app.onboard_practice(\$${tag}\$${payload}\$${tag}\$::jsonb) as result;"
+          code="$(curl -sS -o response.json -w '%{http_code}' -X POST \
+            "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg q "$sql" '{query: $q}')")"
+          if [ "$code" -ge 300 ]; then
+            echo "::error::$(jq -r '.message // .error // .' response.json | head -c 600)"
+            exit 1
+          fi
+          result="$(jq -c '.[0].result' response.json)"
+          echo "$result" | jq .
+          {
+            if [ "$IN_DRY" = "true" ]; then
+              echo "## Probelauf ok – nichts angelegt"
+              echo "Alles passt? Workflow erneut starten und „Nur prüfen“ abwählen."
+            else
+              echo "## Praxis angelegt"
+              echo "- Praxis-ID: \`$(echo "$result" | jq -r .practiceId)\`"
+              echo "- Ärztinnen/Ärzte: $(echo "$result" | jq -r .doctors)"
+              if [ "$(echo "$result" | jq -r .owner)" = "member" ]; then
+                echo "- Dashboard-Zugang: sofort aktiv (Konto gab es schon)"
+              else
+                echo "- Dashboard-Zugang: Einladung – aktiv, sobald sich die Praxis mit **$IN_EMAIL** anmeldet und den Code eingibt"
+              fi
+            fi
+            echo "- Lage prüfen: https://www.openstreetmap.org/?mlat=$LAT&mlon=$LNG#map=18/$LAT/$LNG"
+            echo "- Dashboard: ${DASHBOARD_URL:-noch nicht online – siehe docs/website-setup.md}"
+          } >> "$GITHUB_STEP_SUMMARY"
