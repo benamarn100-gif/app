@@ -10,7 +10,9 @@ name: Supabase bereitstellen (Frankfurt)
 #              EXPO_ACCESS_TOKEN     (optional, für Push über Expo – docs/push-setup.md)
 #              REVENUECAT_WEBHOOK_SECRET (optional, Abo-Webhook – docs/billing-setup.md)
 #              REVENUECAT_SECRET_API_KEY (optional, löscht Kaufdaten beim Konto-Löschen)
-#   Variable:  SUPABASE_PROJECT_REF  (z. B. abcdefghijklmnopqrst)
+#              SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS (eigener EU-E-Mail-Anbieter – docs/email-setup.md)
+#   Variablen: SUPABASE_PROJECT_REF  (z. B. abcdefghijklmnopqrst)
+#              SMTP_SENDER_EMAIL     (Absender, z. B. no-reply@deine-domain.de)
 # Kein Service-Role-Key nötig – und er gehört nie in die App oder ins Repository.
 
 on:
@@ -78,9 +80,44 @@ jobs:
 
       - name: Auth-Konfiguration übertragen
         if: inputs.config
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_SENDER_EMAIL: ${{ vars.SMTP_SENDER_EMAIL }}
         run: |
+          # Eigener SMTP-Anbieter (EU): Werte nur aus Secrets, das Passwort bleibt env() und landet
+          # nie in einer Datei. Ohne ihn verschickt Supabase Codes nur an Team-Adressen.
+          smtp=false
+          if [ -n "$SMTP_HOST" ]; then
+            for name in SMTP_PORT SMTP_USER SMTP_PASS SMTP_SENDER_EMAIL; do
+              if [ -z "${!name}" ]; then echo "::error::$name fehlt (docs/email-setup.md)"; exit 1; fi
+            done
+            [[ "$SMTP_PORT" =~ ^[0-9]+$ ]] || { echo "::error::SMTP_PORT muss eine Zahl sein (meist 587)"; exit 1; }
+            python3 - <<'PY'
+          import os, pathlib, re
+          p = pathlib.Path('supabase/config.toml')
+          s = p.read_text()
+          # Eigener Anbieter: mehr Codes pro Stunde möglich (Supabase-Standard ohne SMTP: sehr wenige)
+          s = re.sub(r'(?m)^email_sent = \d+$', 'email_sent = 30', s)
+          s += f'''
+          [auth.email.smtp]
+          enabled = true
+          host = "env(SMTP_HOST)"
+          port = {int(os.environ['SMTP_PORT'])}
+          user = "env(SMTP_USER)"
+          pass = "env(SMTP_PASS)"
+          admin_email = "env(SMTP_SENDER_EMAIL)"
+          sender_name = "MedNow"
+          '''.replace('\n          ', '\n')
+          p.write_text(s)
+          PY
+            smtp=true
+            echo "E-Mail-Versand über eigenen Anbieter ($SMTP_HOST)."
+          fi
           # Ohne eigenen SMTP-Anbieter erlaubt Supabase (Free-Tarif) keine eigenen E-Mail-Vorlagen.
-          if [ "${{ inputs.email_templates }}" != "true" ]; then
+          if [ "${{ inputs.email_templates }}" != "true" ] && [ "$smtp" != "true" ]; then
             python3 - <<'PY'
           import pathlib, re
           p = pathlib.Path('supabase/config.toml')

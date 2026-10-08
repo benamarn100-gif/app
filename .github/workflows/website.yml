@@ -1,0 +1,94 @@
+name: Webseite und Praxis-Dashboard bereitstellen
+
+# Baut die öffentliche Webseite (Datenschutz, Nutzungsbedingungen, Impressum aus docs/legal) und das
+# Praxis-Dashboard (unter /praxis/) und lädt beides per SFTP auf einen Webspace in der EU.
+# Anleitung: docs/website-setup.md. Ohne SFTP-Zugang wird nur gebaut (Ergebnis als Artefakt „webseite“).
+#
+# GitHub → Settings → Secrets and variables → Actions:
+#   Secrets:   SFTP_HOST, SFTP_USER, SFTP_PASSWORD   (vom Webhoster)
+#   Variablen: SFTP_TARGET_DIR   (Zielordner auf dem Webspace, z. B. /  oder /mednow)
+#              SUPPORT_EMAIL     (Kontaktadresse auf der Startseite, optional)
+# Bestehende Dateien im Zielordner werden nicht gelöscht, nur ergänzt bzw. überschrieben.
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: 'Auf den Webspace hochladen (sonst nur bauen)'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website
+  cancel-in-progress: false
+
+jobs:
+  website:
+    name: Bauen und hochladen
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            dashboard/package-lock.json
+
+      - name: Abhängigkeiten
+        run: |
+          npm ci
+          npm ci --prefix dashboard
+
+      - name: Praxis-Dashboard bauen
+        working-directory: dashboard
+        run: |
+          # Öffentliche Projektwerte wie im Produktions-Build der App (eas.json) – kein geheimer Schlüssel
+          export VITE_DATA_MODE=supabase
+          export VITE_SUPABASE_URL="$(jq -r '.build.production.env.EXPO_PUBLIC_SUPABASE_URL' ../eas.json)"
+          export VITE_SUPABASE_ANON_KEY="$(jq -r '.build.production.env.EXPO_PUBLIC_SUPABASE_ANON_KEY' ../eas.json)"
+          export VITE_BASE_PATH=/praxis/
+          npm run build
+
+      - name: Webseite bauen
+        env:
+          SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+          DASHBOARD_DIST: dashboard/dist
+        run: |
+          export SUPABASE_URL="$(jq -r '.build.production.env.EXPO_PUBLIC_SUPABASE_URL' eas.json)"
+          npx tsx scripts/build-website.ts site
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: webseite
+          path: site
+          include-hidden-files: true
+          retention-days: 14
+
+      - name: Hochladen (SFTP)
+        if: inputs.upload
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_TARGET_DIR: ${{ vars.SFTP_TARGET_DIR }}
+        run: |
+          if [ -z "$SFTP_HOST" ] || [ -z "$SFTP_USER" ] || [ -z "$LFTP_PASSWORD" ]; then
+            echo "::notice::Kein SFTP-Zugang hinterlegt – nur gebaut. Ergebnis: Artefakt „webseite“ (docs/website-setup.md)."
+            exit 0
+          fi
+          sudo apt-get install -y -qq lftp > /dev/null
+          target="${SFTP_TARGET_DIR:-/}"
+          # Neue Dateien und Änderungen hochladen; nichts auf dem Webspace löschen
+          lftp -u "$SFTP_USER" --env-password "sftp://$SFTP_HOST" -e "
+            set sftp:auto-confirm yes;
+            set net:max-retries 3;
+            mirror --reverse --verbose=1 --no-perms site/ '$target';
+            bye"
+          echo "## Webseite hochgeladen" >> "$GITHUB_STEP_SUMMARY"
+          echo "Ziel: \`$target\` auf $SFTP_HOST – Dashboard unter /praxis/" >> "$GITHUB_STEP_SUMMARY"

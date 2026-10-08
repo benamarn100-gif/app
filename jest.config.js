@@ -10,6 +10,8 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    // marked ist ESM-only → UMD-Build für Jest (Webseiten-Generator)
+    '^marked$': '<rootDir>/node_modules/marked/lib/marked.umd.js',
     // ESM-Build (.mjs) von Lucide → CommonJS-Build für Jest
     '^lucide-react-native$':
       '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',

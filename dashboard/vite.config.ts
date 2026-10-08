@@ -54,6 +54,8 @@ function htmlPlugin(env: Record<string, string>): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, fileURLToPath(new URL('.', import.meta.url)), 'VITE_');
   return {
+    // Unterordner beim Webhoster, z. B. /praxis/ (Hash-Routing: keine Rewrite-Regeln nötig)
+    base: env.VITE_BASE_PATH || '/',
     plugins: [react(), themePlugin(), htmlPlugin(env)],
     resolve: {
       alias: { '@app': fileURLToPath(new URL('../src', import.meta.url)) },

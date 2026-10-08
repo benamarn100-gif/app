@@ -48,3 +48,7 @@ bundle-size.txt
 # Supabase CLI
 supabase/.temp/
 supabase/.branches/
+
+# Webseiten-Build (scripts/build-website.ts)
+/dist-website/
+/site/
