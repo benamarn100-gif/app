@@ -1,5 +1,5 @@
 # Frischer Start im Demo-Modus, Onboarding überspringen (Standort: Demo-Stadt Fulda).
-appId: de.mednow.app
+appId: de.terminluecke.app
 ---
 - launchApp:
     clearState: true

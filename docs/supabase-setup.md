@@ -8,7 +8,7 @@
 
 | Punkt            | Stand                                                                                                                           |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Projekt          | `mednow`, Ref `gimynoopnheaapqihsdb`, Region eu-central-1, Organisation „MedNow“ (Free-Tarif)                                   |
+| Projekt          | `mednow`, Ref `gimynoopnheaapqihsdb`, Region eu-central-1, Organisation „Terminlücke“ (Free-Tarif)                              |
 | Migrationen      | 0100–1000 eingespielt (Workflow), Historie passt zu den Dateinamen                                                              |
 | Demo-Daten       | 60 Praxen rund um Fulda, Slots für 14 Tage, täglich weitergerollt (`mednow-demo-roll`)                                          |
 | Vault-Secrets    | angelegt (Werte nur in der Datenbank erzeugt)                                                                                   |

@@ -1,4 +1,4 @@
-# In-App-Käufe einrichten (MedNow Plus / Familie)
+# In-App-Käufe einrichten (Terminlücke Plus / Familie)
 
 > Stand: 10/2026. Technik: RevenueCat (`react-native-purchases`) über App Store und Google Play.
 > Ohne die Schritte unten zeigt die App die Bezahlseite mit dem Hinweis „Käufe noch nicht
@@ -7,11 +7,11 @@
 
 ## Stufen und Produkte
 
-| Stufe   | Produkt-ID             | Art                                          | Preis (Vorschlag) | Test    |
-| ------- | ---------------------- | -------------------------------------------- | ----------------- | ------- |
-| Plus    | `mednow_plus_pass_30d` | iOS: nicht verlängerndes Abo · Play: Prepaid | 4,99 € einmalig   | keiner  |
-| Plus    | `mednow_plus_yearly`   | Jahresabo                                    | 29,99 € pro Jahr  | 14 Tage |
-| Familie | `mednow_family_yearly` | Jahresabo                                    | 44,99 € pro Jahr  | 14 Tage |
+| Stufe   | Produkt-ID      | Art                                          | Preis (Vorschlag) | Test    |
+| ------- | --------------- | -------------------------------------------- | ----------------- | ------- |
+| Plus    | `plus_pass_30d` | iOS: nicht verlängerndes Abo · Play: Prepaid | 4,99 € einmalig   | keiner  |
+| Plus    | `plus_yearly`   | Jahresabo                                    | 29,99 € pro Jahr  | 14 Tage |
+| Familie | `family_yearly` | Jahresabo                                    | 44,99 € pro Jahr  | 14 Tage |
 
 Grenzen je Stufe: `src/domain/plans.ts` (App) und Migration `20261006001300_plans.sql` (Server) –
 beide müssen gleich bleiben.
@@ -63,6 +63,6 @@ beide müssen gleich bleiben.
 ## Bewusst nicht umgesetzt
 
 - **Bezahlter Vorrang / schnellere Benachrichtigung:** abgelehnt (Fairness, Rechtsrisiko).
-- **„Werbefrei“ als Vorteil:** MedNow zeigt in keiner Stufe Werbung.
+- **„Werbefrei“ als Vorteil:** Terminlücke zeigt in keiner Stufe Werbung.
 - **Gemeinsamer Haushalt (2 Konten, Einladung):** kommt mit dem Familien-Ausbau.
 - **Zeitfenster („vor 9 Uhr“, „samstags“) und „Früher dran“:** nächster Ausbauschritt.

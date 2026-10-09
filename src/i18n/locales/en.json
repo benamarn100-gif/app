@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "MedNow",
+    "name": "Terminlücke",
     "tagline": "Free doctor appointments near you",
     "demoBadge": "Demo",
     "demoNotice": "Demo data: practices, addresses, doctors and appointments are fictional.",
@@ -79,7 +79,7 @@
     "emergencyLabel": "Emergency",
     "onCallA11y": "Call the medical on-call service {{number}}",
     "emergencyA11y": "Call emergency number {{number}}",
-    "disclaimer": "MedNow does not replace medical advice. If life is at risk, call 112 immediately.",
+    "disclaimer": "Terminlücke does not replace medical advice. If life is at risk, call 112 immediately.",
     "more": "More help",
     "moreA11y": "Open emergency page: emergency pharmacy, on-call doctor, crisis line"
   },
@@ -309,7 +309,7 @@
     "verify": "Confirm",
     "verified": "Email confirmed",
     "consentTitle": "Consent",
-    "consentText": "I consent to MedNow processing my appointment data and sending it to the chosen practice. This may reveal which specialty I am seeing (health data, Art. 9 GDPR). I can withdraw my consent at any time in the privacy centre.",
+    "consentText": "I consent to Terminlücke processing my appointment data and sending it to the chosen practice. This may reveal which specialty I am seeing (health data, Art. 9 GDPR). I can withdraw my consent at any time in the privacy centre.",
     "consentRequired": "We can’t book the appointment without this consent.",
     "consentMore": "More about privacy",
     "submit": "Book now",
@@ -397,7 +397,7 @@
     "endingA11y": "One minute left before the appointment goes to the next person."
   },
   "notifications": {
-    "offerTitle": "MedNow",
+    "offerTitle": "Terminlücke",
     "offerBody": "An appointment near you just opened up. Tap to confirm.",
     "reminderTitle": "Reminder",
     "reminder24h": "Your doctor’s appointment is tomorrow at {{time}}.",
@@ -484,9 +484,9 @@
     "imprintBody": "Information pursuant to § 5 DDG will be added before launch: provider name and address, authorised representatives, contact, register entry, VAT ID.",
     "privacyBody": "Before launch, the privacy policy will describe: controller, purposes and legal bases (incl. Art. 9(2)(a) GDPR), recipients (practices, processors in the EU), retention periods, data subject rights and the right to lodge a complaint.",
     "termsBody": "Before launch, the terms of use will cover appointment brokering, cancellations and the exclusion of medical advice.",
-    "accessibilityBody": "MedNow aims to meet WCAG 2.1 level AA (German Accessibility Strengthening Act). Known limitations and a contact for reporting barriers will be added before launch.",
-    "helpBody": "MedNow shows free appointments at practices. For urgent complaints outside opening hours, the medical on-call service helps at 116117. If life is at risk, call 112.",
-    "licensesIntro": "MedNow uses open-source software and open data.",
+    "accessibilityBody": "Terminlücke aims to meet WCAG 2.1 level AA (German Accessibility Strengthening Act). Known limitations and a contact for reporting barriers will be added before launch.",
+    "helpBody": "Terminlücke shows free appointments at practices. For urgent complaints outside opening hours, the medical on-call service helps at 116117. If life is at risk, call 112.",
+    "licensesIntro": "Terminlücke uses open-source software and open data.",
     "osmAttribution": "Map data © OpenStreetMap contributors, available under the Open Database License (ODbL).",
     "fontsAttribution": "Fonts: Inter and Plus Jakarta Sans (SIL Open Font License 1.1).",
     "iconsAttribution": "Icons: Lucide (ISC licence)."
@@ -707,13 +707,13 @@
   },
   "calendarSync": {
     "title": "Calendar sync",
-    "hint": "Appointments automatically in a separate “MedNow” calendar on this device",
+    "hint": "Appointments automatically in a separate “Terminlücke” calendar on this device",
     "enabled_one": "Calendar sync is on. {{count}} appointment added.",
     "enabled_other": "Calendar sync is on. {{count}} appointments added.",
     "denied": "Calendar sync needs calendar access. You can still add appointments one by one.",
     "unavailable": "The calendar isn’t available on this device right now.",
     "offTitle": "Turn off calendar sync?",
-    "offBody": "The “MedNow” calendar and all its entries will be removed from this device. Your appointments stay booked.",
+    "offBody": "The “Terminlücke” calendar and all its entries will be removed from this device. Your appointments stay booked.",
     "offConfirm": "Turn off"
   },
   "favorites": {
@@ -738,7 +738,7 @@
     "pharmacySearch": "Find an emergency pharmacy nearby",
     "pharmacyLandline": "Landline: {{number}} (free)",
     "pharmacyMobile": "Mobile: {{number}} (max. 69 ct/min)",
-    "pharmacySource": "Data: emergency search of the pharmacists’ chambers (aponet.de). MedNow has no pharmacy data of its own.",
+    "pharmacySource": "Data: emergency search of the pharmacists’ chambers (aponet.de). Terminlücke has no pharmacy data of its own.",
     "crisisTitle": "Emotional crisis",
     "crisisBody": "The TelefonSeelsorge crisis line is available around the clock – free and anonymous (in German).",
     "crisisA11y": "Call TelefonSeelsorge {{number}}"
@@ -776,7 +776,7 @@
     "clearAll": "Delete all check-up reminders",
     "cleared": "All check-up reminders deleted.",
     "notificationTitle": "Check-up reminder",
-    "notificationBody": "A check-up is due. Details in MedNow.",
+    "notificationBody": "A check-up is due. Details in Terminlücke.",
     "items": {
       "checkup": {
         "title": "Health check-up",
@@ -859,12 +859,12 @@
     }
   },
   "plans": {
-    "entry": "MedNow Plus",
+    "entry": "Terminlücke Plus",
     "entryHint": "More appointment alerts, calendar sync, saved practices, check-up reminders",
     "name": {
       "free": "Free",
-      "plus": "MedNow Plus",
-      "family": "MedNow Family"
+      "plus": "Terminlücke Plus",
+      "family": "Terminlücke Family"
     },
     "includes": {
       "free": "Search, all filters and map\nBooking – also for one family member\n1 appointment alert (including “available soon”)\nReminders, calendar entry, emergency page",
@@ -882,7 +882,7 @@
       },
       "calendar": {
         "title": "Appointments in your calendar automatically",
-        "body": "With Plus, appointments go into the “MedNow” calendar and update when rescheduled or cancelled. Adding them one by one stays free."
+        "body": "With Plus, appointments go into the “Terminlücke” calendar and update when rescheduled or cancelled. Adding them one by one stays free."
       },
       "favorites": {
         "title": "Save practices",
@@ -890,25 +890,25 @@
       },
       "checkups": {
         "title": "Check-up reminders",
-        "body": "The overview stays free. With Plus, MedNow reminds you of your check-ups."
+        "body": "The overview stays free. With Plus, Terminlücke reminds you of your check-ups."
       },
       "familyCheckups": {
         "title": "Check-ups for the whole family",
-        "body": "With MedNow Family you get check-up reminders for every profile – including children’s U-check-ups and J1."
+        "body": "With Terminlücke Family you get check-up reminders for every profile – including children’s U-check-ups and J1."
       },
       "profiles": {
         "title": "More family profiles",
-        "body": "Free covers you and one family member. With MedNow Family you manage up to 5 profiles."
+        "body": "Free covers you and one family member. With Terminlücke Family you manage up to 5 profiles."
       },
       "overview": {
-        "title": "MedNow Plus and Family",
+        "title": "Terminlücke Plus and Family",
         "body": "Searching, booking and emergency help are always free. You pay for convenience: more alerts, calendar, saved practices, check-ups."
       }
     },
     "offer": {
-      "mednow_plus_pass_30d": "30 days of Plus",
-      "mednow_plus_yearly": "Plus yearly",
-      "mednow_family_yearly": "Family yearly"
+      "plus_pass_30d": "30 days of Plus",
+      "plus_yearly": "Plus yearly",
+      "family_yearly": "Family yearly"
     },
     "freePrice": "€0 – always",
     "passPriceShort": "{{price}} for 30 days",
@@ -940,6 +940,6 @@
     "seePlus": "More alerts with Plus"
   },
   "family": {
-    "limit": "Free covers you and one family member. More profiles come with MedNow Family (Profile → Family)."
+    "limit": "Free covers you and one family member. More profiles come with Terminlücke Family (Profile → Family)."
   }
 }

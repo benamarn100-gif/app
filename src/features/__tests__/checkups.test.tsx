@@ -11,7 +11,7 @@ import { mockRouter } from '../../../jest.setup';
 /** Erinnerungen für sich selbst gibt es mit Plus (Übersicht bleibt kostenlos). */
 async function plusRepository() {
   const repository = createTestRepository();
-  await repository.demoPurchase('mednow_plus_yearly');
+  await repository.demoPurchase('plus_yearly');
   return repository;
 }
 

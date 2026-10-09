@@ -32,7 +32,7 @@ export function buildMapStyle(baseUrl: string, flavorName: MapFlavor, archive = 
   const { pois: _pois, ...flavor } = namedFlavor(flavorName);
   const style: StyleSpecification = {
     version: 8,
-    name: `MedNow ${flavorName}`,
+    name: `Terminlücke ${flavorName}`,
     glyphs: `${base}/fonts/{fontstack}/{range}.pbf`,
     sprite: `${base}/sprites/v4/${flavorName}`,
     sources: {

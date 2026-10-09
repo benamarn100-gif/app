@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { useToast } from '@/components';
+import { brand } from '@/config/brand';
 import { useRepository } from '@/data/DataProvider';
 import { queryKeys } from '@/data/queryKeys';
 import { useT } from '@/i18n/useT';
@@ -27,8 +28,9 @@ export function NotificationBridge() {
     void configureNotifications(t);
     const sub = Notifications.addNotificationResponseReceivedListener((response) => {
       const url = response.notification.request.content.data?.url;
-      if (typeof url === 'string' && url.startsWith('mednow://')) {
-        router.push(url.replace('mednow://', '/') as never);
+      const scheme = typeof url === 'string' ? appScheme(url) : null;
+      if (typeof url === 'string' && scheme) {
+        router.push(url.replace(`${scheme}://`, '/') as never);
       }
     });
     return () => sub.remove();
@@ -49,4 +51,9 @@ export function NotificationBridge() {
   );
 
   return null;
+}
+
+/** Eigenes Schema – auch das älterer Testversionen (mednow://) – sonst null. */
+function appScheme(url: string): string | null {
+  return [brand.scheme, ...brand.legacySchemes].find((s) => url.startsWith(`${s}://`)) ?? null;
 }

@@ -10,13 +10,13 @@ import type { TFn } from '@/i18n/useT';
 import { preferenceStorage } from './storage';
 
 /**
- * Kalender-Sync (Feature 4): Termine landen automatisch in einem eigenen Kalender „MedNow“
+ * Kalender-Sync (Feature 4): Termine landen automatisch in einem eigenen Kalender „Terminlücke“
  * auf dem Gerät und werden bei Verschieben/Storno aktualisiert bzw. gelöscht.
  * Nutzen: Der Kalender stimmt immer – ohne jedes Mal „Zum Kalender hinzufügen“ zu tippen.
  *
  * Datenschutz: nur auf dem Gerät, neutraler Titel „Arzttermin“, Praxis nur im Ort-Feld.
  * Gespeichert wird lokal nur die Zuordnung Termin-ID → Kalendereintrag-ID.
- * Ausschalten löscht den Kalender „MedNow“ samt aller Einträge.
+ * Ausschalten löscht den Kalender „Terminlücke“ samt aller Einträge.
  * iOS braucht dafür vollen Kalenderzugriff (Abfrage erst beim Einschalten).
  */
 type SyncState = {
@@ -33,7 +33,7 @@ export const useCalendarSync = create<SyncState>()(
   }),
 );
 
-const CALENDAR_TITLE = 'MedNow';
+const CALENDAR_TITLE = 'Terminlücke';
 
 export type EnableResult = 'enabled' | 'denied' | 'unavailable';
 
@@ -50,7 +50,7 @@ export async function enableCalendarSync(): Promise<EnableResult> {
   }
 }
 
-/** Schaltet aus und entfernt den Kalender „MedNow“ mit allen Einträgen. */
+/** Schaltet aus und entfernt den Kalender „Terminlücke“ mit allen Einträgen. */
 export async function disableCalendarSync(): Promise<void> {
   const { calendarId } = useCalendarSync.getState();
   useCalendarSync.setState({ enabled: false, calendarId: null, events: {} });

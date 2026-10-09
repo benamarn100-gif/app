@@ -1,4 +1,4 @@
-# MedNow Praxis-Dashboard
+# Terminlücke Praxis-Dashboard
 
 Web-App für Praxen: freie Termine pflegen, Sprechzeiten-Vorlagen anwenden, Buchungen sehen und absagen.
 Neue oder geänderte Termine erscheinen sofort in der App (Realtime) und werden – falls jemand auf der

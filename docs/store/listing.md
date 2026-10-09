@@ -7,7 +7,7 @@
 
 | Feld                    | Deutsch                                                                       | Englisch                                                                          |
 | ----------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| App-Name (≤ 30)         | MedNow – Arzttermine finden (27)                                              | MedNow – Doctor appointments (28)                                                 |
+| App-Name (≤ 30)         | Terminlücke – Arzttermine (25)                                                | Terminlücke – Doctor visits (27)                                                  |
 | Kurzbeschreibung (≤ 80) | Freie Arzttermine in der Nähe finden, buchen und bei Absagen nachrücken. (72) | Find and book free doctor appointments nearby – and move up when slots open. (76) |
 | Kategorie               | Medizin                                                                       | Medical                                                                           |
 | Tags                    | Arzttermine, Gesundheit, Medizin                                              | Doctor appointments, Health, Medical                                              |
@@ -21,7 +21,7 @@ Play Console → App-Inhalte → Gesundheits-Apps, siehe `datenschutz-angaben.md
 ```
 Freie Arzttermine in deiner Nähe – schnell gefunden, mit einem Tipp gebucht.
 
-MedNow zeigt dir, welche Praxen in deiner Umgebung bald einen Termin frei haben. Du wählst Fachrichtung,
+Terminlücke zeigt dir, welche Praxen in deiner Umgebung bald einen Termin frei haben. Du wählst Fachrichtung,
 Zeitraum und Entfernung, siehst die Praxen in einer Liste oder auf der Karte und buchst direkt in der App.
 
 SCHNELL EINEN TERMIN
@@ -53,10 +53,10 @@ DATENSCHUTZ
 • Daten exportieren und Konto löschen direkt in der App
 
 KOSTENLOS NUTZBAR
-Suchen, Buchen, ein Termin-Alarm und die Notfall-Seite sind kostenlos. Optional erweitern MedNow Plus
-und MedNow Familie zum Beispiel die Zahl der Termin-Alarme, den Kalender-Sync und die Vorsorge-Erinnerungen.
+Suchen, Buchen, ein Termin-Alarm und die Notfall-Seite sind kostenlos. Optional erweitern Terminlücke Plus
+und Terminlücke Familie zum Beispiel die Zahl der Termin-Alarme, den Kalender-Sync und die Vorsorge-Erinnerungen.
 
-Wichtig: MedNow vermittelt Termine. Die Behandlung vereinbarst du mit der Praxis. MedNow stellt keine
+Wichtig: Terminlücke vermittelt Termine. Die Behandlung vereinbarst du mit der Praxis. Terminlücke stellt keine
 Diagnosen. Im Notfall wähle 112.
 ```
 
@@ -65,7 +65,7 @@ Diagnosen. Im Notfall wähle 112.
 ```
 Free doctor appointments near you – found fast, booked with one tap.
 
-MedNow shows which practices nearby have a free slot soon. Choose specialty, time frame and distance, see
+Terminlücke shows which practices nearby have a free slot soon. Choose specialty, time frame and distance, see
 practices in a list or on the map and book right in the app.
 
 GET SEEN SOON
@@ -96,10 +96,10 @@ PRIVACY
 • Export your data and delete your account right in the app
 
 FREE TO USE
-Search, booking, one appointment alert and the emergency page are free. MedNow Plus and MedNow Family
+Search, booking, one appointment alert and the emergency page are free. Terminlücke Plus and Terminlücke Family
 optionally add more alerts, calendar sync and check-up reminders, among other things.
 
-Important: MedNow arranges appointments. Treatment is agreed with the practice. MedNow does not diagnose.
+Important: Terminlücke arranges appointments. Treatment is agreed with the practice. Terminlücke does not diagnose.
 In an emergency, call 112.
 ```
 
@@ -107,7 +107,7 @@ In an emergency, call 112.
 
 | Feld                    | Deutsch                                                                                                                                                   | Englisch                                                                                                                                            |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Name (≤ 30)             | MedNow – Arzttermine (20)                                                                                                                                 | MedNow – Doctor appointments (28)                                                                                                                   |
+| Name (≤ 30)             | Terminlücke – Arzttermine (25)                                                                                                                            | Terminlücke – Doctor visits (27)                                                                                                                    |
 | Untertitel (≤ 30)       | Freie Termine in deiner Nähe (28)                                                                                                                         | Free slots near you (19)                                                                                                                            |
 | Werbetext (≤ 170)       | Freie Arzttermine finden und mit einem Tipp buchen. Termin-Alarm, wenn etwas frei wird – in fairer Reihenfolge. Server in Frankfurt, keine Werbung. (147) | Find free doctor appointments in Germany and book with one tap. Get an alert when a slot opens – in fair order. Servers in Frankfurt, no ads. (141) |
 | Schlüsselwörter (≤ 100) | `arzttermin,arzt,termin,hausarzt,zahnarzt,kinderarzt,frauenarzt,praxis,warteliste,vorsorge,akut` (94)                                                     | `doctor,appointment,gp,dentist,pediatrician,gynecologist,clinic,waitlist,checkup,germany` (87)                                                      |

@@ -2,7 +2,7 @@
   "name": "mednow-dashboard",
   "version": "0.1.0",
   "private": true,
-  "description": "MedNow Praxis-Dashboard: Slots und Wochenvorlagen pflegen, Buchungen sehen.",
+  "description": "Terminlücke Praxis-Dashboard: Slots und Wochenvorlagen pflegen, Buchungen sehen.",
   "type": "module",
   "engines": {
     "node": ">=22.12"

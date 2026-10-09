@@ -145,10 +145,10 @@ Zeitzonen-Rechnungen werden je Tag/Uhrzeit gecacht, Würfe über einen Integer-M
 Die App schreibt über Edge Functions (Idempotenz, Validierung, Regionsbindung). Das Dashboard ruft dagegen `public.dashboard_*`-RPCs direkt auf: Jede Funktion prüft Mitgliedschaft (`practice_members`) und zweiten Faktor (`aal2`) in der Datenbank, validiert Eingaben in SQL und schreibt ein Zugriffsprotokoll. Direkte Tabellenrechte gibt es nicht. Weniger bewegliche Teile, gleiche Sicherheitsgrenze (die Datenbank), vollständig mit pgTAP getestet (`06_dashboard.test.sql`).
 
 **D-42 · Zwei-Faktor-Pflicht (TOTP) für Praxis-Konten.**
-Das Dashboard zeigt Namen und Telefonnummern von Patient:innen (Art.-9-Kontext). Anmeldung per E-Mail-Code (kein Passwort, keine neuen Konten über das Dashboard), danach TOTP über Supabase Auth MFA. Ohne `aal2` liefert die Datenbank `mfa_required`. Konten legt das MedNow-Team nach Prüfung der Praxis an (`app.add_practice_member`).
+Das Dashboard zeigt Namen und Telefonnummern von Patient:innen (Art.-9-Kontext). Anmeldung per E-Mail-Code (kein Passwort, keine neuen Konten über das Dashboard), danach TOTP über Supabase Auth MFA. Ohne `aal2` liefert die Datenbank `mfa_required`. Konten legt das Terminlücke-Team nach Prüfung der Praxis an (`app.add_practice_member`).
 
 **D-43 · Datensparsame Buchungsansicht.**
-Kontaktdaten nur für bestätigte Termine; nach einer Absage werden sie in der Ansicht nicht mehr geliefert. Bei Familienmitgliedern sieht die Praxis nur die Altersgruppe (der in der App vergebene Name bleibt privat). Jeder Abruf wird in `app.practice_audit_log` protokolliert (12 Monate). Die Wochenansicht kennzeichnet über MedNow gebuchte Slots nur mit der Termin-ID.
+Kontaktdaten nur für bestätigte Termine; nach einer Absage werden sie in der Ansicht nicht mehr geliefert. Bei Familienmitgliedern sieht die Praxis nur die Altersgruppe (der in der App vergebene Name bleibt privat). Jeder Abruf wird in `app.practice_audit_log` protokolliert (12 Monate). Die Wochenansicht kennzeichnet über Terminlücke gebuchte Slots nur mit der Termin-ID.
 
 **D-44 · Absage durch die Praxis: Slot entfällt, Push ohne Details.**
 Sagt die Praxis ab, wird der Slot storniert (nicht erneut angeboten – meist fällt die Sprechzeit aus). Die Person erhält „Die Praxis hat einen Ihrer Termine abgesagt. Details in der App.“ – ohne Praxis, Arzt, Uhrzeit (Sperrbildschirm).
@@ -190,7 +190,7 @@ Die Praxisseite liegt unter dem Buchungs-Sheet; die optimistische Markierung „
 ## Testversionen
 
 **D-55 · Testversionen über EAS mit Demo-Daten, erkennbar am Update-Kanal.**
-Profil `preview` baut eine installierbare APK bzw. interne iOS-Version mit Demo-Daten, Namen „MedNow Test“ und Diagnose-Seite. Die Projekt-ID steht fest in `app.config.ts` (wie `eas init --id`; dynamische Konfiguration kann EAS nicht selbst beschreiben) – sie ist kein Geheimnis und muss auch auf den EAS-Build-Servern vorhanden sein (Push-Token, Updates). Diagnose ist an, wenn `EXPO_PUBLIC_DIAGNOSTICS=1` gesetzt ist **oder** der Build auf einem Testkanal läuft – so bleibt sie auch nach einem EAS Update an, das ohne die Build-Variablen entsteht. Produktions-Builds werden erst nach Abnahme eingereicht (`docs/test-builds.md`).
+Profil `preview` baut eine installierbare APK bzw. interne iOS-Version mit Demo-Daten, Namen „Terminlücke Test“ und Diagnose-Seite. Die Projekt-ID steht fest in `app.config.ts` (wie `eas init --id`; dynamische Konfiguration kann EAS nicht selbst beschreiben) – sie ist kein Geheimnis und muss auch auf den EAS-Build-Servern vorhanden sein (Push-Token, Updates). Diagnose ist an, wenn `EXPO_PUBLIC_DIAGNOSTICS=1` gesetzt ist **oder** der Build auf einem Testkanal läuft – so bleibt sie auch nach einem EAS Update an, das ohne die Build-Variablen entsteht. Produktions-Builds werden erst nach Abnahme eingereicht (`docs/test-builds.md`).
 
 **D-56 · EAS Update ohne Wartezeit beim Start.**
 `expo-updates` mit `checkAutomatically: ON_LOAD` und `fallbackToCacheTimeout: 0`: Der Kaltstart wartet nie auf das Netz (Ziel < 2 s), ein geladenes Update gilt ab dem nächsten Start. `runtimeVersion` folgt der App-Version; neue native Module erfordern eine neue Version und einen neuen Build. Für Builds ohne EAS (GitHub-Ersatzweg) schaltet `EXPO_NO_UPDATES=1` Updates ab.

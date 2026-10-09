@@ -103,7 +103,7 @@ export async function scheduleReminders(
       content: {
         title: t('notifications.reminderTitle'),
         body: entry.body,
-        data: { url: 'mednow://appointments' },
+        data: { url: 'terminluecke://appointments' },
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -129,7 +129,7 @@ export async function presentOfferNotification(offerId: string, t: TFn) {
     content: {
       title: t('notifications.offerTitle'),
       body: t('notifications.offerBody'),
-      data: { url: `mednow://offer/${offerId}`, offerId },
+      data: { url: `terminluecke://offer/${offerId}`, offerId },
     },
     trigger: Platform.OS === 'android' ? { channelId: CHANNEL_OFFERS } : null,
   });

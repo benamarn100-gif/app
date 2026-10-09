@@ -4,17 +4,18 @@
 
 ## Angaben gemäß § 5 DDG
 
-[PLATZHALTER: Name bzw. Firma inkl. Rechtsform, z. B. „Vorname Nachname“ oder „Name GmbH“]
-[PLATZHALTER: Straße und Hausnummer (ladungsfähige Anschrift, kein Postfach)]
-[PLATZHALTER: PLZ und Ort]
+[PLATZHALTER: Name]
+[PLATZHALTER: Anschrift]
+
+[PLATZHALTER: Rechtsform bzw. Firma, falls ein Unternehmen gegründet wird – sonst diese Zeile löschen]
 
 **Vertreten durch:** [PLATZHALTER: Geschäftsführung bzw. vertretungsberechtigte Person – nur bei
 Gesellschaften]
 
 ## Kontakt
 
-- E-Mail: [PLATZHALTER: E-Mail-Adresse]
-- Telefon: [PLATZHALTER: Telefonnummer oder ein anderer schneller elektronischer Kontaktweg]
+- E-Mail: [PLATZHALTER: E-Mail]
+- Telefon: [PLATZHALTER: Telefon]
 
 ## Register und Steuern
 
@@ -32,5 +33,5 @@ Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.�
 
 ## Hinweis
 
-MedNow vermittelt Arzttermine und ist kein medizinischer Dienst. Im Notfall: 112. Ärztlicher
+Terminlücke vermittelt Arzttermine und ist kein medizinischer Dienst. Im Notfall: 112. Ärztlicher
 Bereitschaftsdienst: 116117.

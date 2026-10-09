@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "MedNow",
+    "name": "Terminlücke",
     "tagline": "Freie Arzttermine in deiner Nähe",
     "tagline_formal": "Freie Arzttermine in Ihrer Nähe",
     "demoBadge": "Demo",
@@ -80,8 +80,8 @@
     "emergencyLabel": "Notfall",
     "onCallA11y": "Ärztlichen Bereitschaftsdienst {{number}} anrufen",
     "emergencyA11y": "Notruf {{number}} anrufen",
-    "disclaimer": "MedNow ersetzt keine ärztliche Beratung. Bei Lebensgefahr sofort 112 wählen.",
-    "disclaimer_formal": "MedNow ersetzt keine ärztliche Beratung. Bei Lebensgefahr wählen Sie sofort 112.",
+    "disclaimer": "Terminlücke ersetzt keine ärztliche Beratung. Bei Lebensgefahr sofort 112 wählen.",
+    "disclaimer_formal": "Terminlücke ersetzt keine ärztliche Beratung. Bei Lebensgefahr wählen Sie sofort 112.",
     "more": "Mehr Hilfe",
     "moreA11y": "Notfall-Seite öffnen: Notdienst-Apotheke, Bereitschaftsdienst, Krisentelefon"
   },
@@ -337,7 +337,7 @@
     "verify": "Bestätigen",
     "verified": "E-Mail bestätigt",
     "consentTitle": "Einwilligung",
-    "consentText": "Ich willige ein, dass MedNow meine Termindaten verarbeitet und an die gewählte Praxis übermittelt. Daraus kann hervorgehen, welche Fachrichtung ich aufsuche (Gesundheitsdaten, Art. 9 DSGVO). Ich kann die Einwilligung jederzeit im Datenschutz-Center widerrufen.",
+    "consentText": "Ich willige ein, dass Terminlücke meine Termindaten verarbeitet und an die gewählte Praxis übermittelt. Daraus kann hervorgehen, welche Fachrichtung ich aufsuche (Gesundheitsdaten, Art. 9 DSGVO). Ich kann die Einwilligung jederzeit im Datenschutz-Center widerrufen.",
     "consentRequired": "Ohne diese Einwilligung können wir den Termin nicht buchen.",
     "consentMore": "Mehr zum Datenschutz",
     "submit": "Verbindlich buchen",
@@ -441,7 +441,7 @@
     "endingA11y": "Noch eine Minute, dann geht der Termin an die nächste Person."
   },
   "notifications": {
-    "offerTitle": "MedNow",
+    "offerTitle": "Terminlücke",
     "offerBody": "Ein Termin in deiner Nähe ist frei geworden. Tippe zum Bestätigen.",
     "offerBody_formal": "Ein Termin in Ihrer Nähe ist frei geworden. Tippen Sie zum Bestätigen.",
     "reminderTitle": "Erinnerung",
@@ -541,10 +541,10 @@
     "imprintBody": "Angaben gemäß § 5 DDG folgen vor dem Launch: Name und Anschrift des Anbieters, Vertretungsberechtigte, Kontakt, Registereintrag, Umsatzsteuer-ID.",
     "privacyBody": "Die Datenschutzerklärung beschreibt vor dem Launch: Verantwortlicher, Zwecke und Rechtsgrundlagen (u. a. Art. 9 Abs. 2 lit. a DSGVO), Empfänger (Praxen, Auftragsverarbeiter in der EU), Speicherdauer, Rechte der Betroffenen und Beschwerderecht.",
     "termsBody": "Die Nutzungsbedingungen regeln vor dem Launch die Vermittlung von Terminen, Stornierungen und den Ausschluss medizinischer Beratung.",
-    "accessibilityBody": "MedNow soll die Anforderungen der WCAG 2.1 Stufe AA erfüllen (Barrierefreiheitsstärkungsgesetz). Bekannte Einschränkungen und eine Kontaktmöglichkeit für Barrieren werden vor dem Launch ergänzt.",
-    "helpBody": "MedNow zeigt freie Termine von Praxen. Bei akuten Beschwerden außerhalb der Sprechzeiten hilft der ärztliche Bereitschaftsdienst unter 116117. Bei Lebensgefahr wähle 112.",
-    "helpBody_formal": "MedNow zeigt freie Termine von Praxen. Bei akuten Beschwerden außerhalb der Sprechzeiten hilft der ärztliche Bereitschaftsdienst unter 116117. Bei Lebensgefahr wählen Sie 112.",
-    "licensesIntro": "MedNow nutzt Open-Source-Software und offene Daten.",
+    "accessibilityBody": "Terminlücke soll die Anforderungen der WCAG 2.1 Stufe AA erfüllen (Barrierefreiheitsstärkungsgesetz). Bekannte Einschränkungen und eine Kontaktmöglichkeit für Barrieren werden vor dem Launch ergänzt.",
+    "helpBody": "Terminlücke zeigt freie Termine von Praxen. Bei akuten Beschwerden außerhalb der Sprechzeiten hilft der ärztliche Bereitschaftsdienst unter 116117. Bei Lebensgefahr wähle 112.",
+    "helpBody_formal": "Terminlücke zeigt freie Termine von Praxen. Bei akuten Beschwerden außerhalb der Sprechzeiten hilft der ärztliche Bereitschaftsdienst unter 116117. Bei Lebensgefahr wählen Sie 112.",
+    "licensesIntro": "Terminlücke nutzt Open-Source-Software und offene Daten.",
     "osmAttribution": "Kartendaten © OpenStreetMap-Mitwirkende, verfügbar unter der Open Database License (ODbL).",
     "fontsAttribution": "Schriften: Inter und Plus Jakarta Sans (SIL Open Font License 1.1).",
     "iconsAttribution": "Icons: Lucide (ISC-Lizenz)."
@@ -772,15 +772,15 @@
   },
   "calendarSync": {
     "title": "Kalender-Sync",
-    "hint": "Termine automatisch im eigenen Kalender „MedNow“ auf diesem Gerät",
+    "hint": "Termine automatisch im eigenen Kalender „Terminlücke“ auf diesem Gerät",
     "enabled_one": "Kalender-Sync ist an. {{count}} Termin übernommen.",
     "enabled_other": "Kalender-Sync ist an. {{count}} Termine übernommen.",
     "denied": "Ohne Kalenderzugriff geht der Sync nicht. Du kannst Termine weiterhin einzeln eintragen.",
     "denied_formal": "Ohne Kalenderzugriff geht der Sync nicht. Sie können Termine weiterhin einzeln eintragen.",
     "unavailable": "Der Kalender ist auf diesem Gerät gerade nicht verfügbar.",
     "offTitle": "Kalender-Sync ausschalten?",
-    "offBody": "Der Kalender „MedNow“ wird mit allen Einträgen von diesem Gerät gelöscht. Deine Termine bleiben gebucht.",
-    "offBody_formal": "Der Kalender „MedNow“ wird mit allen Einträgen von diesem Gerät gelöscht. Ihre Termine bleiben gebucht.",
+    "offBody": "Der Kalender „Terminlücke“ wird mit allen Einträgen von diesem Gerät gelöscht. Deine Termine bleiben gebucht.",
+    "offBody_formal": "Der Kalender „Terminlücke“ wird mit allen Einträgen von diesem Gerät gelöscht. Ihre Termine bleiben gebucht.",
     "offConfirm": "Ausschalten"
   },
   "favorites": {
@@ -805,7 +805,7 @@
     "pharmacySearch": "Notdienst-Apotheke in der Nähe finden",
     "pharmacyLandline": "Festnetz: {{number}} (kostenlos)",
     "pharmacyMobile": "Handy: {{number}} (max. 69 ct/Min.)",
-    "pharmacySource": "Daten: Notdienstsuche der Apothekerkammern (aponet.de). MedNow hat keine eigenen Apothekendaten.",
+    "pharmacySource": "Daten: Notdienstsuche der Apothekerkammern (aponet.de). Terminlücke hat keine eigenen Apothekendaten.",
     "crisisTitle": "Seelische Krise",
     "crisisBody": "Die TelefonSeelsorge ist rund um die Uhr erreichbar – kostenlos und anonym.",
     "crisisA11y": "TelefonSeelsorge {{number}} anrufen"
@@ -850,7 +850,7 @@
     "clearAll": "Alle Vorsorge-Erinnerungen löschen",
     "cleared": "Alle Vorsorge-Erinnerungen gelöscht.",
     "notificationTitle": "Vorsorge-Erinnerung",
-    "notificationBody": "Eine Vorsorge steht an. Details in MedNow.",
+    "notificationBody": "Eine Vorsorge steht an. Details in Terminlücke.",
     "items": {
       "checkup": {
         "title": "Gesundheits-Check-up",
@@ -935,12 +935,12 @@
     }
   },
   "plans": {
-    "entry": "MedNow Plus",
+    "entry": "Terminlücke Plus",
     "entryHint": "Mehr Termin-Alarme, Kalender-Sync, Favoriten, Vorsorge-Erinnerungen",
     "name": {
       "free": "Kostenlos",
-      "plus": "MedNow Plus",
-      "family": "MedNow Familie"
+      "plus": "Terminlücke Plus",
+      "family": "Terminlücke Familie"
     },
     "includes": {
       "free": "Suche, alle Filter und Karte\nBuchen – auch für ein Familienmitglied\n1 Termin-Alarm (auch „Heute noch frei“)\nErinnerungen, Kalendereintrag, Notfall-Seite",
@@ -961,7 +961,7 @@
       },
       "calendar": {
         "title": "Termine automatisch im Kalender",
-        "body": "Mit Plus landen Termine im Kalender „MedNow“ und werden beim Verschieben oder Absagen nachgezogen. Einzeln eintragen bleibt kostenlos."
+        "body": "Mit Plus landen Termine im Kalender „Terminlücke“ und werden beim Verschieben oder Absagen nachgezogen. Einzeln eintragen bleibt kostenlos."
       },
       "favorites": {
         "title": "Praxen merken",
@@ -970,27 +970,27 @@
       },
       "checkups": {
         "title": "Vorsorge-Erinnerungen",
-        "body": "Die Übersicht bleibt kostenlos. Mit Plus erinnert MedNow dich an deine Vorsorge.",
-        "body_formal": "Die Übersicht bleibt kostenlos. Mit Plus erinnert MedNow Sie an Ihre Vorsorge."
+        "body": "Die Übersicht bleibt kostenlos. Mit Plus erinnert Terminlücke dich an deine Vorsorge.",
+        "body_formal": "Die Übersicht bleibt kostenlos. Mit Plus erinnert Terminlücke Sie an Ihre Vorsorge."
       },
       "familyCheckups": {
         "title": "Vorsorge für die ganze Familie",
-        "body": "Mit MedNow Familie gibt es Vorsorge-Erinnerungen für alle Profile – auch U-Untersuchungen und J1."
+        "body": "Mit Terminlücke Familie gibt es Vorsorge-Erinnerungen für alle Profile – auch U-Untersuchungen und J1."
       },
       "profiles": {
         "title": "Mehr Familienprofile",
-        "body": "Kostenlos sind du und ein Familienmitglied. Mit MedNow Familie verwaltest du bis zu 5 Profile.",
-        "body_formal": "Kostenlos sind Sie und ein Familienmitglied. Mit MedNow Familie verwalten Sie bis zu 5 Profile."
+        "body": "Kostenlos sind du und ein Familienmitglied. Mit Terminlücke Familie verwaltest du bis zu 5 Profile.",
+        "body_formal": "Kostenlos sind Sie und ein Familienmitglied. Mit Terminlücke Familie verwalten Sie bis zu 5 Profile."
       },
       "overview": {
-        "title": "MedNow Plus und Familie",
+        "title": "Terminlücke Plus und Familie",
         "body": "Suchen, Buchen und Notfall-Hilfe bleiben immer kostenlos. Bezahlt wird Komfort: mehr Alarme, Kalender, Favoriten, Vorsorge."
       }
     },
     "offer": {
-      "mednow_plus_pass_30d": "30 Tage Plus",
-      "mednow_plus_yearly": "Plus Jahresabo",
-      "mednow_family_yearly": "Familie Jahresabo"
+      "plus_pass_30d": "30 Tage Plus",
+      "plus_yearly": "Plus Jahresabo",
+      "family_yearly": "Familie Jahresabo"
     },
     "freePrice": "0 € – dauerhaft",
     "passPriceShort": "{{price}} für 30 Tage",
@@ -1025,7 +1025,7 @@
     "seePlus": "Mehr Alarme mit Plus"
   },
   "family": {
-    "limit": "Kostenlos sind du und ein Familienmitglied gespeichert. Mehr Profile gibt es mit MedNow Familie (Profil → Familie).",
-    "limit_formal": "Kostenlos sind Sie und ein Familienmitglied gespeichert. Mehr Profile gibt es mit MedNow Familie (Profil → Familie)."
+    "limit": "Kostenlos sind du und ein Familienmitglied gespeichert. Mehr Profile gibt es mit Terminlücke Familie (Profil → Familie).",
+    "limit_formal": "Kostenlos sind Sie und ein Familienmitglied gespeichert. Mehr Profile gibt es mit Terminlücke Familie (Profil → Familie)."
   }
 }

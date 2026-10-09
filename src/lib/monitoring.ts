@@ -118,6 +118,6 @@ export function bindMonitoring(): () => void {
 
 export function captureError(error: unknown) {
   const message = scrub(error instanceof Error ? `${error.name}: ${error.message}` : String(error));
-  if (__DEV__) console.warn('[MedNow]', message);
+  if (__DEV__) console.warn('[Terminlücke]', message);
   if (started) sentry().captureException(error);
 }

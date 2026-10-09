@@ -20,7 +20,7 @@ export async function scheduleCheckupReminder(key: string, dueAt: Date, t: TFn):
     content: {
       title: t('checkups.notificationTitle'),
       body: t('checkups.notificationBody'),
-      data: { url: 'mednow://checkups' },
+      data: { url: 'terminluecke://checkups' },
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DATE,

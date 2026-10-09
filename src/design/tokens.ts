@@ -1,5 +1,5 @@
 /**
- * MedNow Design-Tokens – einzige Quelle für Farben, Abstände, Radien, Typografie,
+ * Terminlücke Design-Tokens – einzige Quelle für Farben, Abstände, Radien, Typografie,
  * Schatten und Bewegung. Keine React-Native-Importe (wird auch vom Web-Dashboard
  * und von scripts/check-contrast.ts genutzt).
  *

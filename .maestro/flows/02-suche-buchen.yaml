@@ -1,4 +1,4 @@
-appId: de.mednow.app
+appId: de.terminluecke.app
 name: Suche mit Filter – Termin buchen und stornieren
 ---
 - runFlow: ../subflows/start-demo.yaml

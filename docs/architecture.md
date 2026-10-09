@@ -1,8 +1,8 @@
-# MedNow – Architektur (Phase 0)
+# Terminlücke – Architektur (Phase 0)
 
 > Stand: 06.10.2026 · Status: **umgesetzt** (Phasen 1–6). Abweichungen während der Umsetzung: `docs/decisions.md` ab D-28
 > (u. a. Routen unter `src/app/`, Schriften zur Laufzeit, Schema `app` für service_role).
-> Arbeitstitel „MedNow“, zentral änderbar in `src/config/brand.ts` (Markenrecht vor Launch prüfen).
+> Arbeitstitel „Terminlücke“, zentral änderbar in `src/config/brand.ts` (Markenrecht vor Launch prüfen).
 
 **North Star:** Ein kranker, gestresster Mensch findet in unter 60 Sekunden einen freien Termin in seiner Nähe.
 Jede Architekturentscheidung unten ist daran gemessen: weniger Taps, weniger Wartezeit, ehrliche Daten.

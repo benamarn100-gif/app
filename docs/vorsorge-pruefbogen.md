@@ -4,7 +4,7 @@
 
 ## Worum es geht
 
-Die App zeigt unter **Profil → Vorsorge** Früherkennungs- und Vorsorgeuntersuchungen, die die gesetzliche Krankenversicherung übernimmt. Nutzerinnen und Nutzer können sich **selbst** eine Erinnerung setzen. Die App gibt **keine Empfehlung** und wertet nichts aus. Erinnerungen werden nur auf dem Gerät gespeichert; die Mitteilung nennt keine Untersuchung („Eine Vorsorge steht an. Details in MedNow.“).
+Die App zeigt unter **Profil → Vorsorge** Früherkennungs- und Vorsorgeuntersuchungen, die die gesetzliche Krankenversicherung übernimmt. Nutzerinnen und Nutzer können sich **selbst** eine Erinnerung setzen. Die App gibt **keine Empfehlung** und wertet nichts aus. Erinnerungen werden nur auf dem Gerät gespeichert; die Mitteilung nennt keine Untersuchung („Eine Vorsorge steht an. Details in Terminlücke.“).
 
 Angezeigt wird, was zur angegebenen **Altersgruppe** passt (ohne Angabe: alle Angebote für Erwachsene). Das Geschlecht wird nicht abgefragt; geschlechtsspezifische Angebote stehen in eigenen Abschnitten. Nach „Erledigt“ setzt die App die nächste Erinnerung im unten genannten Abstand.
 
@@ -13,7 +13,7 @@ Angezeigt wird, was zur angegebenen **Altersgruppe** passt (ohne Angabe: alle An
 - `intro`: „Diese Früherkennungs- und Vorsorgeuntersuchungen übernimmt die gesetzliche Krankenversicherung. Wähle selbst, woran wir dich erinnern sollen.“
 - `disclaimer`: „Keine medizinische Beratung. Ob und wann eine Untersuchung sinnvoll ist, besprich mit deiner Praxis. Stand 10/2026; private Versicherungen können abweichen.“
 - `consentBody`: „Wir speichern nur, an welche Vorsorge du erinnert werden möchtest und wann – ausschließlich auf diesem Gerät, nicht auf unseren Servern. Mitteilungen nennen keine Untersuchung. Du kannst alles jederzeit löschen.“
-- `notificationBody`: „Eine Vorsorge steht an. Details in MedNow.“
+- `notificationBody`: „Eine Vorsorge steht an. Details in Terminlücke.“
 
 ☐ korrekt ☐ ändern zu: ______________________________________________
 

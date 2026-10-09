@@ -11,7 +11,7 @@ import { colors } from './src/design/tokens';
  *
  * Umgebungsvariablen (Build-Zeit, keine Geheimnisse – siehe docs/test-builds.md):
  * - EAS_PROJECT_ID / EXPO_OWNER: anderes Expo-Projekt als das Standardprojekt (Updates, Push-Token)
- * - APP_VARIANT=preview: Testversion („MedNow Test“, Diagnose-Seite)
+ * - APP_VARIANT=preview: Testversion („Terminlücke Test“, Diagnose-Seite)
  * - GOOGLE_SERVICES_JSON: Pfad zur Firebase-Datei (EAS-Umgebungsvariable vom Typ „Datei“),
  *   nötig für Push auf Android
  */
@@ -94,7 +94,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'expo-location',
       {
         locationWhenInUsePermission:
-          'MedNow nutzt deinen ungefähren Standort nur während der Nutzung, um Praxen in deiner Nähe und die Entfernung anzuzeigen. Er wird nicht gespeichert.',
+          'Terminlücke nutzt deinen ungefähren Standort nur während der Nutzung, um Praxen in deiner Nähe und die Entfernung anzuzeigen. Er wird nicht gespeichert.',
         locationAlwaysAndWhenInUsePermission: false,
         locationAlwaysPermission: false,
         isIosBackgroundLocationEnabled: false,
@@ -105,12 +105,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       'expo-calendar',
       {
-        // Nur für den freiwilligen Kalender-Sync (eigener Kalender „MedNow“), Abfrage beim Einschalten
+        // Nur für den freiwilligen Kalender-Sync (eigener Kalender „Terminlücke“), Abfrage beim Einschalten
         calendarPermission:
-          'MedNow trägt deine Termine auf Wunsch in einen eigenen Kalender „MedNow“ ein und hält ihn bei Verschieben oder Absagen aktuell.',
+          'Terminlücke trägt deine Termine auf Wunsch in einen eigenen Kalender „Terminlücke“ ein und hält ihn bei Verschieben oder Absagen aktuell.',
         remindersPermission: false,
         writeOnlyCalendarPermission:
-          'MedNow trägt deinen Termin auf Wunsch in deinen Kalender ein.',
+          'Terminlücke trägt deinen Termin auf Wunsch in deinen Kalender ein.',
       },
     ],
     [

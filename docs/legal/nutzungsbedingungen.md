@@ -2,29 +2,29 @@
 
 > **ENTWURF – vor Veröffentlichung anwaltlich prüfen lassen.** Stand: 07.10.2026.
 
-Diese Bedingungen gelten für die Nutzung der App „MedNow“ (iOS und Android). Für das Praxis-Dashboard gilt
+Diese Bedingungen gelten für die Nutzung der App „Terminlücke“ (iOS und Android). Für das Praxis-Dashboard gilt
 die gesonderte Vereinbarung mit der jeweiligen Praxis.
 
 ## 1. Anbieter und Geltungsbereich
 
-1. Anbieter der App ist [PLATZHALTER: Name bzw. Firma des Betreibers inkl. Rechtsform, Anschrift]
-   („wir“). Kontakt: [PLATZHALTER: Support-E-Mail].
+1. Anbieter der App ist [PLATZHALTER: Name], [PLATZHALTER: Anschrift] („wir“). Kontakt:
+   [PLATZHALTER: E-Mail].
 2. Die App richtet sich an Verbraucherinnen und Verbraucher in Deutschland. Abweichende Bedingungen von
    Nutzerinnen und Nutzern gelten nicht.
 
-## 2. Was MedNow ist – und was nicht
+## 2. Was Terminlücke ist – und was nicht
 
-1. MedNow zeigt freie Termine von Arztpraxen an, vermittelt Buchungen an die Praxis und benachrichtigt Sie
+1. Terminlücke zeigt freie Termine von Arztpraxen an, vermittelt Buchungen an die Praxis und benachrichtigt Sie
    auf Wunsch, wenn ein passender Termin frei wird („Termin-Alarm“).
 2. **Der Behandlungsvertrag kommt ausschließlich zwischen Ihnen und der Praxis zustande.** Wir sind nicht
    Vertragspartner der Behandlung und haben keinen Einfluss auf Behandlung, Wartezeiten vor Ort oder
    Abrechnung.
-3. **MedNow stellt keine Diagnosen und gibt keine medizinischen Empfehlungen.** Die Auswahl einer
+3. **Terminlücke stellt keine Diagnosen und gibt keine medizinischen Empfehlungen.** Die Auswahl einer
    Fachrichtung oder einer Anlass-Kategorie ist keine Ersteinschätzung. Vorsorge-Hinweise sind reine
    Erinnerungen an Untersuchungen, die die gesetzliche Krankenversicherung anbietet; ob eine Untersuchung
    für Sie sinnvoll ist, klären Sie mit Ihrer Ärztin oder Ihrem Arzt.
 4. **Im Notfall: 112.** Wenn es nicht bis zur nächsten Sprechstunde warten kann: ärztlicher
-   Bereitschaftsdienst 116117. MedNow ist kein Notfalldienst.
+   Bereitschaftsdienst 116117. Terminlücke ist kein Notfalldienst.
 5. Freie Termine und Praxisangaben stammen von den Praxen. Wir zeigen an, wann eine Praxis ihre Angaben
    zuletzt bestätigt hat; ältere Angaben (mehr als 24 Stunden) kennzeichnen wir als „Unbekannt“. Für die
    Richtigkeit der Praxisangaben ist die jeweilige Praxis verantwortlich. Einen Anspruch auf einen
@@ -66,12 +66,12 @@ die gesonderte Vereinbarung mit der jeweiligen Praxis.
 
 ## 6. Ihre Pflichten
 
-Bitte nutzen Sie MedNow nur für eigene Termine oder Termine von Personen, für die Sie handeln dürfen. Nicht
+Bitte nutzen Sie Terminlücke nur für eigene Termine oder Termine von Personen, für die Sie handeln dürfen. Nicht
 erlaubt sind insbesondere: Termine ohne Absicht der Wahrnehmung zu buchen oder zu blockieren, mehrere Konten
 anzulegen, um Grenzen zu umgehen, automatisierte Abfragen (z. B. Skripte) sowie Eingriffe in die Technik
 der App. Bei Verstößen können wir Termin-Alarme beenden und das Konto nach vorheriger Mitteilung sperren.
 
-## 7. Abo-Bedingungen (MedNow Plus und MedNow Familie)
+## 7. Abo-Bedingungen (Terminlücke Plus und Terminlücke Familie)
 
 ### 7.1 Stufen
 
@@ -86,7 +86,7 @@ der App. Bei Verstößen können wir Termin-Alarme beenden und das Konto nach vo
 | Vorsorge-Erinnerungen                 | –           | für Sie     | für alle    |
 
 Suchen, Buchen (auch für ein Familienmitglied), der Akut-Bereich „Heute“, Terminerinnerungen, der manuelle
-Kalendereintrag und die Notfall-Seite bleiben dauerhaft kostenlos. MedNow zeigt in keiner Stufe Werbung.
+Kalendereintrag und die Notfall-Seite bleiben dauerhaft kostenlos. Terminlücke zeigt in keiner Stufe Werbung.
 
 ### 7.2 Angebote und Preise
 
@@ -108,7 +108,7 @@ auf einem neuen Gerät mit demselben Store-Konto wieder freischalten.
 
 ### 7.4 Kostenlose Testphase
 
-Bei den Jahresabos können Sie MedNow Plus bzw. Familie einmalig 14 Tage kostenlos testen. Kündigen Sie nicht
+Bei den Jahresabos können Sie Terminlücke Plus bzw. Familie einmalig 14 Tage kostenlos testen. Kündigen Sie nicht
 mindestens 24 Stunden vor Ende der Testphase, beginnt das kostenpflichtige Jahresabo. Wenn Sie Mitteilungen
 erlaubt haben, erinnern wir Sie 3 Tage vor Ende der Testphase.
 
@@ -118,7 +118,7 @@ erlaubt haben, erinnern wir Sie 3 Tage vor Ende der Testphase.
    Ablauf kündigen.
 2. Kündigen können Sie jederzeit in den Abo-Einstellungen Ihres Store-Kontos; in der App führt
    „Abo verwalten“ direkt dorthin. Die Kündigung wirkt zum Ende der bezahlten Laufzeit.
-3. Das Löschen der App oder des MedNow-Kontos kündigt ein Store-Abo **nicht**.
+3. Das Löschen der App oder des Terminlücke-Kontos kündigt ein Store-Abo **nicht**.
 
 ### 7.6 Ende der bezahlten Stufe
 
@@ -142,7 +142,7 @@ Leistung als digitaler Inhalt (§ 356 Abs. 5 BGB) oder digitale Dienstleistung (
 Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Die
 Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.
 
-Um Ihr Widerrufsrecht auszuüben, müssen Sie uns ([PLATZHALTER: Name, Anschrift, E-Mail des Betreibers])
+Um Ihr Widerrufsrecht auszuüben, müssen Sie uns ([PLATZHALTER: Name], [PLATZHALTER: Anschrift], [PLATZHALTER: E-Mail])
 mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine E-Mail) über Ihren
 Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte
 Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.
@@ -169,7 +169,7 @@ Dienstleistungen im Vergleich zum Gesamtumfang der im Vertrag vorgesehenen Diens
 (Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es
 zurück.)
 
-- An [PLATZHALTER: Name, Anschrift, E-Mail des Betreibers]:
+- An [PLATZHALTER: Name], [PLATZHALTER: Anschrift], [PLATZHALTER: E-Mail]:
 - Hiermit widerrufe(n) ich/wir (\*) den von mir/uns (\*) abgeschlossenen Vertrag über die Erbringung der
   folgenden Dienstleistung: ____________________
 - Bestellt am (\*) ____________ / erhalten am (\*) ____________

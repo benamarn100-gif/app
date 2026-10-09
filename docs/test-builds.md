@@ -36,7 +36,7 @@ Das Expo-Projekt ist verknüpft: `extra.eas.projectId = 2fc9f403-cc00-478b-876d-
 - Nach etwa 15–30 Minuten (kostenloser Tarif: Warteschlange) erscheint auf der Build-Seite ein
   Installationslink mit QR-Code. Auf Android die Installation aus dieser Quelle erlauben.
 
-Die App heißt auf dem Gerät **„MedNow Test“** (`APP_VARIANT=preview`) und hat dieselbe Paket-ID wie die
+Die App heißt auf dem Gerät **„Terminlücke Test“** (`APP_VARIANT=preview`) und hat dieselbe Paket-ID wie die
 spätere Store-Version – beide lassen sich daher nicht gleichzeitig installieren.
 
 ## 4. Änderungen ohne Neuinstallation (EAS Update)

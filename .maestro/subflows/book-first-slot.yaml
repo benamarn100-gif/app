@@ -1,5 +1,5 @@
 # Auf dem Praxisprofil: ersten freien Termin wählen und in vier Schritten buchen.
-appId: de.mednow.app
+appId: de.terminluecke.app
 ---
 - extendedWaitUntil:
     visible:

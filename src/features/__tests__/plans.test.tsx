@@ -57,7 +57,7 @@ describe('Abo-Grenzen (Demo-Modus, gleiche Regeln wie der Server)', () => {
   it('Plus (Demo-Kauf): mehrere Alarme mit 60 Tagen; Familie: 5 Profile', async () => {
     const repo = createTestRepository();
     await repo.grantConsent('health_data', HEALTH_CONSENT_VERSION);
-    await repo.demoPurchase('mednow_plus_pass_30d');
+    await repo.demoPurchase('plus_pass_30d');
     expect((await repo.getPlan()).plan).toBe('plus');
     const [a, b] = await practiceIds(repo);
     for (const id of [a!, b!]) {
@@ -67,7 +67,7 @@ describe('Abo-Grenzen (Demo-Modus, gleiche Regeln wie der Server)', () => {
       );
     }
     expect((await repo.listWaitlist()).length).toBe(2);
-    await repo.demoPurchase('mednow_family_yearly');
+    await repo.demoPurchase('family_yearly');
     for (const name of ['A', 'B', 'C', 'D']) await repo.addDependent(name, 'child_0_5');
     await expect(repo.addDependent('E', 'child_0_5')).rejects.toMatchObject({ code: 'plan_limit' });
   });
@@ -79,8 +79,8 @@ describe('Bezahlseite', () => {
     await renderWithProviders(<PlansScreen />, { repository: createTestRepository() }).result;
     expect(await screen.findByText('4,99 € einmalig')).toBeTruthy();
     const offer = (id: string) => within(screen.getByTestId(`buy-${id}`));
-    expect(offer('mednow_plus_yearly').getByText('29,99 € pro Jahr')).toBeTruthy();
-    expect(offer('mednow_family_yearly').getByText('44,99 € pro Jahr')).toBeTruthy();
+    expect(offer('plus_yearly').getByText('29,99 € pro Jahr')).toBeTruthy();
+    expect(offer('family_yearly').getByText('44,99 € pro Jahr')).toBeTruthy();
     // Preise auch schon in der Stufen-Übersicht
     expect(
       within(screen.getByTestId('plan-plus')).getByText('4,99 € für 30 Tage · 29,99 € pro Jahr'),
@@ -89,7 +89,7 @@ describe('Bezahlseite', () => {
     expect(screen.getByText(/keinen Vorrang/)).toBeTruthy();
     expect(screen.getByTestId('plans-not-now')).toBeTruthy();
     expect(screen.getByText(/Es wird nichts berechnet/)).toBeTruthy();
-    for (const id of ['mednow_plus_pass_30d', 'mednow_plus_yearly', 'mednow_family_yearly']) {
+    for (const id of ['plus_pass_30d', 'plus_yearly', 'family_yearly']) {
       expect(screen.getByTestId(`buy-${id}`).props.accessibilityState?.selected).toBeFalsy();
     }
   });
@@ -97,15 +97,15 @@ describe('Bezahlseite', () => {
   it('Familien-Anlass zeigt nur Familie', async () => {
     mockParams.current = { reason: 'profiles' };
     await renderWithProviders(<PlansScreen />, { repository: createTestRepository() }).result;
-    expect(await screen.findByTestId('buy-mednow_family_yearly')).toBeTruthy();
-    expect(screen.queryByTestId('buy-mednow_plus_pass_30d')).toBeNull();
+    expect(await screen.findByTestId('buy-family_yearly')).toBeTruthy();
+    expect(screen.queryByTestId('buy-plus_pass_30d')).toBeNull();
   });
 
   it('Demo-Kauf schaltet frei und schließt die Seite', async () => {
     mockParams.current = { reason: 'overview' };
     const repository = createTestRepository();
     await renderWithProviders(<PlansScreen />, { repository }).result;
-    await fireEvent.press(await screen.findByTestId('buy-mednow_plus_yearly'));
+    await fireEvent.press(await screen.findByTestId('buy-plus_yearly'));
     await waitFor(() => expect(mockRouter.back).toHaveBeenCalled());
     expect((await repository.getPlan()).plan).toBe('plus');
   });

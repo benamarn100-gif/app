@@ -4,7 +4,7 @@
  *   kanzlei-unterlagen.pdf  offene Rechtsfragen + alle Entwürfe (für die anwaltliche Prüfung)
  *   vorsorge-pruefbogen.pdf Prüfbogen (für die ärztliche Prüfung)
  *
- *   KONTAKT_NAME=… KONTAKT_EMAIL=… KONTAKT_TELEFON=… KONTAKT_ANSCHRIFT=… PILOT_STADT=… \
+ *   KONTAKT_NAME=… KONTAKT_EMAIL=… KONTAKT_TELEFON=… KONTAKT_ANSCHRIFT=… \
  *   CHROMIUM_PATH=/pfad/zu/chrome npx tsx scripts/build-print-docs.ts [Ausgabeordner]
  *
  * Die KONTAKT_*-Werte ersetzen die gleichnamigen Platzhalter; übrige Platzhalter bleiben gelb markiert.
@@ -14,7 +14,7 @@ import { join } from 'node:path';
 
 import { chromium } from 'playwright-core';
 
-import { renderMarkdown } from './build-website';
+import { fillContact, renderMarkdown } from './build-website';
 
 const ROOT = join(__dirname, '..');
 
@@ -39,18 +39,6 @@ export const BUNDLES: Record<string, { title: string; files: string[] }> = {
     files: ['docs/vorsorge-pruefbogen.md'],
   },
 };
-
-/** Platzhalter mit bekannten Werten füllen (nur exakt diese Schlüssel). */
-export function fillContact(md: string, env: NodeJS.ProcessEnv): string {
-  const values: Record<string, string | undefined> = {
-    Name: env.KONTAKT_NAME,
-    'E-Mail': env.KONTAKT_EMAIL,
-    Telefon: env.KONTAKT_TELEFON,
-    Anschrift: env.KONTAKT_ANSCHRIFT,
-    Stadt: env.PILOT_STADT,
-  };
-  return md.replace(/\[PLATZHALTER: ([^\]]+)\]/g, (m, key: string) => values[key.trim()] || m);
-}
 
 const CSS = `
 @page { size: A4; margin: 18mm 16mm 20mm; }

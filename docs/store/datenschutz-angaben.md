@@ -62,7 +62,7 @@ Berechtigungen (Begründung):
 | Ungefährer Standort         | Praxen in der Nähe, nur während der Nutzung                          |
 | Mitteilungen                | Termin-Alarm, Terminerinnerungen, Vorsorge-Erinnerungen              |
 | Kalender                    | Termin in den Kalender eintragen bzw. Kalender-Sync (nur auf Wunsch) |
-| Abrechnung über Google Play | MedNow Plus und Familie                                              |
+| Abrechnung über Google Play | Terminlücke Plus und Familie                                         |
 
 Nach dem ersten Hochladen in der Play Console unter „App-Bundle-Explorer“ die tatsächliche Liste prüfen.
 
@@ -91,8 +91,8 @@ Zugangsdaten in den Prüfhinweisen stehen, oder ein fester Prüfcode nur für ei
 
 Prüfhinweise (Vorschlag):
 
-> MedNow arranges doctor appointments in Germany. It does not provide diagnoses or medical advice. During
+> Terminlücke arranges doctor appointments in Germany. It does not provide diagnoses or medical advice. During
 > the pilot phase only a few practices in [PLATZHALTER: city] publish real appointments; demo practices are
 > labelled "Demo". Booking and appointment alerts require email verification: [PLATZHALTER: Prüfzugang].
-> In-app purchases: MedNow Plus (30-day non-renewing pass, yearly subscription) and MedNow Family (yearly
+> In-app purchases: Terminlücke Plus (30-day non-renewing pass, yearly subscription) and Terminlücke Family (yearly
 > subscription). Paying never changes the order of appointment alerts.

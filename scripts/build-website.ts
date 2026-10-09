@@ -31,6 +31,20 @@ const escapeHtml = (s: string) =>
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
   );
 
+/**
+ * Betreiber-Platzhalter mit Werten aus der Umgebung füllen (GitHub-Variablen bzw. lokal gesetzt),
+ * damit Name, Anschrift und Telefon nicht im Repository stehen. Nur exakt diese Schlüssel.
+ */
+export function fillContact(md: string, env: Partial<Record<string, string>>): string {
+  const values: Record<string, string | undefined> = {
+    Name: env.KONTAKT_NAME,
+    'E-Mail': env.KONTAKT_EMAIL,
+    Telefon: env.KONTAKT_TELEFON,
+    Anschrift: env.KONTAKT_ANSCHRIFT,
+  };
+  return md.replace(/\[PLATZHALTER: ([^\]]+)\]/g, (m, key: string) => values[key.trim()] || m);
+}
+
 /** Markdown → HTML; rohes HTML aus den Texten wird nicht übernommen. */
 export function renderMarkdown(md: string): string {
   const html = marked.parse(md, {
@@ -148,7 +162,7 @@ Header set Cache-Control "no-store"
 
 export function buildWebsite(
   outDir: string,
-  opts: { supportEmail?: string; legalDir?: string } = {},
+  opts: { supportEmail?: string; legalDir?: string; env?: Partial<Record<string, string>> } = {},
 ) {
   const legalDir = opts.legalDir ?? join(__dirname, '..', 'docs', 'legal');
   mkdirSync(outDir, { recursive: true });
@@ -160,7 +174,7 @@ export function buildWebsite(
   for (const page of PAGES) {
     const src = join(legalDir, page.file);
     const body = existsSync(src)
-      ? renderMarkdown(readFileSync(src, 'utf8'))
+      ? renderMarkdown(fillContact(readFileSync(src, 'utf8'), opts.env ?? {}))
       : `<h1>${page.title}</h1><p><mark>[PLATZHALTER: Text folgt]</mark></p>`;
     if (!existsSync(src)) missing.push(page.file);
     mkdirSync(join(outDir, page.slug), { recursive: true });
@@ -171,7 +185,10 @@ export function buildWebsite(
 
 if (require.main === module) {
   const out = process.argv[2] ?? 'dist-website';
-  const { missing } = buildWebsite(out, { supportEmail: process.env.SUPPORT_EMAIL || undefined });
+  const { missing } = buildWebsite(out, {
+    supportEmail: process.env.SUPPORT_EMAIL || process.env.KONTAKT_EMAIL || undefined,
+    env: process.env,
+  });
   const dashboard = process.env.DASHBOARD_DIST;
   if (dashboard) {
     const supabaseUrl = process.env.SUPABASE_URL;

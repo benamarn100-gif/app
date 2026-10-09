@@ -15,12 +15,12 @@ export interface PushSender {
 
 const OFFER_TEXT = {
   de: {
-    title: 'MedNow',
+    title: 'Terminlücke',
     informal: 'Ein Termin in deiner Nähe ist frei geworden. Tippe zum Bestätigen.',
     formal: 'Ein Termin in Ihrer Nähe ist frei geworden. Tippen Sie zum Bestätigen.',
   },
   en: {
-    title: 'MedNow',
+    title: 'Terminlücke',
     informal: 'An appointment near you just opened up. Tap to confirm.',
     formal: 'An appointment near you just opened up. Tap to confirm.',
   },
@@ -28,12 +28,12 @@ const OFFER_TEXT = {
 
 const CANCELLED_TEXT = {
   de: {
-    title: 'MedNow',
+    title: 'Terminlücke',
     informal: 'Die Praxis hat einen deiner Termine abgesagt. Details in der App.',
     formal: 'Die Praxis hat einen Ihrer Termine abgesagt. Details in der App.',
   },
   en: {
-    title: 'MedNow',
+    title: 'Terminlücke',
     informal: 'A practice cancelled one of your appointments. See the app for details.',
     formal: 'A practice cancelled one of your appointments. See the app for details.',
   },
@@ -44,7 +44,7 @@ export function offerMessage(target: PushTarget, offerId: string): PushMessage {
   return {
     title: text.title,
     body: target.formal ? text.formal : text.informal,
-    data: { type: 'waitlist_offer', offerId, url: `mednow://offer/${offerId}` },
+    data: { type: 'waitlist_offer', offerId, url: `terminluecke://offer/${offerId}` },
   };
 }
 
@@ -54,7 +54,7 @@ export function cancelledByPracticeMessage(target: PushTarget): PushMessage {
   return {
     title: text.title,
     body: target.formal ? text.formal : text.informal,
-    data: { type: 'appointment_cancelled', url: 'mednow://appointments' },
+    data: { type: 'appointment_cancelled', url: 'terminluecke://appointments' },
   };
 }
 

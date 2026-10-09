@@ -11,7 +11,7 @@ Ein Paket bei einem deutschen Webhoster mit: **eigener Domain**, **SFTP- oder FT
 E-Mails) und **AV-Vertrag**. Geeignet sind z. B. netcup (Nürnberg) oder IONOS (Montabaur); vor dem Kauf auf
 der Tarifseite prüfen, dass alle Punkte im gewählten Tarif enthalten sind. Das deckt auch die Absenderadresse für E-Mails
 (`docs/email-setup.md`) und ein Postfach für Support ab. Domain vorher auf Markenrechte prüfen
-(`TODO.md`, Markenrecherche „MedNow“).
+(`TODO.md`, Markenrecherche „Terminlücke“).
 
 1. Paket buchen, Domain registrieren, **SSL** für die Domain einschalten.
 2. **SFTP-Zugang** (oder FTPS) anlegen bzw. ablesen: Server, Benutzer, Passwort und den Ordner, in dem die
@@ -22,15 +22,19 @@ der Tarifseite prüfen, dass alle Punkte im gewählten Tarif enthalten sind. Das
 
 Repository → **Settings → Secrets and variables → Actions**:
 
-| Art      | Name              | Wert                                                         |
-| -------- | ----------------- | ------------------------------------------------------------ |
-| Secret   | `UPLOAD_HOST`     | Server des Hosters (ohne `sftp://`)                          |
-| Secret   | `UPLOAD_USER`     | Benutzer                                                     |
-| Secret   | `UPLOAD_PASSWORD` | Passwort                                                     |
-| Variable | `UPLOAD_PROTOCOL` | `sftp` (Standard) oder `ftps`                                |
-| Variable | `UPLOAD_DIR`      | Ordner der Domain, z. B. `/` oder `/mednow`                  |
-| Variable | `SUPPORT_EMAIL`   | Kontaktadresse für die Startseite                            |
-| Variable | `DASHBOARD_URL`   | `https://<deine-domain>/praxis/` (für „Pilotpraxis anlegen“) |
+| Art      | Name                | Wert                                                         |
+| -------- | ------------------- | ------------------------------------------------------------ |
+| Secret   | `UPLOAD_HOST`       | Server des Hosters (ohne `sftp://`)                          |
+| Secret   | `UPLOAD_USER`       | Benutzer                                                     |
+| Secret   | `UPLOAD_PASSWORD`   | Passwort                                                     |
+| Variable | `UPLOAD_PROTOCOL`   | `sftp` (Standard) oder `ftps`                                |
+| Variable | `UPLOAD_DIR`        | Ordner der Domain, z. B. `/` oder `/mednow`                  |
+| Variable | `SUPPORT_EMAIL`     | Kontaktadresse für die Startseite                            |
+| Variable | `KONTAKT_NAME`      | Betreiber für Impressum und Datenschutz (Name bzw. Firma)    |
+| Variable | `KONTAKT_ANSCHRIFT` | Ladungsfähige Anschrift, z. B. „Straße 1, 12345 Ort“         |
+| Variable | `KONTAKT_EMAIL`     | Kontakt-E-Mail                                               |
+| Variable | `KONTAKT_TELEFON`   | Telefon (optional, sonst Zeile im Impressum anpassen)        |
+| Variable | `DASHBOARD_URL`     | `https://<deine-domain>/praxis/` (für „Pilotpraxis anlegen“) |
 
 ## 3. Bereitstellen
 

@@ -36,7 +36,7 @@ describe('Dashboard-Texte', () => {
     const t = createTranslator('de');
     expect(t.tp('templates.applied', 1)).toBe('1 neuer Termin angelegt.');
     expect(t.tp('templates.applied', 12)).toBe('12 neue Termine angelegt.');
-    expect(t.t('week.bookedWeek')).toBe('Über MedNow gebucht');
+    expect(t.t('week.bookedWeek')).toBe('Über Terminlücke gebucht');
     expect(t.reason('vaccination')).toBe('Impfung');
     expect(createTranslator('en').tp('freshness.hours', 2)).toBe('Updated 2 hrs ago');
   });

@@ -11,7 +11,7 @@ import { disableCalendarSync } from './calendarSync';
 
 /**
  * Konto löschen: alles, was nur auf dem Gerät liegt, ebenfalls entfernen –
- * Einstellungen, Favoriten, aktives Profil, Vorsorge-Erinnerungen, Kalender „MedNow“
+ * Einstellungen, Favoriten, aktives Profil, Vorsorge-Erinnerungen, Kalender „Terminlücke“
  * und alle geplanten lokalen Mitteilungen.
  */
 export async function clearLocalData(): Promise<void> {

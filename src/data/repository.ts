@@ -26,7 +26,8 @@ import type { PlanId } from '@/domain/plans';
  * Woher die Slots stammen (Seed, Praxis-Dashboard, 116117), entscheidet der Server.
  */
 
-export const HEALTH_CONSENT_VERSION = '2026-10-01';
+// 2026-10-09: Name des Verantwortlichen im Text geändert (MedNow → Terminlücke)
+export const HEALTH_CONSENT_VERSION = '2026-10-09';
 export const HOLD_MINUTES = 5;
 export const OFFER_MINUTES = 10;
 

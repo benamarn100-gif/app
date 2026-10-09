@@ -17,14 +17,14 @@ Zugänge zu Apple (APNs) und Google (FCM) liegen bei EAS, nicht im Repository.
 ## 2. Android (Firebase Cloud Messaging, API V1)
 
 1. console.firebase.google.com → Projekt anlegen (Google Analytics **aus**), Standort der Daten: EU.
-2. _Projekt­einstellungen → Allgemein → App hinzufügen → Android_, Paketname **`de.mednow.app`**.
+2. _Projekt­einstellungen → Allgemein → App hinzufügen → Android_, Paketname **`de.terminluecke.app`**.
    `google-services.json` herunterladen. Die Datei enthält keine Geheimnisse im engeren Sinn, kommt aber
    trotzdem nicht ins Repository.
 3. expo.dev → Projekt → _Environment variables_ → _Add variable_: Name **`GOOGLE_SERVICES_JSON`**,
    Typ **Datei**, Datei hochladen, Umgebungen `preview` und `production`, Sichtbarkeit „Secret“.
    `app.config.ts` übernimmt den Pfad automatisch als `android.googleServicesFile`.
 4. Firebase → _Projekteinstellungen → Dienstkonten_ → _Neuen privaten Schlüssel generieren_ (JSON).
-5. expo.dev → Projekt → _Credentials → Android → de.mednow.app → FCM V1 service account key_ → JSON hochladen.
+5. expo.dev → Projekt → _Credentials → Android → de.terminluecke.app → FCM V1 service account key_ → JSON hochladen.
    (Alternativ: `npx eas-cli credentials -p android` → „Google Service Account“ → „Push Notifications (FCM V1)“.)
 6. Neuen Android-Build erstellen (die Datei wird beim Build eingebunden).
 

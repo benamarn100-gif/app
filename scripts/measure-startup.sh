@@ -4,7 +4,7 @@
 # Voraussetzungen: Testversion (Profil „preview“) installiert, USB-Debugging an,
 # `adb devices` zeigt das Gerät. Der erste Lauf ist ein Aufwärmlauf und zählt nicht.
 #
-# Nutzung: scripts/measure-startup.sh [Läufe=10] [Paket=de.mednow.app]
+# Nutzung: scripts/measure-startup.sh [Läufe=10] [Paket=de.terminluecke.app]
 #
 # Gemessen je Lauf:
 #   erstes Bild  – `am start -W` TotalTime (Prozessstart bis erstes Bild, meist das Startbild)
@@ -14,7 +14,7 @@ set -euo pipefail
 # Hinweis: läuft auch mit der alten bash 3.2 von macOS (leere Arrays, kein mapfile).
 
 RUNS="${1:-10}"
-PKG="${2:-de.mednow.app}"
+PKG="${2:-de.terminluecke.app}"
 
 command -v adb >/dev/null || { echo "adb fehlt – Android SDK Platform-Tools installieren." >&2; exit 1; }
 adb get-state >/dev/null 2>&1 || { echo "Kein Gerät verbunden (adb devices)." >&2; exit 1; }

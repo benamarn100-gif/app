@@ -109,7 +109,7 @@ jobs:
           user = "env(SMTP_USER)"
           pass = "env(SMTP_PASS)"
           admin_email = "env(SMTP_SENDER_EMAIL)"
-          sender_name = "MedNow"
+          sender_name = "Terminlücke"
           '''.replace('\n          ', '\n')
           p.write_text(s)
           PY

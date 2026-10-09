@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import { buildWebsite, renderMarkdown } from '../build-website';
+import { buildWebsite, fillContact, renderMarkdown } from '../build-website';
 
 describe('Webseite aus docs/legal', () => {
   it('übernimmt kein rohes HTML aus den Texten', () => {
@@ -18,6 +18,13 @@ describe('Webseite aus docs/legal', () => {
     expect(renderMarkdown('Name: [PLATZHALTER: Name des Betreibers]')).toContain(
       '<mark>[PLATZHALTER: Name des Betreibers]</mark>',
     );
+  });
+
+  it('füllt nur die bekannten Betreiber-Platzhalter aus der Umgebung', () => {
+    const md = '[PLATZHALTER: Name], [PLATZHALTER: Anschrift] · [PLATZHALTER: USt-IdNr.]';
+    expect(
+      fillContact(md, { KONTAKT_NAME: 'Erika Muster', KONTAKT_ANSCHRIFT: 'Weg 1, 12345 Ort' }),
+    ).toBe('Erika Muster, Weg 1, 12345 Ort · [PLATZHALTER: USt-IdNr.]');
   });
 
   it('baut alle Seiten, fehlende Texte als Platzhalter', () => {

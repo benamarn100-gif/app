@@ -1,5 +1,5 @@
 /**
- * Abo-Stufen (Phase 4, Konzept „MedNow – Abo-Konzept“ vom 06.10.2026).
+ * Abo-Stufen (Phase 4, Konzept „Terminlücke – Abo-Konzept“ vom 06.10.2026).
  *
  * Grundsätze:
  *  - Kern bleibt kostenlos: Suche, alle Filter, Karte, Buchen (auch für Angehörige),
@@ -61,7 +61,7 @@ export function higherPlan(a: PlanId, b: PlanId): PlanId {
  * hinterlegte, lokalisierte Preis.
  */
 export type ProductKind = 'pass' | 'yearly';
-export type ProductId = 'mednow_plus_pass_30d' | 'mednow_plus_yearly' | 'mednow_family_yearly';
+export type ProductId = 'plus_pass_30d' | 'plus_yearly' | 'family_yearly';
 export type Product = {
   id: ProductId;
   plan: Exclude<PlanId, 'free'>;
@@ -76,7 +76,7 @@ export type Product = {
 
 export const PRODUCTS: readonly Product[] = [
   {
-    id: 'mednow_plus_pass_30d',
+    id: 'plus_pass_30d',
     plan: 'plus',
     kind: 'pass',
     fallbackPriceCents: 499,
@@ -84,7 +84,7 @@ export const PRODUCTS: readonly Product[] = [
     durationDays: 30,
   },
   {
-    id: 'mednow_plus_yearly',
+    id: 'plus_yearly',
     plan: 'plus',
     kind: 'yearly',
     fallbackPriceCents: 2999,
@@ -92,7 +92,7 @@ export const PRODUCTS: readonly Product[] = [
     durationDays: 365,
   },
   {
-    id: 'mednow_family_yearly',
+    id: 'family_yearly',
     plan: 'family',
     kind: 'yearly',
     fallbackPriceCents: 4499,

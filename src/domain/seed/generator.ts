@@ -36,7 +36,7 @@ import { createRandom, hashString, mix32, uuidFromString, type Random } from './
  */
 
 export const SEED_VERSION = 'mednow-demo-v1';
-export const DEMO_SOURCE_LICENSE = 'Fiktive Demo-Daten (MedNow), frei verwendbar';
+export const DEMO_SOURCE_LICENSE = 'Fiktive Demo-Daten (Terminlücke), frei verwendbar';
 
 export type Busyness = 'busy' | 'normal' | 'relaxed';
 

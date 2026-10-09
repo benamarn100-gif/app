@@ -1,4 +1,4 @@
-# MedNow (Arbeitstitel)
+# Terminlücke (Arbeitstitel)
 
 App für iOS und Android, mit der Menschen in Deutschland freie Arzttermine in ihrer Nähe finden und buchen.
 
@@ -107,7 +107,7 @@ npx eas-cli@latest update --channel preview                    # Testgeräte ohn
 npx eas-cli@latest update --channel production                 # OTA-Updates (nur JS/Assets)
 ```
 
-Vorher: `docs/legal-checklist.md` abarbeiten (Impressum, Datenschutz, AVV, Store-Datenschutzangaben, Markenrecht „MedNow“).
+Vorher: `docs/legal-checklist.md` abarbeiten (Impressum, Datenschutz, AVV, Store-Datenschutzangaben, Markenrecht „Terminlücke“).
 
 ## Praxis-Dashboard
 

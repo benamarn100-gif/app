@@ -4,7 +4,7 @@
 
 Diese Datenschutzerklärung informiert Sie darüber, welche personenbezogenen Daten wir verarbeiten, wenn Sie
 
-- die App „MedNow“ für iOS und Android nutzen (Abschnitt 4),
+- die App „Terminlücke“ für iOS und Android nutzen (Abschnitt 4),
 - unsere Webseite [PLATZHALTER: Adresse der Webseite] besuchen (Abschnitt 5) oder
 - als Mitarbeiterin oder Mitarbeiter einer Praxis das Praxis-Dashboard [PLATZHALTER: Adresse des Praxis-Dashboards] verwenden (Abschnitt 6).
 
@@ -24,12 +24,12 @@ Die Erklärung ist nach Zwecken gegliedert. Zu jedem Zweck finden Sie, welche Da
 
 Verantwortlich für die Datenverarbeitung im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:
 
-- [PLATZHALTER: Name bzw. Firma des Betreibers inkl. Rechtsform]
-- [PLATZHALTER: Anschrift des Betreibers]
-- E-Mail: [PLATZHALTER: E-Mail-Adresse für Datenschutzanfragen]
-- Telefon: [PLATZHALTER: Telefonnummer des Betreibers]
+- [PLATZHALTER: Name]
+- [PLATZHALTER: Anschrift]
+- E-Mail: [PLATZHALTER: E-Mail]
+- Telefon: [PLATZHALTER: Telefon]
 
-Im Folgenden „wir“ oder „MedNow“.
+Im Folgenden „wir“ oder „Terminlücke“.
 
 ## 2. Datenschutzbeauftragte/r
 
@@ -59,7 +59,7 @@ Wenn die App Daten von unseren Servern lädt (z. B. freie Termine) oder dorthin 
 
 ### 4.2 Nutzung ohne Konto (pseudonyme Sitzung)
 
-Sie können MedNow ohne Registrierung nutzen. Sobald die App zum ersten Mal eine Funktion braucht, die Ihnen Daten zuordnen muss (z. B. Ihre Abo-Stufe oder einen Termin-Alarm), legt sie automatisch eine pseudonyme Sitzung an. Dafür erzeugt der Anmeldedienst eine zufällige Nutzer-ID. Name oder E-Mail-Adresse werden dafür nicht benötigt.
+Sie können Terminlücke ohne Registrierung nutzen. Sobald die App zum ersten Mal eine Funktion braucht, die Ihnen Daten zuordnen muss (z. B. Ihre Abo-Stufe oder einen Termin-Alarm), legt sie automatisch eine pseudonyme Sitzung an. Dafür erzeugt der Anmeldedienst eine zufällige Nutzer-ID. Name oder E-Mail-Adresse werden dafür nicht benötigt.
 
 - **Daten:** zufällige Nutzer-ID, Zeitpunkte der Erstellung und der letzten Anmeldung, Sitzungs-Token. Das Sitzungs-Token liegt verschlüsselt auf Ihrem Gerät; der Schlüssel dafür liegt im geschützten Schlüsselspeicher des Betriebssystems.
 - **Zweck:** Ihnen Ihre eigenen Daten (z. B. Termin-Alarme, Einwilligungen, Abo-Stufe) zuordnen, ohne dass Sie sich registrieren müssen.
@@ -105,7 +105,7 @@ Wenn Sie einen freien Termin wählen, reserviert die App ihn 5 Minuten für Sie,
 
 **Einwilligung in die Verarbeitung von Gesundheitsdaten.** Aus einem Termin kann hervorgehen, welche Fachrichtung Sie aufsuchen, und die Anlass-Kategorie kann Rückschlüsse auf Ihre Gesundheit zulassen. Vor der ersten Buchung bitten wir deshalb in einem eigenen, nicht vorausgewählten Schritt um Ihre ausdrückliche Einwilligung:
 
-> „Ich willige ein, dass MedNow meine Termindaten verarbeitet und an die gewählte Praxis übermittelt. Daraus kann hervorgehen, welche Fachrichtung ich aufsuche (Gesundheitsdaten, Art. 9 DSGVO). Ich kann die Einwilligung jederzeit im Datenschutz-Center widerrufen.“
+> „Ich willige ein, dass Terminlücke meine Termindaten verarbeitet und an die gewählte Praxis übermittelt. Daraus kann hervorgehen, welche Fachrichtung ich aufsuche (Gesundheitsdaten, Art. 9 DSGVO). Ich kann die Einwilligung jederzeit im Datenschutz-Center widerrufen.“
 
 Wir speichern, welche Version dieses Textes Sie wann bestätigt haben. Ohne diese Einwilligung können Sie keine Termine buchen und keine Termin-Alarme setzen.
 
@@ -116,7 +116,7 @@ Wir speichern, welche Version dieses Textes Sie wann bestätigt haben. Ohne dies
   - Kontaktdaten für die Praxis: Vor- und Nachname, Telefonnummer, Versicherungsart (gesetzlich oder privat);
   - Nachweis Ihrer Einwilligung (Art, Version, Zeitpunkt der Erteilung und ggf. des Widerrufs).
 - **Zweck:** den Termin bei der Praxis buchen, verschieben oder stornieren; Ihnen Ihre Termine anzeigen; der Praxis ermöglichen, Sie bei Änderungen zu erreichen. Ihre zuletzt verwendeten Kontaktdaten füllt die App bei der nächsten Buchung vor.
-- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO (Nutzung von MedNow); für Gesundheitsdaten Ihre ausdrückliche Einwilligung nach Art. 9 Abs. 2 lit. a DSGVO. Den Nachweis der Einwilligung speichern wir nach Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 7 Abs. 1 DSGVO.
+- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO (Nutzung von Terminlücke); für Gesundheitsdaten Ihre ausdrückliche Einwilligung nach Art. 9 Abs. 2 lit. a DSGVO. Den Nachweis der Einwilligung speichern wir nach Art. 6 Abs. 1 lit. c DSGVO in Verbindung mit Art. 7 Abs. 1 DSGVO.
 - **Speicherdauer:** Termine einschließlich Kontaktdaten und Anlass – auch stornierte – löschen wir automatisch 12 Monate nach dem Ende des Termins (tägliche Löschroutine), bei Löschung Ihres Kontos sofort. Einwilligungsnachweise speichern wir bis zur Löschung Ihres Kontos.
 - **Empfänger:**
   - **die von Ihnen gewählte Praxis.** Sie sieht im Praxis-Dashboard: Datum, Uhrzeit, Ärztin oder Arzt, Art des Termins, Anlass-Kategorie, ob der Termin für ein Familienmitglied ist und dessen Altersgruppe, Ihren Namen, Ihre Telefonnummer und Ihre Versicherungsart sowie die Zeitpunkte von Buchung und Stornierung. Ihre E-Mail-Adresse und den Namen eines Familienmitglieds sieht die Praxis nicht. Nach einer Stornierung zeigt das Dashboard Ihre Kontaktdaten nicht mehr an. Für die weitere Verarbeitung in ihren eigenen Systemen (z. B. Praxisverwaltung, Behandlungsdokumentation) ist die Praxis selbst verantwortlich. [PLATZHALTER: Rollenverteilung zwischen Betreiber und Praxis nach anwaltlicher Prüfung beschreiben – eigene Verantwortlichkeit, gemeinsame Verantwortlichkeit nach Art. 26 DSGVO oder Auftragsverarbeitung nach Art. 28 DSGVO]
@@ -130,7 +130,7 @@ Wir speichern, welche Version dieses Textes Sie wann bestätigt haben. Ohne dies
 
 ### 4.6 Familienprofile
 
-Sie können Termine auch für Familienmitglieder buchen, z. B. für Ihr Kind. Dafür legen Sie in der App ein Familienprofil an. Kostenlos sind zwei Profile (Sie und ein Familienmitglied), mit „MedNow Familie“ bis zu fünf.
+Sie können Termine auch für Familienmitglieder buchen, z. B. für Ihr Kind. Dafür legen Sie in der App ein Familienprofil an. Kostenlos sind zwei Profile (Sie und ein Familienmitglied), mit „Terminlücke Familie“ bis zu fünf.
 
 - **Daten:** ein von Ihnen gewählter Name oder Spitzname (nur zur Unterscheidung, verschlüsselt gespeichert), die Altersgruppe (z. B. „6–12 Jahre“) und die Zuordnung von Terminen zu diesem Profil. Ein Geburtsdatum fragen wir nicht ab.
 - **Zweck:** Termine für Angehörige buchen und verwalten.
@@ -167,25 +167,25 @@ Die Texte sind bewusst neutral, z. B. „Ein Termin in Ihrer Nähe ist frei gewo
 
 Die folgenden Funktionen speichern Daten ausschließlich auf Ihrem Gerät. Wir erhalten diese Daten nicht.
 
-| Funktion                                    | Was auf dem Gerät gespeichert wird                                                                                                                                           | Hinweise                                                                                          |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| Terminerinnerungen 24 h und 2 h vorher      | geplante Mitteilungen im System Ihres Geräts                                                                                                                                 | Text nur mit Uhrzeit, z. B. „Ihr Arzttermin ist morgen um 14:30 Uhr.“                             |
-| „Jetzt losfahren“                           | geplante Mitteilung; bevorzugtes Verkehrsmittel                                                                                                                              | Wegezeit grob aus der Luftlinie geschätzt; in den Einstellungen abschaltbar                       |
-| Erinnerung vor Ende der Testphase (Abo)     | geplante Mitteilung                                                                                                                                                          | nur wenn Mitteilungen erlaubt sind                                                                |
-| „In Kalender eintragen“                     | Eintrag in dem Kalender, den Sie im Systemdialog wählen                                                                                                                      | Titel „Arzttermin“, Praxis und Adresse im Ort-Feld; kein Kalenderzugriff durch die App            |
-| Kalender-Sync (MedNow Plus/Familie)         | eigener Kalender „MedNow“ mit Ihren Terminen; Zuordnung Termin → Kalendereintrag                                                                                             | erfordert Kalenderzugriff; Ausschalten löscht den Kalender „MedNow“ mit allen Einträgen           |
-| Gemerkte Praxen (MedNow Plus/Familie)       | bis zu 20 Praxis-Kennungen                                                                                                                                                   | –                                                                                                 |
-| Vorsorge-Erinnerungen (MedNow Plus/Familie) | Profil, Art der Vorsorgeuntersuchung, Fälligkeitsdatum, Zeitpunkt Ihrer Bestätigung                                                                                          | Mitteilungstext ohne Untersuchung und Person; „Alle Vorsorge-Erinnerungen löschen“ entfernt alles |
-| Einstellungen                               | z. B. Standortwahl oder Postleitzahl, „für wen“, Altersgruppe, bevorzugte Fachrichtungen, Umkreis, Darstellung, Sprache, du/Sie, Erinnerungen an/aus, Absturzberichte an/aus | –                                                                                                 |
-| Zwischenspeicher                            | öffentlich abrufbare Praxis- und Termindaten für bis zu 24 Stunden                                                                                                           | damit die App auch offline zuletzt geladene Ergebnisse zeigt                                      |
-| Anmeldesitzung                              | verschlüsseltes Sitzungs-Token                                                                                                                                               | siehe Abschnitt 4.2                                                                               |
+| Funktion                                         | Was auf dem Gerät gespeichert wird                                                                                                                                           | Hinweise                                                                                          |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Terminerinnerungen 24 h und 2 h vorher           | geplante Mitteilungen im System Ihres Geräts                                                                                                                                 | Text nur mit Uhrzeit, z. B. „Ihr Arzttermin ist morgen um 14:30 Uhr.“                             |
+| „Jetzt losfahren“                                | geplante Mitteilung; bevorzugtes Verkehrsmittel                                                                                                                              | Wegezeit grob aus der Luftlinie geschätzt; in den Einstellungen abschaltbar                       |
+| Erinnerung vor Ende der Testphase (Abo)          | geplante Mitteilung                                                                                                                                                          | nur wenn Mitteilungen erlaubt sind                                                                |
+| „In Kalender eintragen“                          | Eintrag in dem Kalender, den Sie im Systemdialog wählen                                                                                                                      | Titel „Arzttermin“, Praxis und Adresse im Ort-Feld; kein Kalenderzugriff durch die App            |
+| Kalender-Sync (Terminlücke Plus/Familie)         | eigener Kalender „Terminlücke“ mit Ihren Terminen; Zuordnung Termin → Kalendereintrag                                                                                        | erfordert Kalenderzugriff; Ausschalten löscht den Kalender „Terminlücke“ mit allen Einträgen      |
+| Gemerkte Praxen (Terminlücke Plus/Familie)       | bis zu 20 Praxis-Kennungen                                                                                                                                                   | –                                                                                                 |
+| Vorsorge-Erinnerungen (Terminlücke Plus/Familie) | Profil, Art der Vorsorgeuntersuchung, Fälligkeitsdatum, Zeitpunkt Ihrer Bestätigung                                                                                          | Mitteilungstext ohne Untersuchung und Person; „Alle Vorsorge-Erinnerungen löschen“ entfernt alles |
+| Einstellungen                                    | z. B. Standortwahl oder Postleitzahl, „für wen“, Altersgruppe, bevorzugte Fachrichtungen, Umkreis, Darstellung, Sprache, du/Sie, Erinnerungen an/aus, Absturzberichte an/aus | –                                                                                                 |
+| Zwischenspeicher                                 | öffentlich abrufbare Praxis- und Termindaten für bis zu 24 Stunden                                                                                                           | damit die App auch offline zuletzt geladene Ergebnisse zeigt                                      |
+| Anmeldesitzung                                   | verschlüsseltes Sitzungs-Token                                                                                                                                               | siehe Abschnitt 4.2                                                                               |
 
 - **Rechtsgrundlage:** Das Speichern und Auslesen dieser Informationen auf Ihrem Gerät ist für die von Ihnen gewünschten Funktionen unbedingt erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Auf Kalender und Mitteilungen greift die App nur zu, wenn Sie das im Betriebssystem erlauben.
-- **Kalender:** Wird der von Ihnen gewählte Kalender (oder auf iOS das Konto, in dem der Kalender „MedNow“ angelegt wird) mit einem Dienst wie iCloud oder Google synchronisiert, übermittelt Ihr Gerät die Einträge an diesen Dienst. Darauf haben wir keinen Einfluss.
+- **Kalender:** Wird der von Ihnen gewählte Kalender (oder auf iOS das Konto, in dem der Kalender „Terminlücke“ angelegt wird) mit einem Dienst wie iCloud oder Google synchronisiert, übermittelt Ihr Gerät die Einträge an diesen Dienst. Darauf haben wir keinen Einfluss.
 - **Datensicherungen:** Je nach Einstellungen Ihres Geräts können diese Daten in Geräte-Backups (z. B. iCloud oder Google) enthalten sein.
-- **Löschung:** Beim Löschen Ihres Kontos im Datenschutz-Center entfernt die App auch diese Daten, den Kalender „MedNow“ und alle geplanten Mitteilungen. Außerdem werden die Daten gelöscht, wenn Sie die App deinstallieren.
+- **Löschung:** Beim Löschen Ihres Kontos im Datenschutz-Center entfernt die App auch diese Daten, den Kalender „Terminlücke“ und alle geplanten Mitteilungen. Außerdem werden die Daten gelöscht, wenn Sie die App deinstallieren.
 
-### 4.10 MedNow Plus und MedNow Familie (In-App-Käufe)
+### 4.10 Terminlücke Plus und Terminlücke Familie (In-App-Käufe)
 
 Kostenpflichtige Stufen kaufen Sie über den App Store von Apple oder Google Play. Den Kauf und die Zahlung wickelt der jeweilige Store ab. Wir erhalten von den Stores keine Zahlungsdaten und keinen Namen.
 
@@ -253,7 +253,7 @@ Unsere Webseite setzt keine Cookies, nutzt keine Analyse- oder Tracking-Dienste 
 
 Wenn Sie uns per E-Mail schreiben, verarbeiten wir Ihre E-Mail-Adresse, Ihren Namen (falls angegeben) und den Inhalt Ihrer Nachricht, um Ihr Anliegen zu bearbeiten. Bitte senden Sie uns keine Angaben zu Ihrer Gesundheit per E-Mail.
 
-- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO, wenn Ihr Anliegen die Nutzung von MedNow betrifft; im Übrigen Art. 6 Abs. 1 lit. f DSGVO (Beantwortung Ihrer Anfrage).
+- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO, wenn Ihr Anliegen die Nutzung von Terminlücke betrifft; im Übrigen Art. 6 Abs. 1 lit. f DSGVO (Beantwortung Ihrer Anfrage).
 - **Speicherdauer:** bis Ihr Anliegen erledigt ist, es sei denn, gesetzliche Aufbewahrungspflichten (z. B. für Geschäftsbriefe nach Handels- und Steuerrecht) verlangen eine längere Speicherung (Art. 6 Abs. 1 lit. c DSGVO).
 - **Empfänger:** [PLATZHALTER: Anbieter des E-Mail-Postfachs für den Kontakt]
 
@@ -263,7 +263,7 @@ Dieser Abschnitt richtet sich an Mitarbeiterinnen und Mitarbeiter von Praxen, di
 
 ### 6.1 Praxis-Konten und Anmeldung
 
-Praxis-Konten legt das MedNow-Team an, nachdem es die Praxis geprüft hat. Die Anmeldung erfolgt mit einem Code per E-Mail und anschließend zwingend mit einem zweiten Faktor (zeitbasierter Einmalcode aus einer Authenticator-App). Ohne zweiten Faktor liefert das System keine Patientendaten.
+Praxis-Konten legt das Terminlücke-Team an, nachdem es die Praxis geprüft hat. Die Anmeldung erfolgt mit einem Code per E-Mail und anschließend zwingend mit einem zweiten Faktor (zeitbasierter Einmalcode aus einer Authenticator-App). Ohne zweiten Faktor liefert das System keine Patientendaten.
 
 - **Daten:** dienstliche E-Mail-Adresse, Zuordnung zur Praxis und Rolle (Inhaber/in oder Mitarbeiter/in), Daten des zweiten Faktors, Zeitpunkte der Anmeldung; in Sicherheitsprotokollen des Anmeldedienstes auch die IP-Adresse.
 - **Zweck:** sicherer Zugang nur für berechtigte Personen der jeweiligen Praxis.
@@ -295,7 +295,7 @@ In der App zeigen wir öffentliche Angaben zu Praxen: Name, Adresse, Lage, Telef
 - **Herkunft:** Angaben der Praxis selbst (bei der Einrichtung des Praxis-Zugangs und im Dashboard).
 - **Zweck:** Patientinnen und Patienten bei der Wahl einer Praxis und eines Termins informieren.
 - **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO (Vertrag mit der Praxis) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse der Praxis und der Nutzenden an einer informierten Terminwahl).
-- **Speicherdauer:** solange die Praxis über MedNow Termine anbietet. [PLATZHALTER: Löschfrist für Praxis- und Arztangaben nach Ende der Zusammenarbeit]
+- **Speicherdauer:** solange die Praxis über Terminlücke Termine anbietet. [PLATZHALTER: Löschfrist für Praxis- und Arztangaben nach Ende der Zusammenarbeit]
 - **Empfänger:** alle Nutzenden der App (öffentlich), Supabase Inc. (Auftragsverarbeiter).
 
 ## 8. Empfänger im Überblick

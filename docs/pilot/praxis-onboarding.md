@@ -53,7 +53,7 @@ Genau diese Felder – sie entsprechen den Eingaben des GitHub-Workflows „Pilo
 Hinweise zu den Feldern:
 
 - **`doctors`:** Namen so, wie die Praxis sie öffentlich nennt (Praxisschild, Website). Nur Ärztinnen und Ärzte
-  eintragen, deren Termine über MedNow angeboten werden – im Dashboard wird jeder Termin einer Person zugeordnet.
+  eintragen, deren Termine über Terminlücke angeboten werden – im Dashboard wird jeder Termin einer Person zugeordnet.
   In schmalen Spalten kürzt das Dashboard, z. B. „Dr. med. Anna Becker“ → „Dr. Becker“.
 - **`owner_email`:** möglichst eine persönliche dienstliche Adresse, kein Sammelpostfach. Jeder Zugang gehört
   genau einer Person (Zwei-Faktor auf deren Gerät). Weitere Personen bekommen eigene Zugänge (A5).
@@ -134,7 +134,7 @@ dasselbe.
 
 Per E-Mail an `owner_email` – **ohne** Codes oder Passwörter. Vorschlag:
 
-> Betreff: Ihr Zugang zum MedNow Praxis-Dashboard
+> Betreff: Ihr Zugang zum Terminlücke Praxis-Dashboard
 >
 > Guten Tag [Name],
 >
@@ -215,10 +215,10 @@ mit „Angemeldet bleiben“. Das schützt Patientendaten an gemeinsam genutzten
 
 ### B3. Sprechzeiten-Vorlagen anlegen und anwenden
 
-Vorlagen sind wiederkehrende Zeiten, die Sie über MedNow anbieten möchten. Daraus erzeugt das Dashboard die
+Vorlagen sind wiederkehrende Zeiten, die Sie über Terminlücke anbieten möchten. Daraus erzeugt das Dashboard die
 einzelnen freien Termine.
 
-> **Wichtig:** Geben Sie nur Zeiten frei, die Sie in Ihrem Praxiskalender auch für MedNow freihalten. MedNow
+> **Wichtig:** Geben Sie nur Zeiten frei, die Sie in Ihrem Praxiskalender auch für Terminlücke freihalten. Terminlücke
 > sieht Ihren Praxiskalender nicht.
 
 1. Reiter **„Sprechzeiten“** → Bereich „Neue Vorlage“.
@@ -237,7 +237,7 @@ Gut zu wissen:
 - Vergangene Zeiten werden nicht angelegt.
 - Eine Vorlage zu löschen entfernt **keine** bereits erzeugten Termine. Diese entfernen Sie im Wochenplan
   einzeln (B4).
-- Videosprechstunde: Das Dashboard kann solche Termine anlegen, MedNow verschickt aber keinen Zugangslink.
+- Videosprechstunde: Das Dashboard kann solche Termine anlegen, Terminlücke verschickt aber keinen Zugangslink.
   [PLATZHALTER: Im Pilot Videosprechstunden anbieten – ja/nein?]
 
 ### B4. Einzelne freie Termine anlegen und entfernen
@@ -256,13 +256,13 @@ lautet dann:
 | ------------ | ----------------------------------------------------------------------------------------------------- |
 | „Frei“       | in der App buchbar                                                                                    |
 | „Reserviert“ | jemand bucht gerade (bis 5 Minuten) oder hat ihn per Termin-Alarm angeboten bekommen (bis 10 Minuten) |
-| „Gebucht“    | über MedNow gebucht – Details unter „Buchungen“                                                       |
+| „Gebucht“    | über Terminlücke gebucht – Details unter „Buchungen“                                                  |
 
 **Entfernen:** Termin anklicken → „Termin entfernen“. Das geht nur bei freien Terminen. Tun Sie das immer,
 wenn Sie einen freigegebenen Termin anderweitig vergeben (z. B. am Telefon) oder eine Sprechzeit ausfällt.
 „Reserviert“ lässt sich nicht entfernen – versuchen Sie es nach wenigen Minuten erneut.
 
-Oben im Wochenplan sehen Sie „Heute frei“, „Frei in dieser Woche“, „Über MedNow gebucht“ und
+Oben im Wochenplan sehen Sie „Heute frei“, „Frei in dieser Woche“, „Über Terminlücke gebucht“ und
 „So sieht die App Sie heute“ (Status und Aktualität).
 
 ### B5. Buchungen sehen
@@ -274,8 +274,8 @@ Telefon, Versicherung, Anlass, Ärztin/Arzt, Status. Bucht jemand für ein Famil
 - **Neue Buchungen:** Ist das Dashboard geöffnet, erscheint „Neue Buchung eingegangen.“ Eine E-Mail oder
   andere Benachrichtigung gibt es **nicht** – schauen Sie deshalb regelmäßig unter „Buchungen“ nach
   (Vorschlag: morgens und mittags).
-- **In den Praxiskalender übernehmen:** Tragen Sie jede MedNow-Buchung in Ihr Praxisverwaltungssystem ein.
-  MedNow ist kein Archiv: Buchungen verschwinden z. B., wenn die Person ihr Konto löscht.
+- **In den Praxiskalender übernehmen:** Tragen Sie jede Terminlücke-Buchung in Ihr Praxisverwaltungssystem ein.
+  Terminlücke ist kein Archiv: Buchungen verschwinden z. B., wenn die Person ihr Konto löscht.
 - **Storniert die Person selbst in der App,** steht die Buchung auf „Abgesagt“, die Kontaktdaten sind
   entfernt, und der Termin ist automatisch wieder frei – passende Termin-Alarme bekommen ihn sofort angeboten.
   Sie müssen nur Ihren Praxiskalender anpassen.
@@ -326,7 +326,7 @@ Die App zeigt bei Ihrer Praxis, wie aktuell die Angaben sind („Aktualisiert vo
 ### B9. Zugänge im Team
 
 - Jede Person hat einen **eigenen** Zugang mit eigenem Authenticator. Zugänge nicht teilen.
-- Neue Zugänge und das Entfernen von Zugängen (z. B. wenn jemand die Praxis verlässt) beim MedNow-Team
+- Neue Zugänge und das Entfernen von Zugängen (z. B. wenn jemand die Praxis verlässt) beim Terminlücke-Team
   anfragen – das geht derzeit nicht im Dashboard selbst.
 
 ---
@@ -384,7 +384,7 @@ select at, action, target, details
 
 **Bitte notiert die Praxis bis zum Feedback (freiwillig, ohne Patientendaten):**
 
-- Nicht erschienene MedNow-Termine (No-Shows) als Strichliste – das Dashboard erfasst das nicht.
+- Nicht erschienene Terminlücke-Termine (No-Shows) als Strichliste – das Dashboard erfasst das nicht.
 - Wenn möglich: Anrufe wegen Terminsuche als Strichliste, eine typische Woche vor dem Start und eine im Pilot.
 - Stellen, an denen es gehakt hat (Datum, Uhrzeit, was passiert ist; Screenshots nur ohne Patientendaten).
 
@@ -438,7 +438,7 @@ Ziel: Hürden im Alltag finden. Nur Fragen – Antworten in den Gesprächsnotize
 **Buchungen und No-Shows**
 
 - Passen die Buchungszahlen (vom Betreiber mitgebracht) zu Ihrem Eindruck?
-- Wie viele Personen mit MedNow-Termin sind nicht erschienen (Strichliste)?
+- Wie viele Personen mit Terminlücke-Termin sind nicht erschienen (Strichliste)?
 - Haben die Angaben in der Buchung (Name, Telefon, Versicherung, Anlass) gereicht? Fehlte etwas, war etwas
   überflüssig?
 - Gab es Doppelbelegungen, also Termine, die schon anderweitig vergeben waren?
@@ -446,12 +446,12 @@ Ziel: Hürden im Alltag finden. Nur Fragen – Antworten in den Gesprächsnotize
 **Telefonentlastung**
 
 - Haben Sie weniger, gleich viele oder mehr Anrufe zur Terminsuche bemerkt? (Strichliste, falls geführt)
-- Haben Personen wegen ihres MedNow-Termins angerufen (Rückfragen, Bestätigung, Absage)?
+- Haben Personen wegen ihres Terminlücke-Termins angerufen (Rückfragen, Bestätigung, Absage)?
 
 **Termin-Alarm und Leerlauf**
 
 - Haben Sie bemerkt, dass frei gewordene Termine über die App neu belegt wurden?
-- Gab es kurzfristige Lücken, die Sie gern über MedNow angeboten hätten, aber nicht angeboten haben? Warum?
+- Gab es kurzfristige Lücken, die Sie gern über Terminlücke angeboten hätten, aber nicht angeboten haben? Warum?
 
 **Verbesserungswünsche**
 
@@ -466,11 +466,11 @@ Ziel: Wirkung einschätzen und über die Fortsetzung sprechen. Zusätzlich zu de
 **Aufwand**
 
 - Hat sich der Aufwand eingespielt? Wie viel Zeit pro Praxistag heute im Vergleich zum Start?
-- Bieten Sie heute mehr oder weniger Termine über MedNow an als am Anfang? Warum?
+- Bieten Sie heute mehr oder weniger Termine über Terminlücke an als am Anfang? Warum?
 
 **No-Shows**
 
-- Ihre Einschätzung: Erscheinen Personen mit MedNow-Termin anders zuverlässig als bei telefonisch vereinbarten
+- Ihre Einschätzung: Erscheinen Personen mit Terminlücke-Termin anders zuverlässig als bei telefonisch vereinbarten
   Terminen? Worauf stützt sich die Einschätzung?
 
 **Telefonentlastung**
@@ -479,12 +479,12 @@ Ziel: Wirkung einschätzen und über die Fortsetzung sprechen. Zusätzlich zu de
 
 **Patient:innen und Datenschutz**
 
-- Welche Rückmeldungen haben Patient:innen zu MedNow gegeben?
+- Welche Rückmeldungen haben Patient:innen zu Terminlücke gegeben?
 - Gab es Fragen von Patient:innen oder im Team zum Datenschutz? Fühlten Sie sich mit dem Dashboard sicher?
 
 **Fortsetzung und Verbesserungen**
 
-- Würden Sie MedNow nach dem Pilot weiter nutzen? Unter welchen Bedingungen?
+- Würden Sie Terminlücke nach dem Pilot weiter nutzen? Unter welchen Bedingungen?
 - Welche drei Änderungen wären für Sie am wichtigsten?
-- Würden Sie MedNow einer Kollegin oder einem Kollegen empfehlen? Was müsste sich dafür ändern?
+- Würden Sie Terminlücke einer Kollegin oder einem Kollegen empfehlen? Was müsste sich dafür ändern?
 - Dürfen wir Ihre Rückmeldung verwenden – anonym oder mit Nennung der Praxis? (Regelung in der Vereinbarung)

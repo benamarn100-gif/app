@@ -9,6 +9,8 @@ name: Webseite und Praxis-Dashboard bereitstellen
 #   Variablen: UPLOAD_PROTOCOL   (sftp oder ftps; Standard sftp)
 #              UPLOAD_DIR        (Zielordner auf dem Webspace, z. B. /  oder /mednow)
 #              SUPPORT_EMAIL     (Kontaktadresse auf der Startseite, optional)
+#              KONTAKT_NAME, KONTAKT_ANSCHRIFT, KONTAKT_EMAIL, KONTAKT_TELEFON
+#                                (Betreiber für Impressum/Datenschutz – nur hier, nicht im Repository)
 # Bestehende Dateien im Zielordner werden nicht gelöscht, nur ergänzt bzw. überschrieben.
 
 on:
@@ -59,6 +61,10 @@ jobs:
       - name: Webseite bauen
         env:
           SUPPORT_EMAIL: ${{ vars.SUPPORT_EMAIL }}
+          KONTAKT_NAME: ${{ vars.KONTAKT_NAME }}
+          KONTAKT_ANSCHRIFT: ${{ vars.KONTAKT_ANSCHRIFT }}
+          KONTAKT_EMAIL: ${{ vars.KONTAKT_EMAIL }}
+          KONTAKT_TELEFON: ${{ vars.KONTAKT_TELEFON }}
           DASHBOARD_DIST: dashboard/dist
         run: |
           export SUPABASE_URL="$(jq -r '.build.production.env.EXPO_PUBLIC_SUPABASE_URL' eas.json)"

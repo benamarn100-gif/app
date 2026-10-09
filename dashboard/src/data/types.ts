@@ -14,7 +14,7 @@ import type {
 export type PracticeRole = 'owner' | 'staff';
 export type Membership = { practice: Practice; role: PracticeRole };
 
-/** Slot mit Quelle und – falls über MedNow gebucht – der Termin-ID (ohne Personendaten). */
+/** Slot mit Quelle und – falls über Terminlücke gebucht – der Termin-ID (ohne Personendaten). */
 export type DashboardSlot = Slot & { source: DataSource; appointmentId: string | null };
 
 export type WeekData = {

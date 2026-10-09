@@ -1,5 +1,5 @@
 /*
- * MedNow Praxis-Dashboard. Alle Farben, Abstände, Radien, Schriften und Schatten
+ * Terminlücke Praxis-Dashboard. Alle Farben, Abstände, Radien, Schriften und Schatten
  * kommen als CSS-Variablen aus src/design/tokens.ts (virtual:mednow-theme.css).
  * Keine Farbwerte in dieser Datei (geprüft in src/__tests__/theme.test.ts).
  */

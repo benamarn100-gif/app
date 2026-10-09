@@ -1,5 +1,5 @@
 # Demo: Rund 20 Sekunden nach dem Eintragen wird ein Termin frei (docs/decisions.md D-33).
-appId: de.mednow.app
+appId: de.terminluecke.app
 name: Warteliste – Angebot annehmen
 ---
 - runFlow: ../subflows/start-demo.yaml

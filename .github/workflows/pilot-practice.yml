@@ -109,7 +109,7 @@ jobs:
           else
             # OpenStreetMap Nominatim (eine Anfrage, Nutzungsrichtlinie: eindeutiger User-Agent)
             res="$(curl -sS --max-time 20 -G 'https://nominatim.openstreetmap.org/search' \
-              -H 'User-Agent: MedNow-Pilotpraxis/1.0 (github.com/benamarn100-gif/app)' \
+              -H 'User-Agent: Terminlücke-Pilotpraxis/1.0 (github.com/benamarn100-gif/app)' \
               --data-urlencode "street=$street" --data-urlencode "postalcode=$postal" \
               --data-urlencode "city=$city" --data-urlencode 'countrycodes=de' \
               --data-urlencode 'format=jsonv2' --data-urlencode 'limit=1' || true)"

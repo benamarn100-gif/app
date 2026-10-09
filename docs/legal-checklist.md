@@ -35,7 +35,7 @@
 
 - [ ] **Impressum** (§ 5 DDG) – Platzhalter in `legal.imprintBody`.
 - [ ] **Datenschutzerklärung** – Platzhalter in `legal.privacyBody`.
-- [ ] **Nutzungsbedingungen** – Vermittlung, Stornoregeln, Haftung, kein Behandlungsvertrag mit MedNow.
+- [ ] **Nutzungsbedingungen** – Vermittlung, Stornoregeln, Haftung, kein Behandlungsvertrag mit Terminlücke.
 - [ ] **Vereinbarungen mit Praxen** (Phase 6): Datenverarbeitung, Pflegepflichten für Slots, Verantwortlichkeiten (gemeinsame Verantwortlichkeit Art. 26 bzw. Auftragsverarbeitung Art. 28 prüfen), Pflicht zur Zwei-Faktor-Anmeldung, Umgang mit Absagen.
 - [ ] **Zugriffsprotokoll** der Praxen (`app.practice_audit_log`, 12 Monate) – Zweck, Frist und Auskunftsprozess festlegen.
 - [ ] **Benachrichtigung bei Praxis-Absage** (Push ohne Details) – Text und Pflicht zur direkten Information durch die Praxis klären.
@@ -59,7 +59,7 @@
 - [ ] **Google Play Data Safety**: entsprechend; Datenlöschung in der App vorhanden.
 - [ ] **Datenschutz-Manifest iOS** (`PrivacyInfo.xcprivacy` über `app.config.ts` → `privacyManifests`) prüfen.
 - [ ] Gesundheits-App-Richtlinien (Apple 1.4.1, 5.1.3; Google Health Apps Policy) – Nachweis der Berechtigung/Partnerschaften.
-- [ ] Markenrecherche „MedNow“ (DPMA, EUIPO, App Stores) – Name zentral in `src/config/brand.ts`.
+- [ ] Markenrecherche „Terminlücke“ (DPMA, EUIPO, App Stores) – Name zentral in `src/config/brand.ts`.
 
 ## 7. 116117 (falls weiterverfolgt)
 

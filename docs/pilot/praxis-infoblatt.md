@@ -1,18 +1,18 @@
-# MedNow für Praxen – Infoblatt zur Pilotphase
+# Terminlücke für Praxen – Infoblatt zur Pilotphase
 
 > Stand: 07.10.2026.
-> Für Praxen, die MedNow in einer kostenlosen Pilotphase ausprobieren möchten. Zum Ausdrucken oder Weiterleiten.
+> Für Praxen, die Terminlücke in einer kostenlosen Pilotphase ausprobieren möchten. Zum Ausdrucken oder Weiterleiten.
 
 ## Kurz gesagt
 
-MedNow ist eine App, mit der Patient:innen freie Arzttermine in ihrer Nähe finden und direkt buchen.
+Terminlücke ist eine App, mit der Patient:innen freie Arzttermine in ihrer Nähe finden und direkt buchen.
 Ihre Praxis gibt freie Termine über das **Praxis-Dashboard** frei – eine Web-Seite, die im Browser läuft.
 Wir suchen 1–2 Praxen, die das drei Monate lang mit uns ausprobieren und uns
 offen sagen, was im Praxisalltag funktioniert und was nicht.
 
-Die App ist in der Testphase und startet für Patient:innen zusammen mit den Pilotpraxen in [PLATZHALTER: Stadt].
+Die App ist in der Testphase und startet deutschlandweit – zuerst mit den Pilotpraxen.
 
-## So funktioniert MedNow
+## So funktioniert Terminlücke
 
 - **In der App (für Patient:innen):** Suche nach Fachrichtung und Ort. Jede Praxis hat einen Status:
   „Frei“, „Wenige frei“, „Ausgebucht“ oder „Unbekannt“. Zum Buchen gibt die Person Name, Telefonnummer,
@@ -27,12 +27,12 @@ Die App ist in der Testphase und startet für Patient:innen zusammen mit den Pil
 
 - **Weniger Anrufe zur Terminsuche:** Patient:innen sehen Ihre freien Termine und buchen selbst – ohne Anruf.
   Wie stark das Ihr Telefon entlastet, wollen wir im Pilot gemeinsam herausfinden.
-- **Frei gewordene Termine finden schneller jemanden:** Storniert eine Person ihren MedNow-Termin in der App,
+- **Frei gewordene Termine finden schneller jemanden:** Storniert eine Person ihren Terminlücke-Termin in der App,
   ist der Platz sofort wieder frei und wird automatisch der ersten passenden Person mit Termin-Alarm angeboten
   (10 Minuten für sie reserviert). Dasselbe gilt für Termine, die Sie kurzfristig neu freigeben. Das kann
   Leerlauf verringern – ob und wie oft, sehen wir im Pilot.
 - **Erinnerungen:** Patient:innen können sich in der App 24 Stunden und 2 Stunden vor dem Termin erinnern lassen.
-- **Sie behalten die Kontrolle:** Sie entscheiden, welche und wie viele Termine Sie über MedNow anbieten.
+- **Sie behalten die Kontrolle:** Sie entscheiden, welche und wie viele Termine Sie über Terminlücke anbieten.
   Eine Mindestmenge gibt es nicht.
 - **Sichtbarkeit:** Ihre Praxis erscheint mit Adresse, Telefonnummer, Fachrichtung, Sprachen und dem Hinweis
   „Von der Praxis gepflegt“.
@@ -51,7 +51,7 @@ Die App ist in der Testphase und startet für Patient:innen zusammen mit den Pil
 **Laufend**
 
 - **Freie Termine freigeben** – über die Vorlagen oder einzeln mit „Termin anlegen“.
-- **Buchungen in Ihren Praxiskalender übernehmen.** MedNow ist nicht mit Ihrem Praxisverwaltungssystem
+- **Buchungen in Ihren Praxiskalender übernehmen.** Terminlücke ist nicht mit Ihrem Praxisverwaltungssystem
   verbunden. Neue Buchungen sehen Sie im Dashboard unter „Buchungen“.
 - **Anderweitig vergebene Termine entfernen.** Vergeben Sie einen freigegebenen Termin am Telefon, entfernen
   Sie ihn im Dashboard, damit ihn niemand zusätzlich bucht.
@@ -74,12 +74,12 @@ Die App ist in der Testphase und startet für Patient:innen zusammen mit den Pil
 
 - Keine Software installieren – das Dashboard läuft in einem aktuellen Browser.
 - Keine Schnittstelle zum Praxisverwaltungssystem, keine Änderung an Ihrer Praxis-IT.
-- Keine Patientendaten an MedNow übermitteln – Sie geben nur freie Termine frei.
+- Keine Patientendaten an Terminlücke übermitteln – Sie geben nur freie Termine frei.
 - Keine Mindestanzahl an Terminen anbieten.
 
 ## Kosten
 
-In der Pilotphase ist MedNow für Ihre Praxis **kostenlos**. Es gibt keine Gebühr und keine Provision je Termin.
+In der Pilotphase ist Terminlücke für Ihre Praxis **kostenlos**. Es gibt keine Gebühr und keine Provision je Termin.
 Ob und zu welchen Bedingungen es nach dem Pilot weitergeht, besprechen wir vor dem Ende der Pilotphase. Kosten
 entstehen nur, wenn Sie einer neuen Vereinbarung zustimmen.
 
@@ -105,7 +105,7 @@ entstehen nur, wenn Sie einer neuen Vereinbarung zustimmen.
 ## Fairness
 
 Bezahlen verschafft Patient:innen keinen Vorrang. Es gibt für Patient:innen ein freiwilliges Abo
-(„MedNow Plus“) mit Komfortfunktionen, z. B. mehreren Termin-Alarmen gleichzeitig. Frei werdende Termine gehen
+(„Terminlücke Plus“) mit Komfortfunktionen, z. B. mehreren Termin-Alarmen gleichzeitig. Frei werdende Termine gehen
 aber an alle in derselben Reihenfolge – nach dem Zeitpunkt, zu dem der Termin-Alarm gesetzt wurde – und mit
 derselben Reservierungszeit von 10 Minuten. Auch Praxen können keine bessere Platzierung kaufen: Die Suche
 sortiert nach Verfügbarkeit und Entfernung.

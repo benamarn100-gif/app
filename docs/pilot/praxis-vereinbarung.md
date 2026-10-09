@@ -1,4 +1,4 @@
-# Pilot-Vereinbarung zur Nutzung des MedNow Praxis-Dashboards
+# Pilot-Vereinbarung zur Nutzung des Terminlücke Praxis-Dashboards
 
 > Stand: 07.10.2026.
 >
@@ -15,10 +15,10 @@
 
 ## § 2 Gegenstand und Laufzeit
 
-1. Der Betreiber stellt der Praxis das Praxis-Dashboard von MedNow im Rahmen einer Pilotphase kostenlos zur
+1. Der Betreiber stellt der Praxis das Praxis-Dashboard von Terminlücke im Rahmen einer Pilotphase kostenlos zur
    Verfügung. Mit dem Dashboard gibt die Praxis freie Termine frei, verwaltet Sprechzeiten-Vorlagen, sieht
-   Buchungen, die über die MedNow-App eingehen, und sagt Termine ab.
-2. Patient:innen finden die freigegebenen Termine in der MedNow-App und buchen sie dort. Ein
+   Buchungen, die über die Terminlücke-App eingehen, und sagt Termine ab.
+2. Patient:innen finden die freigegebenen Termine in der Terminlücke-App und buchen sie dort. Ein
    Behandlungsvertrag kommt ausschließlich zwischen Praxis und Patient:in zustande, nicht mit dem Betreiber.
 3. Die Praxis entscheidet selbst, welche und wie viele Termine sie freigibt. Eine Mindestmenge besteht nicht.
 4. Laufzeit: vom [PLATZHALTER: Startdatum] bis [PLATZHALTER: Enddatum, drei Monate nach Start]. Die Vereinbarung
@@ -35,7 +35,7 @@ Die Praxis
    anderweitig vergebene oder ausfallende Termine unverzüglich im Dashboard und bestätigt ihre Angaben an jedem
    Praxistag – durch eine Änderung oder über „Alles aktuell“. Der Praxis ist bekannt, dass die App nach mehr
    als 24 Stunden ohne Bestätigung den Status „Unbekannt“ zeigt.
-2. **sagt Termine im System ab:** Kann die Praxis einen über MedNow gebuchten Termin nicht halten, sagt sie ihn
+2. **sagt Termine im System ab:** Kann die Praxis einen über Terminlücke gebuchten Termin nicht halten, sagt sie ihn
    über das Dashboard ab („Absagen“), damit die Person in der App benachrichtigt wird.
    [PLATZHALTER: Ob die Praxis bei kurzfristigen Absagen zusätzlich direkt informieren muss, z. B. telefonisch
    bei weniger als 24 Stunden Vorlauf.]
@@ -60,7 +60,7 @@ Der Betreiber
 2. **richtet Zugänge ein und entfernt sie** innerhalb von [PLATZHALTER: Frist] nach Anfrage der Praxis; bei
    Verdacht auf Missbrauch unverzüglich. Bei Verlust eines Authenticators prüft er die Identität der Person,
    bevor er den zweiten Faktor zurücksetzt.
-3. **ist erreichbar** unter [PLATZHALTER: Support-E-Mail, Telefon, Erreichbarkeit].
+3. **ist erreichbar** unter [PLATZHALTER: E-Mail] und [PLATZHALTER: Telefon], werktags [PLATZHALTER: Erreichbarkeit, z. B. 9–17 Uhr].
 4. **schützt die Daten** nach § 6 und Anlage 4, insbesondere: Datenbank und Anmeldung bei Supabase in der
    EU-Region Frankfurt; Zwei-Faktor-Pflicht für alle Praxis-Zugänge; Name, Telefonnummer und Anlass werden
    verschlüsselt gespeichert; Zugriffsprotokoll; automatische Abmeldung im Dashboard nach 30 Minuten ohne
@@ -141,7 +141,7 @@ Ein täglicher Job (`app.retention()`) löscht automatisch:
 | Beendete Termin-Alarme                                                           | 90 Tage nach dem Anlegen  |
 | Warteschlange für Mitteilungen an Patient:innen                                  | 30 Tage                   |
 
-Löscht eine Person ihr MedNow-Konto, werden ihre künftigen Termine storniert und ihre Daten sofort gelöscht;
+Löscht eine Person ihr Terminlücke-Konto, werden ihre künftigen Termine storniert und ihre Daten sofort gelöscht;
 die Buchung ist dann auch im Dashboard nicht mehr sichtbar. Die 12-Monats-Frist ist mit den
 Aufbewahrungspflichten der Praxis abzugleichen; Behandlungsdokumentation führt die Praxis in ihren eigenen
 Systemen. [PLATZHALTER: Ergebnis des Abgleichs]
@@ -170,7 +170,7 @@ je nach Variante in § 6.2.]
 1. Die Praxis nimmt nach 2 und 6 Wochen an je einem Feedbackgespräch teil (Fragen in Anlage 2, Teil D).
    Die Teilnahme ist freiwillig, aber für den Zweck des Pilots wichtig.
 2. Der Betreiber darf das Feedback und die Nutzungszahlen der Praxis (z. B. Anzahl freigegebener und gebuchter
-   Termine) zur Verbesserung von MedNow auswerten.
+   Termine) zur Verbesserung von Terminlücke auswerten.
 3. Eine Veröffentlichung von Zitaten oder die Nennung der Praxis als Referenz erfolgt nur mit gesonderter
    Zustimmung der Praxis in Textform. Veröffentlichte Zahlen dürfen keinen Rückschluss auf die Praxis zulassen,
    sofern die Praxis nicht zugestimmt hat.

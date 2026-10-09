@@ -1,6 +1,6 @@
 /**
- * Zentrale Markenkonfiguration. „MedNow“ ist ein Arbeitstitel –
- * vor dem Launch Markenrecht prüfen (DPMA/EUIPO-Recherche), dann nur hier ändern.
+ * Zentrale Markenkonfiguration. Name „Terminlücke“ (seit 09.10.2026, vorher Arbeitstitel „MedNow“) –
+ * vor dem Launch Markenrecht prüfen (DPMA/EUIPO), Änderungen nur hier.
  *
  * Diese Datei darf keine React-Native-Importe enthalten: Sie wird auch von
  * app.config.ts (Node) und dem Praxis-Dashboard (Web) gelesen.
@@ -8,13 +8,16 @@
  * und in den Push-Titeln (supabase/functions/_shared/push.ts).
  */
 export const brand = {
-  name: 'MedNow',
+  name: 'Terminlücke',
+  /** Slug des Expo-Projekts (expo.dev) – intern, bleibt beim alten Arbeitstitel */
   slug: 'mednow',
-  scheme: 'mednow',
-  iosBundleIdentifier: 'de.mednow.app',
-  androidPackage: 'de.mednow.app',
+  scheme: 'terminluecke',
+  /** Schema älterer Testversionen – Links damit werden weiter verstanden */
+  legacySchemes: ['mednow'],
+  iosBundleIdentifier: 'de.terminluecke.app',
+  androidPackage: 'de.terminluecke.app',
   /** Wird im Impressum-Platzhalter angezeigt – vor Launch ersetzen. */
-  publisher: 'MedNow (Arbeitstitel) – Angaben vor Launch ergänzen',
+  publisher: 'Terminlücke – Angaben vor Launch ergänzen',
   emergency: {
     /** Ärztlicher Bereitschaftsdienst */
     onCallService: '116117',

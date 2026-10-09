@@ -13,7 +13,7 @@ Voraussetzung: eine eigene Domain mit Zugriff auf die DNS-Einstellungen (siehe `
 2. **Senders, Domains & Dedicated IPs → Domains → Add a domain**: deine Domain eintragen.
 3. Brevo zeigt 3–4 DNS-Einträge (Bestätigungscode, DKIM, DMARC). Beim Domain-Anbieter unter „DNS“ genau so
    anlegen, dann bei Brevo **Verify** – kann bis zu einigen Stunden dauern.
-4. **Senders → Add a sender**: Absender `no-reply@<deine-domain>`, Name „MedNow“.
+4. **Senders → Add a sender**: Absender `no-reply@<deine-domain>`, Name „Terminlücke“.
 5. **AV-Vertrag:** Kontoeinstellungen → Datenschutz/DPA herunterladen bzw. bestätigen und ablegen.
 
 ## 2. SMTP-Zugang

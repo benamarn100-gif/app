@@ -248,7 +248,7 @@ Deno.test('send_notifications: Absage durch die Praxis ohne Praxisdetails', asyn
   );
   assertEquals(res.status, 200);
   assertEquals(sent[0]?.body, 'Die Praxis hat einen Ihrer Termine abgesagt. Details in der App.');
-  assertEquals(sent[0]?.data.url, 'mednow://appointments');
+  assertEquals(sent[0]?.data.url, 'terminluecke://appointments');
 });
 
 Deno.test('Push-Texte: Sie-Form und Englisch', () => {
@@ -312,7 +312,7 @@ Deno.test('billing_webhook: Jahresabo Familie → Stufe family mit Ablaufdatum',
       app_user_id: USER,
       entitlement_ids: ['plus', 'family'],
       expiration_at_ms: expires,
-      product_id: 'mednow_family_yearly',
+      product_id: 'family_yearly',
     }),
   );
   assertEquals(res.status, 200);
@@ -330,7 +330,7 @@ Deno.test('billing_webhook: Pass ohne Ablauf vom Store → 30 Tage ab Kauf', asy
       app_user_id: USER,
       entitlement_ids: ['plus'],
       purchased_at_ms: bought,
-      product_id: 'mednow_plus_pass_30d',
+      product_id: 'plus_pass_30d',
     }),
   );
   assertEquals(calls[0]?.params.p_plan, 'plus');

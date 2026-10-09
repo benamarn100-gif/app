@@ -47,7 +47,7 @@ jobs:
         run: ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a -x lintVitalAnalyzeRelease -x lintVitalReportRelease -x lintVitalRelease --no-daemon
       - name: Dateiname
         id: name
-        run: echo "file=mednow-test-${GITHUB_SHA::7}.apk" >> "$GITHUB_OUTPUT"
+        run: echo "file=terminluecke-test-${GITHUB_SHA::7}.apk" >> "$GITHUB_OUTPUT"
       - run: mv android/app/build/outputs/apk/release/app-release.apk "${{ steps.name.outputs.file }}"
       - uses: actions/upload-artifact@v4
         with:

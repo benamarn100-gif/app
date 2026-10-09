@@ -12,7 +12,7 @@
 - [ ] Einwilligungstext Gesundheitsdaten juristisch prüfen; bei Änderung `HEALTH_CONSENT_VERSION` erhöhen.
 - [ ] AV-Verträge: Supabase, Expo, Sentry (oder GlitchTip selbst hosten), E-Mail-Versand, Hosting Dashboard, Kartenkacheln.
 - [ ] Vereinbarung mit Praxen (Art. 26/28 DSGVO, Pflegepflichten, Zwei-Faktor-Pflicht, Absagen).
-- [ ] Markenrecherche „MedNow“ (DPMA/EUIPO/Stores); Name nur in `src/config/brand.ts`, `supabase/templates/*.html`, Push-Titel in `supabase/functions/_shared/push.ts`.
+- [ ] Markenrecherche „Terminlücke“ (DPMA/EUIPO/Stores); Name nur in `src/config/brand.ts`, `supabase/templates/*.html`, Push-Titel in `supabase/functions/_shared/push.ts`.
 
 ### Backend (Supabase, Region eu-central-1)
 

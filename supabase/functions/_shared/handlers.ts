@@ -315,7 +315,7 @@ export async function deleteBillingCustomer(
   }
 }
 
-const PASS_PRODUCT = 'mednow_plus_pass_30d';
+const PASS_PRODUCT = 'plus_pass_30d';
 const PASS_DAYS = 30;
 
 const billingEvent = z.object({

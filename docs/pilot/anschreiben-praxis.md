@@ -6,9 +6,9 @@
 
 Sehr geehrte/r [Anrede und Name],
 
-ich entwickle **[App-Name]**, eine App, mit der Patientinnen und Patienten in [Stadt] freie Arzttermine
-finden und direkt buchen können. Ich suche zwei Praxen, die die App in einem kostenlosen Pilot drei Monate
-lang mit mir ausprobieren.
+ich entwickle **Terminlücke**, eine App, mit der Patientinnen und Patienten in ganz Deutschland freie
+Arzttermine finden und direkt buchen können. Für den Start suche ich Praxen, die die App in einem kostenlosen
+Pilot drei Monate lang mit mir ausprobieren.
 
 **Was Ihre Praxis davon hat:**
 

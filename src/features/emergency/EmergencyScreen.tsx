@@ -17,7 +17,7 @@ const tel = (number: string) => `tel:${number.replace(/[^\d+]/g, '')}`;
  * Abos. Keine Diagnose, keine Empfehlung: nur, wer wofür zuständig ist.
  * Nutzen: Im Ernstfall nicht suchen müssen – alle wichtigen Nummern auf einer Seite.
  *
- * Fehlende Daten: MedNow hat keine eigenen Apothekendaten. „Nächste Notapotheke“ führt zur
+ * Fehlende Daten: Terminlücke hat keine eigenen Apothekendaten. „Nächste Notapotheke“ führt zur
  * Notdienstsuche der Apothekerkammern (aponet.de) bzw. zum Sprachdialog 22833.
  */
 export function EmergencyScreen() {

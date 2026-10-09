@@ -7,7 +7,7 @@
 
 Sehr geehrte/r [Anrede und Name],
 
-in meiner App [App-Name] können Nutzerinnen und Nutzer sich an Vorsorge- und Früherkennungsuntersuchungen
+in meiner App Terminlücke können Nutzerinnen und Nutzer sich an Vorsorge- und Früherkennungsuntersuchungen
 erinnern lassen, die die gesetzliche Krankenversicherung übernimmt. Die App gibt keine Empfehlungen und
 stellt keine Diagnosen – sie zeigt nur, was es gibt, und erinnert zum selbst gewählten Zeitpunkt.
 
