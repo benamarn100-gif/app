@@ -52,3 +52,4 @@ supabase/.branches/
 # Webseiten-Build (scripts/build-website.ts)
 /dist-website/
 /site/
+/dist-print/

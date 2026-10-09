@@ -6,14 +6,16 @@
 
 ## 1. Webspace mit Domain
 
-Ein Paket bei einem deutschen Webhoster mit: **eigener Domain**, **SFTP-Zugang**, **.htaccess (Apache)**,
-**kostenlosem SSL-Zertifikat** und **AV-Vertrag**. Das deckt auch die Absenderadresse für E-Mails
+Ein Paket bei einem deutschen Webhoster mit: **eigener Domain**, **SFTP- oder FTPS-Zugang**,
+**.htaccess (Apache)**, **kostenlosem SSL-Zertifikat**, **DNS-Verwaltung** (für die Absender-Domain der
+E-Mails) und **AV-Vertrag**. Geeignet sind z. B. netcup (Nürnberg) oder IONOS (Montabaur); vor dem Kauf auf
+der Tarifseite prüfen, dass alle Punkte im gewählten Tarif enthalten sind. Das deckt auch die Absenderadresse für E-Mails
 (`docs/email-setup.md`) und ein Postfach für Support ab. Domain vorher auf Markenrechte prüfen
 (`TODO.md`, Markenrecherche „MedNow“).
 
 1. Paket buchen, Domain registrieren, **SSL** für die Domain einschalten.
-2. **SFTP-Zugang** anlegen bzw. ablesen: Server, Benutzer, Passwort und den Ordner, in dem die Domain liegt
-   (Document Root).
+2. **SFTP-Zugang** (oder FTPS) anlegen bzw. ablesen: Server, Benutzer, Passwort und den Ordner, in dem die
+   Domain liegt (Document Root).
 3. **AV-Vertrag** im Kundenkonto abschließen und ablegen.
 
 ## 2. In GitHub hinterlegen
@@ -22,10 +24,11 @@ Repository → **Settings → Secrets and variables → Actions**:
 
 | Art      | Name              | Wert                                                         |
 | -------- | ----------------- | ------------------------------------------------------------ |
-| Secret   | `SFTP_HOST`       | SFTP-Server des Hosters                                      |
-| Secret   | `SFTP_USER`       | SFTP-Benutzer                                                |
-| Secret   | `SFTP_PASSWORD`   | SFTP-Passwort                                                |
-| Variable | `SFTP_TARGET_DIR` | Ordner der Domain, z. B. `/` oder `/mednow`                  |
+| Secret   | `UPLOAD_HOST`     | Server des Hosters (ohne `sftp://`)                          |
+| Secret   | `UPLOAD_USER`     | Benutzer                                                     |
+| Secret   | `UPLOAD_PASSWORD` | Passwort                                                     |
+| Variable | `UPLOAD_PROTOCOL` | `sftp` (Standard) oder `ftps`                                |
+| Variable | `UPLOAD_DIR`      | Ordner der Domain, z. B. `/` oder `/mednow`                  |
 | Variable | `SUPPORT_EMAIL`   | Kontaktadresse für die Startseite                            |
 | Variable | `DASHBOARD_URL`   | `https://<deine-domain>/praxis/` (für „Pilotpraxis anlegen“) |
 

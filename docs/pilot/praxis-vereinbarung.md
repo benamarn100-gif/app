@@ -21,7 +21,7 @@
 2. Patient:innen finden die freigegebenen Termine in der MedNow-App und buchen sie dort. Ein
    Behandlungsvertrag kommt ausschließlich zwischen Praxis und Patient:in zustande, nicht mit dem Betreiber.
 3. Die Praxis entscheidet selbst, welche und wie viele Termine sie freigibt. Eine Mindestmenge besteht nicht.
-4. Laufzeit: vom [PLATZHALTER: Startdatum] bis [PLATZHALTER: Enddatum; Vorschlag 3 Monate]. Die Vereinbarung
+4. Laufzeit: vom [PLATZHALTER: Startdatum] bis [PLATZHALTER: Enddatum, drei Monate nach Start]. Die Vereinbarung
    endet mit Ablauf der Laufzeit, ohne dass es einer Kündigung bedarf. Eine Verlängerung bedarf der Textform.
 5. Bestandteil dieser Vereinbarung sind: Anlage 1 Infoblatt (`docs/pilot/praxis-infoblatt.md`), Anlage 2
    Ablauf und Anleitung (`docs/pilot/praxis-onboarding.md`), Anlage 3 Datenschutzregelung nach § 6,

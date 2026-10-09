@@ -7,10 +7,10 @@
 
 MedNow ist eine App, mit der Patient:innen freie Arzttermine in ihrer Nähe finden und direkt buchen.
 Ihre Praxis gibt freie Termine über das **Praxis-Dashboard** frei – eine Web-Seite, die im Browser läuft.
-Wir suchen 1–2 Praxen, die das [PLATZHALTER: Laufzeit, Vorschlag 3 Monate] lang mit uns ausprobieren und uns
+Wir suchen 1–2 Praxen, die das drei Monate lang mit uns ausprobieren und uns
 offen sagen, was im Praxisalltag funktioniert und was nicht.
 
-[PLATZHALTER: Wo und seit wann die App für Patient:innen verfügbar ist.]
+Die App ist in der Testphase und startet für Patient:innen zusammen mit den Pilotpraxen in [PLATZHALTER: Stadt].
 
 ## So funktioniert MedNow
 
@@ -114,6 +114,6 @@ sortiert nach Verfügbarkeit und Entfernung.
 
 Gern zeigen wir Ihnen vorab die Demo des Praxis-Dashboards mit einer fiktiven Praxis.
 
-- [PLATZHALTER: Name, Funktion]
+- [PLATZHALTER: Name]
 - [PLATZHALTER: E-Mail] · [PLATZHALTER: Telefon]
-- [PLATZHALTER: Anschrift des Betreibers]
+- [PLATZHALTER: Anschrift]

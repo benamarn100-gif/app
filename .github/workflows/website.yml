@@ -1,12 +1,13 @@
 name: Webseite und Praxis-Dashboard bereitstellen
 
 # Baut die öffentliche Webseite (Datenschutz, Nutzungsbedingungen, Impressum aus docs/legal) und das
-# Praxis-Dashboard (unter /praxis/) und lädt beides per SFTP auf einen Webspace in der EU.
-# Anleitung: docs/website-setup.md. Ohne SFTP-Zugang wird nur gebaut (Ergebnis als Artefakt „webseite“).
+# Praxis-Dashboard (unter /praxis/) und lädt beides per SFTP oder FTPS auf einen Webspace in der EU.
+# Anleitung: docs/website-setup.md. Ohne Zugang wird nur gebaut (Ergebnis als Artefakt „webseite“).
 #
 # GitHub → Settings → Secrets and variables → Actions:
-#   Secrets:   SFTP_HOST, SFTP_USER, SFTP_PASSWORD   (vom Webhoster)
-#   Variablen: SFTP_TARGET_DIR   (Zielordner auf dem Webspace, z. B. /  oder /mednow)
+#   Secrets:   UPLOAD_HOST, UPLOAD_USER, UPLOAD_PASSWORD   (vom Webhoster)
+#   Variablen: UPLOAD_PROTOCOL   (sftp oder ftps; Standard sftp)
+#              UPLOAD_DIR        (Zielordner auf dem Webspace, z. B. /  oder /mednow)
 #              SUPPORT_EMAIL     (Kontaktadresse auf der Startseite, optional)
 # Bestehende Dateien im Zielordner werden nicht gelöscht, nur ergänzt bzw. überschrieben.
 
@@ -70,25 +71,32 @@ jobs:
           include-hidden-files: true
           retention-days: 14
 
-      - name: Hochladen (SFTP)
+      - name: Hochladen (SFTP oder FTPS)
         if: inputs.upload
         env:
-          SFTP_HOST: ${{ secrets.SFTP_HOST }}
-          SFTP_USER: ${{ secrets.SFTP_USER }}
-          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
-          SFTP_TARGET_DIR: ${{ vars.SFTP_TARGET_DIR }}
+          UPLOAD_HOST: ${{ secrets.UPLOAD_HOST }}
+          UPLOAD_USER: ${{ secrets.UPLOAD_USER }}
+          LFTP_PASSWORD: ${{ secrets.UPLOAD_PASSWORD }}
+          UPLOAD_PROTOCOL: ${{ vars.UPLOAD_PROTOCOL }}
+          UPLOAD_DIR: ${{ vars.UPLOAD_DIR }}
         run: |
-          if [ -z "$SFTP_HOST" ] || [ -z "$SFTP_USER" ] || [ -z "$LFTP_PASSWORD" ]; then
-            echo "::notice::Kein SFTP-Zugang hinterlegt – nur gebaut. Ergebnis: Artefakt „webseite“ (docs/website-setup.md)."
+          if [ -z "$UPLOAD_HOST" ] || [ -z "$UPLOAD_USER" ] || [ -z "$LFTP_PASSWORD" ]; then
+            echo "::notice::Kein Upload-Zugang hinterlegt – nur gebaut. Ergebnis: Artefakt „webseite“ (docs/website-setup.md)."
             exit 0
           fi
           sudo apt-get install -y -qq lftp > /dev/null
-          target="${SFTP_TARGET_DIR:-/}"
+          target="${UPLOAD_DIR:-/}"
+          case "${UPLOAD_PROTOCOL:-sftp}" in
+            sftp) url="sftp://$UPLOAD_HOST"; settings="set sftp:auto-confirm yes;" ;;
+            # FTPS (explizit, AUTH TLS) – nie unverschlüsseltes FTP
+            ftps) url="ftp://$UPLOAD_HOST"; settings="set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate yes;" ;;
+            *) echo "::error::UPLOAD_PROTOCOL muss sftp oder ftps sein"; exit 1 ;;
+          esac
           # Neue Dateien und Änderungen hochladen; nichts auf dem Webspace löschen
-          lftp -u "$SFTP_USER" --env-password "sftp://$SFTP_HOST" -e "
-            set sftp:auto-confirm yes;
+          lftp -u "$UPLOAD_USER" --env-password "$url" -e "
+            $settings
             set net:max-retries 3;
             mirror --reverse --verbose=1 --no-perms site/ '$target';
             bye"
           echo "## Webseite hochgeladen" >> "$GITHUB_STEP_SUMMARY"
-          echo "Ziel: \`$target\` auf $SFTP_HOST – Dashboard unter /praxis/" >> "$GITHUB_STEP_SUMMARY"
+          echo "Ziel: \`$target\` auf $UPLOAD_HOST (${UPLOAD_PROTOCOL:-sftp}) – Dashboard unter /praxis/" >> "$GITHUB_STEP_SUMMARY"
