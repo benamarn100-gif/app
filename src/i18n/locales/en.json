@@ -782,7 +782,7 @@
         "title": "Health check-up",
         "who": "18–34 once, regularly from 35",
         "often": "from 35 every 3 years",
-        "about": "GP examination with blood pressure, blood tests and a talk about previous illnesses."
+        "about": "GP examination with blood pressure, blood tests and a talk about previous illnesses. From 35, once with a test for hepatitis B and C."
       },
       "skin": {
         "title": "Skin cancer screening",
@@ -825,6 +825,18 @@
         "who": "from 65",
         "often": "once",
         "about": "Early detection of an abdominal aortic aneurysm."
+      },
+      "lung": {
+        "title": "Lung cancer screening",
+        "who": "50–75, heavy smokers only (current or former)",
+        "often": "yearly, as long as the criteria are met",
+        "about": "Low-dose CT since April 2026. Criteria include at least 25 years of smoking cigarettes and at least 15 pack-years. Your GP checks whether they apply."
+      },
+      "chlamydia": {
+        "title": "Chlamydia test",
+        "who": "up to age 25",
+        "often": "yearly",
+        "about": "Test for a common infection that often goes unnoticed, e.g. at a gynaecologist."
       },
       "uExams": {
         "title": "Children’s check-ups U1–U9",

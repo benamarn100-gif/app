@@ -856,7 +856,7 @@
         "title": "Gesundheits-Check-up",
         "who": "18–34 Jahre einmal, ab 35 Jahren regelmäßig",
         "often": "ab 35 alle 3 Jahre",
-        "about": "Hausärztliche Untersuchung mit Blutdruck, Blutwerten und Gespräch über Vorerkrankungen."
+        "about": "Hausärztliche Untersuchung mit Blutdruck, Blutwerten und Gespräch über Vorerkrankungen. Ab 35 einmalig mit Test auf Hepatitis B und C."
       },
       "skin": {
         "title": "Hautkrebs-Screening",
@@ -900,6 +900,18 @@
         "who": "ab 65 Jahren",
         "often": "einmalig",
         "about": "Früherkennung einer Erweiterung der Bauchschlagader (Bauchaortenaneurysma)."
+      },
+      "lung": {
+        "title": "Lungenkrebs-Früherkennung",
+        "who": "50–75 Jahre, nur starke Raucherinnen und Raucher (auch ehemalige)",
+        "often": "jährlich, solange die Voraussetzungen erfüllt sind",
+        "about": "Niedrigdosis-CT seit April 2026. Voraussetzungen u. a.: mindestens 25 Jahre Zigaretten geraucht und mindestens 15 Packungsjahre. Ob sie erfüllt sind, prüft die Hausarztpraxis."
+      },
+      "chlamydia": {
+        "title": "Chlamydien-Test",
+        "who": "bis 25 Jahre",
+        "often": "jährlich",
+        "about": "Test auf eine häufige, oft unbemerkte Infektion, z. B. in der Frauenarztpraxis."
       },
       "uExams": {
         "title": "Kinder-Untersuchungen U1–U9",

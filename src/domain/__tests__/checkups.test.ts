@@ -1,4 +1,4 @@
-import { addMonthsAt10, CHECKUPS, checkupsFor } from '../checkups';
+import { addMonthsAt10, CHECKUPS, checkupsFor, intervalFor } from '../checkups';
 
 const ids = (g: Parameters<typeof checkupsFor>[0]) => checkupsFor(g).map((c) => c.id);
 
@@ -31,6 +31,23 @@ describe('Vorsorge-Übersicht', () => {
   it('ohne Altersgruppe: Erwachsenen-Angebote', () => {
     expect(ids(null)).toContain('checkup');
     expect(ids(null)).not.toContain('uExams');
+  });
+
+  it('Gebärmutterhals: jährlich bis 34, ab 35 alle 3 Jahre – 18–39 im Zweifel jährlich', () => {
+    const cervix = CHECKUPS.find((c) => c.id === 'cervix')!;
+    expect(intervalFor(cervix, 'adult_18_39')).toBe(12);
+    expect(intervalFor(cervix, 'adult_40_64')).toBe(36);
+    expect(intervalFor(cervix, 'senior_65_plus')).toBe(36);
+    expect(intervalFor(cervix, null)).toBe(12);
+  });
+
+  it('Lungenkrebs-Früherkennung 50–75, Chlamydien-Test nur für junge Erwachsene', () => {
+    expect(ids('adult_40_64')).toContain('lung');
+    expect(ids('senior_65_plus')).toContain('lung');
+    expect(ids('adult_18_39')).not.toContain('lung');
+    expect(ids('adult_18_39')).toContain('chlamydia');
+    expect(ids('adult_40_64')).not.toContain('chlamydia');
+    expect(ids('teen_13_17')).not.toContain('chlamydia');
   });
 
   it('Fälligkeit: Monate addieren, Monatsende abfangen, 10:00 Uhr', () => {

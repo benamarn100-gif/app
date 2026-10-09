@@ -18,6 +18,7 @@ import { makeStyles, useTheme } from '@/design/theme';
 import {
   addMonthsAt10,
   checkupsFor,
+  intervalFor,
   reminderKey,
   type Checkup,
   type CheckupAudience,
@@ -118,6 +119,7 @@ export function CheckupsScreen() {
                   storageKey={reminderKey(profile.id, c.id)}
                   needsConsent={!consentAt}
                   forFamily={profile.id !== SELF}
+                  intervalMonths={intervalFor(c, profile.ageGroup)}
                   confirmConsent={() =>
                     confirm({
                       title: t('checkups.consentTitle'),
@@ -154,12 +156,15 @@ function CheckupCard({
   needsConsent,
   confirmConsent,
   forFamily,
+  intervalMonths,
 }: {
   checkup: Checkup;
   storageKey: string;
   needsConsent: boolean;
   confirmConsent: () => Promise<boolean>;
   forFamily: boolean;
+  /** Abstand für diese Altersgruppe (intervalFor) */
+  intervalMonths: number | null;
 }) {
   const plan = usePlan();
   // Erst sperren, wenn die Stufe bekannt ist – sonst sähen Plus-Nutzer kurz die Bezahlseite
@@ -178,10 +183,8 @@ function CheckupCard({
   const formatDate = (d: Date | string) =>
     formatBerlinDate(d, locale, { day: 'numeric', month: 'long', year: 'numeric' });
 
-  const options = [
-    ...new Set([1, 6, 12, ...(checkup.intervalMonths ? [checkup.intervalMonths] : [])]),
-  ]
-    .filter((m) => checkup.intervalMonths !== null || m <= 6)
+  const options = [...new Set([1, 6, 12, ...(intervalMonths ? [intervalMonths] : [])])]
+    .filter((m) => intervalMonths !== null || m <= 6)
     .sort((a, b) => a - b);
 
   const schedule = async (months: number) => {
@@ -206,13 +209,13 @@ function CheckupCard({
   };
 
   const markDone = async () => {
-    if (checkup.intervalMonths === null) {
+    if (intervalMonths === null) {
       await cancelCheckupReminder(storageKey);
       removeReminder(storageKey);
       toast.show(t('checkups.doneOnce'), 'success');
       return;
     }
-    const due = addMonthsAt10(new Date(), checkup.intervalMonths);
+    const due = addMonthsAt10(new Date(), intervalMonths);
     setReminder(storageKey, { dueAt: due.toISOString() });
     await scheduleCheckupReminder(storageKey, due, t);
     toast.show(t('checkups.doneToast', { date: formatDate(due) }), 'success');

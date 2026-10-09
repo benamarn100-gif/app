@@ -6,7 +6,8 @@ import type { AgeGroup } from './types';
  * keine medizinische Empfehlung, keine Auswertung.
  * Nutzen: Niemand muss sich merken, wann die nächste Vorsorge dran ist.
  *
- * Stand 10/2026 (Verbraucherzentrale, Bundesgesundheitsministerium, G-BA-Richtlinien).
+ * Stand 10/2026 (Verbraucherzentrale, Bundesgesundheitsministerium, G-BA-Richtlinien; u. a.
+ * Darmkrebs-Angleichung ab 04/2025, Lungenkrebs-Früherkennung mit Niedrigdosis-CT ab 04/2026).
  * Vor Launch fachlich prüfen lassen (docs/release-notes-2026-10.md, offene Punkte).
  * Geschlecht wird nicht gespeichert: geschlechtsspezifische Angebote stehen in eigenen
  * Abschnitten, die Person entscheidet selbst, was für sie zutrifft.
@@ -22,6 +23,8 @@ export type CheckupId =
   | 'breast'
   | 'prostate'
   | 'aorta'
+  | 'lung'
+  | 'chlamydia'
   | 'uExams'
   | 'dentalChild'
   | 'j1';
@@ -33,6 +36,8 @@ export type Checkup = {
   maxAge: number | null;
   /** Abstand für die nächste Erinnerung in Monaten; null = einmalig */
   intervalMonths: number | null;
+  /** Anderer Abstand ab einem Alter (z. B. Gebärmutterhals: ab 35 alle 3 Jahre) */
+  intervalFrom?: { minAge: number; months: number };
 };
 
 export const CHECKUPS: readonly Checkup[] = [
@@ -41,10 +46,22 @@ export const CHECKUPS: readonly Checkup[] = [
   { id: 'skin', audience: 'all', minAge: 35, maxAge: null, intervalMonths: 24 },
   { id: 'dental', audience: 'all', minAge: 18, maxAge: null, intervalMonths: 6 },
   { id: 'bowel', audience: 'all', minAge: 50, maxAge: null, intervalMonths: 24 },
-  { id: 'cervix', audience: 'women', minAge: 20, maxAge: null, intervalMonths: 12 },
+  // 20–34 jährlich (Pap-Abstrich), ab 35 alle 3 Jahre Ko-Test (oKFE-RL)
+  {
+    id: 'cervix',
+    audience: 'women',
+    minAge: 20,
+    maxAge: null,
+    intervalMonths: 12,
+    intervalFrom: { minAge: 35, months: 36 },
+  },
+  // jährlich bis einschließlich 25; in der App ab 18 (keine Anzeige in Kinder-/Jugendprofilen)
+  { id: 'chlamydia', audience: 'women', minAge: 18, maxAge: 25, intervalMonths: 12 },
   { id: 'breast', audience: 'women', minAge: 50, maxAge: 75, intervalMonths: 24 },
   { id: 'prostate', audience: 'men', minAge: 45, maxAge: null, intervalMonths: 12 },
   { id: 'aorta', audience: 'men', minAge: 65, maxAge: null, intervalMonths: null },
+  // Niedrigdosis-CT seit 04/2026, nur für (ehemals) starke Raucher – Voraussetzungen prüft die Praxis
+  { id: 'lung', audience: 'all', minAge: 50, maxAge: 75, intervalMonths: 12 },
   // Kinder und Jugendliche
   { id: 'uExams', audience: 'all', minAge: 0, maxAge: 5, intervalMonths: 3 },
   { id: 'dentalChild', audience: 'all', minAge: 0, maxAge: 17, intervalMonths: 6 },
@@ -64,6 +81,16 @@ const AGE_RANGE: Record<AgeGroup, [number, number]> = {
 export function checkupsFor(ageGroup: AgeGroup | null): Checkup[] {
   const [lo, hi] = ageGroup ? AGE_RANGE[ageGroup] : [18, 120];
   return CHECKUPS.filter((c) => c.minAge <= hi && (c.maxAge === null || c.maxAge >= lo));
+}
+
+/**
+ * Abstand für die nächste Erinnerung in dieser Altersgruppe. Der abweichende Abstand gilt nur,
+ * wenn die ganze Altersgruppe darüber liegt (18–39 bleibt beim kürzeren – im Zweifel früher erinnern).
+ */
+export function intervalFor(checkup: Checkup, ageGroup: AgeGroup | null): number | null {
+  const from = checkup.intervalFrom;
+  if (from && ageGroup && AGE_RANGE[ageGroup][0] >= from.minAge) return from.months;
+  return checkup.intervalMonths;
 }
 
 /** Nächste Fälligkeit: Datum + Monate, 10:00 Uhr Ortszeit (keine Erinnerung mitten in der Nacht). */
