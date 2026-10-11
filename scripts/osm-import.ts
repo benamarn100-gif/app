@@ -41,6 +41,8 @@ export type OsmElement = {
   lat?: number;
   lon?: number;
   center?: { lat: number; lon: number };
+  /** Nur Gebäude mit Adresse (zweiter Teil der Abfrage, „out geom“) */
+  geometry?: { lat: number; lon: number }[];
   tags?: Record<string, string>;
 };
 
@@ -337,6 +339,97 @@ export function toRow(el: OsmElement): ImportRow | SkipReason {
   return row;
 }
 
+export function isPractice(tags: Record<string, string> = {}): boolean {
+  return (
+    tags.amenity === 'doctors' ||
+    tags.amenity === 'dentist' ||
+    /^(doctor|dentist|psychotherapist)$/.test(tags.healthcare ?? '')
+  );
+}
+
+const ADDRESS_KEYS = [
+  'addr:street',
+  'addr:place',
+  'addr:housenumber',
+  'addr:postcode',
+  'addr:city',
+];
+
+function contains(ring: { lat: number; lon: number }[], lat: number, lon: number): boolean {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const a = ring[i]!;
+    const b = ring[j]!;
+    if (
+      a.lat > lat !== b.lat > lat &&
+      lon < ((b.lon - a.lon) * (lat - a.lat)) / (b.lat - a.lat) + a.lon
+    )
+      inside = !inside;
+  }
+  return inside;
+}
+
+function boxArea(ring: { lat: number; lon: number }[]): number {
+  const lats = ring.map((p) => p.lat);
+  const lons = ring.map((p) => p.lon);
+  return (Math.max(...lats) - Math.min(...lats)) * (Math.max(...lons) - Math.min(...lons));
+}
+
+/**
+ * Viele Praxen sind als Punkt im Gebäude erfasst, die Adresse hängt am Gebäude. Dann übernehmen wir
+ * die Adresse des Gebäudes, in dem der Punkt liegt (kleinstes, falls verschachtelt). Fehlt nur der
+ * Ort, kommt er aus der Postleitzahl (häufigster Ort zu dieser PLZ in denselben Daten).
+ */
+export function enrichAddresses(elements: OsmElement[]) {
+  const buildings = elements.filter(
+    (el) =>
+      el.type === 'way' && el.geometry && el.geometry.length >= 4 && el.tags?.['addr:housenumber'],
+  );
+  let fromBuilding = 0;
+  let cityFromPostcode = 0;
+  const practices = elements
+    .filter((el) => isPractice(el.tags))
+    .map((el) => {
+      const tags = el.tags ?? {};
+      if (
+        el.type !== 'node' ||
+        tags['addr:street'] ||
+        tags['addr:place'] ||
+        el.lat == null ||
+        el.lon == null
+      )
+        return el;
+      const building = buildings
+        .filter((b) => contains(b.geometry!, el.lat!, el.lon!))
+        .sort((a, b) => boxArea(a.geometry!) - boxArea(b.geometry!))[0];
+      if (!building) return el;
+      const merged = { ...tags };
+      for (const key of ADDRESS_KEYS)
+        if (!merged[key] && building.tags?.[key]) merged[key] = building.tags[key]!;
+      fromBuilding++;
+      return { ...el, tags: merged };
+    });
+
+  const votes = new Map<string, Map<string, number>>();
+  for (const el of [...practices, ...buildings]) {
+    const postcode = el.tags?.['addr:postcode']?.trim();
+    const city = el.tags?.['addr:city']?.trim();
+    if (!postcode || !city) continue;
+    const forCode = votes.get(postcode) ?? new Map<string, number>();
+    forCode.set(city, (forCode.get(city) ?? 0) + 1);
+    votes.set(postcode, forCode);
+  }
+  const enriched = practices.map((el) => {
+    const postcode = el.tags?.['addr:postcode']?.trim();
+    if (!postcode || el.tags?.['addr:city']) return el;
+    const best = [...(votes.get(postcode) ?? [])].sort((a, b) => b[1] - a[1])[0];
+    if (!best) return el;
+    cityFromPostcode++;
+    return { ...el, tags: { ...el.tags, 'addr:city': best[0] } };
+  });
+  return { practices: enriched, fromBuilding, cityFromPostcode };
+}
+
 /** Dieselbe Praxis ist oft doppelt erfasst (Punkt + Gebäude): Name, PLZ und Straße gleich. */
 export function convert(elements: OsmElement[]) {
   const rows: ImportRow[] = [];
@@ -348,9 +441,10 @@ export function convert(elements: OsmElement[]) {
     duplicate: 0,
   };
   const seen = new Set<string>();
+  const { practices, fromBuilding, cityFromPostcode } = enrichAddresses(elements);
   // Punkte zuerst: sie sitzen meist genau am Eingang
   const order = { node: 0, way: 1, relation: 2 } as const;
-  for (const el of [...elements].sort((a, b) => order[a.type] - order[b.type] || a.id - b.id)) {
+  for (const el of [...practices].sort((a, b) => order[a.type] - order[b.type] || a.id - b.id)) {
     const row = toRow(el);
     if (typeof row === 'string') {
       skipped[row]++;
@@ -365,7 +459,7 @@ export function convert(elements: OsmElement[]) {
     seen.add(key);
     rows.push(row);
   }
-  return { rows, skipped };
+  return { rows, skipped, fromBuilding, cityFromPostcode, practices: practices.length };
 }
 
 // --- Abruf und Upload ---------------------------------------------------------------------------------
@@ -373,6 +467,7 @@ export function convert(elements: OsmElement[]) {
 const OVERPASS = [
   'https://overpass-api.de/api/interpreter',
   'https://overpass.private.coffee/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter',
 ];
 const USER_AGENT = 'Terminluecke-Verzeichnis/1.0 (github.com/benamarn100-gif/app)';
 
@@ -383,8 +478,11 @@ area["ISO3166-2"="DE-${state}"]["boundary"="administrative"]->.a;
   nwr["amenity"="doctors"](area.a);
   nwr["amenity"="dentist"](area.a);
   nwr["healthcare"~"^(doctor|dentist|psychotherapist)$"](area.a);
-);
-out center tags;`;
+)->.p;
+.p out center tags;
+node.p[!"addr:street"][!"addr:place"]->.n;
+way(around.n:30)["addr:housenumber"];
+out tags geom;`;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -498,23 +596,23 @@ async function main() {
   );
   summary('');
   summary(
-    '| Land | OSM-Einträge | übernommen | ohne Fachrichtung | ohne Adresse | ohne Name | Duplikate | neu | aktualisiert | von Praxis gepflegt |',
+    '| Land | OSM-Praxen | übernommen | Adresse vom Gebäude | Ort aus PLZ | ohne Fachrichtung | ohne Adresse | ohne Name | Duplikate | neu | aktualisiert | von Praxis gepflegt |',
   );
-  summary('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |');
+  summary('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |');
   const all: ImportRow[] = [];
   const failed: string[] = [];
   for (const state of states) {
     try {
       const elements = await fetchState(state);
-      const { rows, skipped } = convert(elements);
+      const { rows, skipped, fromBuilding, cityFromPostcode, practices } = convert(elements);
       all.push(...rows);
       const t = apply ? await upload(rows, seenAt) : null;
       summary(
-        `| ${STATES[state]} | ${elements.length} | ${rows.length} | ${skipped.noSpecialty} | ${skipped.noAddress} | ${skipped.noName} | ${skipped.duplicate} | ${t?.inserted ?? '–'} | ${t?.updated ?? '–'} | ${t?.maintainedByPractice ?? '–'} |`,
+        `| ${STATES[state]} | ${practices} | ${rows.length} | ${fromBuilding} | ${cityFromPostcode} | ${skipped.noSpecialty} | ${skipped.noAddress} | ${skipped.noName} | ${skipped.duplicate} | ${t?.inserted ?? '–'} | ${t?.updated ?? '–'} | ${t?.maintainedByPractice ?? '–'} |`,
       );
     } catch (e) {
       failed.push(state);
-      summary(`| ${STATES[state]} | Fehler: ${String(e).slice(0, 160)} | | | | | | | | |`);
+      summary(`| ${STATES[state]} | Fehler: ${String(e).slice(0, 160)} | | | | | | | | | | |`);
     }
     await sleep(5_000); // Overpass schonen
   }

@@ -216,6 +216,73 @@ describe('Zeilen', () => {
   });
 });
 
+describe('Adressen ergänzen', () => {
+  const square = (lat: number, lon: number, d = 0.0002) => [
+    { lat, lon },
+    { lat: lat + d, lon },
+    { lat: lat + d, lon: lon + d },
+    { lat, lon: lon + d },
+    { lat, lon },
+  ];
+
+  it('übernimmt die Adresse des Gebäudes, in dem die Praxis liegt', () => {
+    const { rows, fromBuilding } = convert([
+      {
+        type: 'node',
+        id: 1,
+        lat: 50.55011,
+        lon: 9.68011,
+        tags: { amenity: 'dentist', name: 'Zahnarztpraxis Muster' },
+      },
+      // großes Gebäude außen, kleines innen: das kleinere zählt
+      {
+        type: 'way',
+        id: 10,
+        geometry: square(50.55, 9.68, 0.001),
+        tags: { building: 'yes', ...address, 'addr:housenumber': '1' },
+      },
+      {
+        type: 'way',
+        id: 11,
+        geometry: square(50.5501, 9.6801),
+        tags: { building: 'yes', ...address, 'addr:housenumber': '7' },
+      },
+      // Gebäude daneben (Punkt liegt nicht darin)
+      {
+        type: 'way',
+        id: 12,
+        geometry: square(50.552, 9.682),
+        tags: { building: 'yes', ...address, 'addr:housenumber': '9' },
+      },
+    ]);
+    expect(fromBuilding).toBe(1);
+    expect(rows).toEqual([
+      expect.objectContaining({ ref: 'node/1', street: 'Bahnhofstraße 7', city: 'Fulda' }),
+    ]);
+  });
+
+  it('ergänzt den Ort aus der Postleitzahl, wenn er eindeutig vorkommt', () => {
+    const { rows, cityFromPostcode } = convert([
+      {
+        type: 'node',
+        id: 1,
+        lat: 50.55,
+        lon: 9.68,
+        tags: { amenity: 'dentist', name: 'Zahnarzt A', ...address, 'addr:city': '' },
+      },
+      {
+        type: 'node',
+        id: 2,
+        lat: 50.56,
+        lon: 9.69,
+        tags: { amenity: 'dentist', name: 'Zahnarzt B', ...address, 'addr:housenumber': '9' },
+      },
+    ]);
+    expect(cityFromPostcode).toBe(1);
+    expect(rows.map((r) => r.city)).toEqual(['Fulda', 'Fulda']);
+  });
+});
+
 describe('Hilfen', () => {
   it('Website nur mit http(s) und Domain', () => {
     expect(normalizeWebsite('praxis-beispiel.de')).toBe('https://praxis-beispiel.de/');
@@ -231,6 +298,7 @@ describe('Hilfen', () => {
 
   it('Overpass-Abfrage je Bundesland', () => {
     expect(overpassQuery('HE')).toContain('"ISO3166-2"="DE-HE"');
-    expect(overpassQuery('HE')).toContain('out center tags;');
+    expect(overpassQuery('HE')).toContain('.p out center tags;');
+    expect(overpassQuery('HE')).toContain('way(around.n:30)["addr:housenumber"];');
   });
 });
