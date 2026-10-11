@@ -10,3 +10,4 @@ supabase/migrations
 supabase/tests
 coverage
 assets
+src/features/profile/legalTexts.generated.ts

@@ -546,9 +546,7 @@
   },
   "legal": {
     "placeholder": "Platzhalter – vor Launch anwaltlich prüfen.",
-    "imprintBody": "Angaben gemäß § 5 DDG folgen vor dem Launch: Name und Anschrift des Anbieters, Vertretungsberechtigte, Kontakt, Registereintrag, Umsatzsteuer-ID.",
-    "privacyBody": "Die Datenschutzerklärung beschreibt vor dem Launch: Verantwortlicher, Zwecke und Rechtsgrundlagen (u. a. Art. 9 Abs. 2 lit. a DSGVO), Empfänger (Praxen, Auftragsverarbeiter in der EU), Speicherdauer, Rechte der Betroffenen und Beschwerderecht.",
-    "termsBody": "Die Nutzungsbedingungen regeln vor dem Launch die Vermittlung von Terminen, Stornierungen und den Ausschluss medizinischer Beratung.",
+    "germanOnly": "Die Rechtstexte liegen nur auf Deutsch vor.",
     "accessibilityBody": "Terminlücke soll die Anforderungen der WCAG 2.1 Stufe AA erfüllen (Barrierefreiheitsstärkungsgesetz). Bekannte Einschränkungen und eine Kontaktmöglichkeit für Barrieren werden vor dem Launch ergänzt.",
     "helpBody": "Terminlücke zeigt freie Termine von Praxen. Bei akuten Beschwerden außerhalb der Sprechzeiten hilft der ärztliche Bereitschaftsdienst unter 116117. Bei Lebensgefahr wähle 112.",
     "helpBody_formal": "Terminlücke zeigt freie Termine von Praxen. Bei akuten Beschwerden außerhalb der Sprechzeiten hilft der ärztliche Bereitschaftsdienst unter 116117. Bei Lebensgefahr wählen Sie 112.",

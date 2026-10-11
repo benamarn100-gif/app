@@ -488,9 +488,7 @@
   },
   "legal": {
     "placeholder": "Placeholder – to be reviewed by a lawyer before launch.",
-    "imprintBody": "Information pursuant to § 5 DDG will be added before launch: provider name and address, authorised representatives, contact, register entry, VAT ID.",
-    "privacyBody": "Before launch, the privacy policy will describe: controller, purposes and legal bases (incl. Art. 9(2)(a) GDPR), recipients (practices, processors in the EU), retention periods, data subject rights and the right to lodge a complaint.",
-    "termsBody": "Before launch, the terms of use will cover appointment brokering, cancellations and the exclusion of medical advice.",
+    "germanOnly": "The legal texts are available in German only.",
     "accessibilityBody": "Terminlücke aims to meet WCAG 2.1 level AA (German Accessibility Strengthening Act). Known limitations and a contact for reporting barriers will be added before launch.",
     "helpBody": "Terminlücke shows free appointments at practices. For urgent complaints outside opening hours, the medical on-call service helps at 116117. If life is at risk, call 112.",
     "licensesIntro": "Terminlücke uses open-source software and open data.",

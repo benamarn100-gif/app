@@ -1,11 +1,13 @@
 import { ScrollView, View } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
 
-import { Card, EmergencyBar, Text } from '@/components';
+import { Card, EmergencyBar, Markdown, Text } from '@/components';
 import { TriangleAlert } from '@/components/icons';
-import { brand } from '@/config/brand';
 import { makeStyles, useTheme } from '@/design/theme';
 import { useT, type TFn } from '@/i18n/useT';
+import { appContactEnv, fillContact } from '@/lib/legalText';
+
+import { LEGAL_TEXTS } from './legalTexts.generated';
 
 type Page = 'imprint' | 'privacy' | 'terms' | 'licenses' | 'accessibility' | 'help';
 
@@ -35,13 +37,18 @@ function title(page: Page, t: TFn) {
   }[page];
 }
 
-/** Rechtstexte: deutlich markierte Platzhalter („vor Launch anwaltlich prüfen“). */
+/**
+ * Rechtstexte: dieselben Entwürfe wie auf der Webseite (docs/legal, „ENTWURF“-Hinweis und
+ * markierte Platzhalter bleiben sichtbar, bis die anwaltliche Prüfung erledigt ist).
+ */
 export function LegalScreen() {
   const theme = useTheme();
   const styles = useStyles();
-  const { t } = useT();
+  const { t, language } = useT();
   const { page = 'imprint' } = useLocalSearchParams<{ page: Page }>();
-  const isPlaceholder = page !== 'licenses' && page !== 'help';
+  const isPlaceholder = page === 'accessibility';
+  const document =
+    page === 'imprint' || page === 'privacy' || page === 'terms' ? LEGAL_TEXTS[page] : null;
 
   return (
     <ScrollView style={styles.root} contentContainerStyle={styles.content}>
@@ -56,14 +63,14 @@ export function LegalScreen() {
           </View>
         </Card>
       ) : null}
-      {page === 'imprint' ? (
-        <>
-          <Text variant="body">{brand.publisher}</Text>
-          <Text variant="body">{t('legal.imprintBody')}</Text>
-        </>
+      {document && language !== 'de' ? (
+        <Text variant="small" color="textSecondary">
+          {t('legal.germanOnly')}
+        </Text>
       ) : null}
-      {page === 'privacy' ? <Text variant="body">{t('legal.privacyBody')}</Text> : null}
-      {page === 'terms' ? <Text variant="body">{t('legal.termsBody')}</Text> : null}
+      {document ? (
+        <Markdown source={fillContact(document, appContactEnv)} testID={`legal-${page}`} />
+      ) : null}
       {page === 'accessibility' ? <Text variant="body">{t('legal.accessibilityBody')}</Text> : null}
       {page === 'help' ? (
         <>

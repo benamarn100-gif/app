@@ -12,6 +12,7 @@ export { EmptyState } from './EmptyState';
 export { FreshnessLabel, freshnessText } from './FreshnessLabel';
 export * from './Illustrations';
 export { ListRow } from './ListRow';
+export { Markdown, parseMarkdown } from './Markdown';
 export { PracticeCard } from './PracticeCard';
 export { PressableScale } from './PressableScale';
 export { LoadingDots, ProgressDots } from './ProgressDots';

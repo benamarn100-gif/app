@@ -16,6 +16,9 @@ import { marked } from 'marked';
 
 import { brand } from '../src/config/brand';
 import { colors } from '../src/design/tokens';
+import { fillContact } from '../src/lib/legalText';
+
+export { fillContact };
 
 export type Page = { slug: string; file: string; title: string };
 
@@ -30,20 +33,6 @@ const escapeHtml = (s: string) =>
     /[&<>"']/g,
     (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!,
   );
-
-/**
- * Betreiber-Platzhalter mit Werten aus der Umgebung füllen (GitHub-Variablen bzw. lokal gesetzt),
- * damit Name, Anschrift und Telefon nicht im Repository stehen. Nur exakt diese Schlüssel.
- */
-export function fillContact(md: string, env: Partial<Record<string, string>>): string {
-  const values: Record<string, string | undefined> = {
-    Name: env.KONTAKT_NAME,
-    'E-Mail': env.KONTAKT_EMAIL,
-    Telefon: env.KONTAKT_TELEFON,
-    Anschrift: env.KONTAKT_ANSCHRIFT,
-  };
-  return md.replace(/\[PLATZHALTER: ([^\]]+)\]/g, (m, key: string) => values[key.trim()] || m);
-}
 
 /** Markdown → HTML; rohes HTML aus den Texten wird nicht übernommen. */
 export function renderMarkdown(md: string): string {

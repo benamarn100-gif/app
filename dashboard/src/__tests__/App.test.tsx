@@ -38,7 +38,12 @@ describe('Praxis-Dashboard (Demo)', () => {
 
   it('Wochenplan: Termin anlegen, der sofort in der App sichtbar ist', async () => {
     const { user, container } = await openDemo();
-    await screen.findAllByRole('button', { name: /Uhr, / });
+    // Woche geladen: Termine oder „nichts frei“ je Tag (sonntags ist der Rest der Woche leer)
+    await waitFor(() =>
+      expect(
+        container.querySelector('.week[aria-busy="false"] :is(.day__slots, .day__empty)'),
+      ).not.toBeNull(),
+    );
     await expectNoAxeViolations(container);
 
     await user.click(screen.getByRole('button', { name: 'Termin anlegen' }));
