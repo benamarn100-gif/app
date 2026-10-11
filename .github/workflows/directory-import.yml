@@ -2,6 +2,7 @@ name: Praxisverzeichnis importieren (OpenStreetMap)
 
 # Echte Arzt-, Zahnarzt- und Psychotherapiepraxen in ganz Deutschland aus OpenStreetMap
 # (© OpenStreetMap-Mitwirkende, ODbL 1.0) – mit Adresse, Telefon und, wo eindeutig, Sprechzeiten.
+# Quelle: Auszüge je Bundesland von download.geofabrik.de, gefiltert mit osmium.
 # Termine werden nie erfunden: Diese Praxen erscheinen mit „Keine aktuellen Termindaten – bitte
 # anrufen“, bis sie als Pilotpraxis eigene Termine einstellen (Eintrag wird dann übernommen).
 # Skript: scripts/osm-import.ts · Datenbank: Migration 20261011000100 · Doku: docs/data-sources.md
@@ -88,7 +89,11 @@ jobs:
 
       - name: Abhängigkeiten
         if: env.IN_REMOVE == ''
-        run: npm ci
+        run: |
+          npm ci
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq osmium-tool > /dev/null
+          osmium --version | head -1
 
       - name: Import
         if: env.IN_REMOVE == ''

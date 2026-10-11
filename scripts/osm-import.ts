@@ -1,18 +1,26 @@
 /**
  * Praxisverzeichnis aus OpenStreetMap (© OpenStreetMap-Mitwirkende, ODbL 1.0).
  *
- * Holt Arzt-, Zahnarzt- und Psychotherapiepraxen je Bundesland über die Overpass-API, übernimmt nur
- * Einträge mit Name, Adresse und erkennbarer Fachrichtung und schreibt sie über die Management-API
- * in app.import_osm_practices (Migration 20261011000100). Termine werden nie erfunden – diese Praxen
- * erscheinen in der App mit „Keine aktuellen Termindaten – bitte anrufen“.
+ * Lädt je Bundesland den OpenStreetMap-Auszug von Geofabrik, filtert Arzt-, Zahnarzt- und
+ * Psychotherapiepraxen mit osmium (apt: osmium-tool), übernimmt nur Einträge mit Name, Adresse und
+ * erkennbarer Fachrichtung und schreibt sie über die Management-API in app.import_osm_practices
+ * (Migration 20261011000100). Termine werden nie erfunden – diese Praxen erscheinen in der App mit
+ * „Keine Online-Termine – bitte anrufen“.
+ *
+ * Kein Overpass: Die öffentlichen Server lehnen Anfragen von geteilten CI-Adressen oft ab (504/500).
  *
  *   npx tsx scripts/osm-import.ts [--states HE,BY] [--apply] [--prune] [--out verzeichnis.json]
+ *   npx tsx scripts/osm-import.ts --pbf auszug.osm.pbf      (lokale Datei, nur Probelauf)
  *
  * Ohne --apply: Probelauf (nur zählen). Mit --apply: SUPABASE_ACCESS_TOKEN und PROJECT_REF nötig.
  * --prune (nur zusammen mit allen Bundesländern): Einträge entfernen, die es nicht mehr gibt.
  */
+import { execFileSync, spawn } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { appendFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { createInterface } from 'node:readline';
 
 import type { OpeningHours, Weekday } from '../src/domain/types';
 
@@ -462,55 +470,184 @@ export function convert(elements: OsmElement[]) {
   return { rows, skipped, fromBuilding, cityFromPostcode, practices: practices.length };
 }
 
-// --- Abruf und Upload ---------------------------------------------------------------------------------
+// --- Abruf (Geofabrik + osmium) -------------------------------------------------------------------------
 
-const OVERPASS = [
-  'https://overpass-api.de/api/interpreter',
-  'https://overpass.private.coffee/api/interpreter',
-  'https://overpass.kumi.systems/api/interpreter',
+const GEOFABRIK: Record<string, string> = {
+  BW: 'baden-wuerttemberg',
+  BY: 'bayern',
+  BE: 'berlin',
+  BB: 'brandenburg',
+  HB: 'bremen',
+  HH: 'hamburg',
+  HE: 'hessen',
+  MV: 'mecklenburg-vorpommern',
+  NI: 'niedersachsen',
+  NW: 'nordrhein-westfalen',
+  RP: 'rheinland-pfalz',
+  SL: 'saarland',
+  SN: 'sachsen',
+  ST: 'sachsen-anhalt',
+  SH: 'schleswig-holstein',
+  TH: 'thueringen',
+};
+
+export const geofabrikUrl = (state: string) =>
+  `https://download.geofabrik.de/europe/germany/${GEOFABRIK[state]}-latest.osm.pbf`;
+
+export const PRACTICE_FILTERS = [
+  'nwr/amenity=doctors,dentist',
+  'nwr/healthcare=doctor,dentist,psychotherapist',
 ];
+
+type Feature = {
+  geometry: { type: string; coordinates: unknown } | null;
+  properties: Record<string, string>;
+};
+type Ring = { lat: number; lon: number }[];
+
+function outerRing(geometry: Feature['geometry']): Ring | null {
+  if (!geometry) return null;
+  const coords =
+    geometry.type === 'Polygon'
+      ? (geometry.coordinates as number[][][])[0]
+      : geometry.type === 'MultiPolygon'
+        ? (geometry.coordinates as number[][][][])[0]?.[0]
+        : null;
+  return coords ? coords.map(([lon, lat]) => ({ lat: lat!, lon: lon! })) : null;
+}
+
+/** Eine Zeile aus „osmium export -f geojsonseq -a type,id“ → OsmElement (Flächen mit Mittelpunkt). */
+export function featureToElement(feature: Feature, withGeometry = false): OsmElement | null {
+  const { '@type': type, '@id': id, ...tags } = feature.properties;
+  if (type !== 'node' && type !== 'way' && type !== 'relation') return null;
+  const el: OsmElement = { type, id: Number(id), tags };
+  if (feature.geometry?.type === 'Point') {
+    const [lon, lat] = feature.geometry.coordinates as number[];
+    return { ...el, lat, lon };
+  }
+  const ring = outerRing(feature.geometry);
+  if (!ring?.length) return null;
+  const lats = ring.map((p) => p.lat);
+  const lons = ring.map((p) => p.lon);
+  el.center = {
+    lat: (Math.min(...lats) + Math.max(...lats)) / 2,
+    lon: (Math.min(...lons) + Math.max(...lons)) / 2,
+  };
+  if (withGeometry) el.geometry = ring;
+  return el;
+}
+
+function osmium(args: string[]) {
+  execFileSync('osmium', args, { stdio: ['ignore', 'ignore', 'inherit'] });
+}
+
+/** Zeilenweise lesen, ohne die ganze Ausgabe im Speicher zu halten. */
+async function eachFeature(args: string[], onFeature: (f: Feature) => void) {
+  const child = spawn('osmium', args, { stdio: ['ignore', 'pipe', 'inherit'] });
+  const lines = createInterface({ input: child.stdout });
+  for await (const line of lines) {
+    const json = line.replace(/^\x1e/, '').trim(); // geojsonseq: Datensatz-Trenner
+    if (json) onFeature(JSON.parse(json) as Feature);
+  }
+  const code: number = await new Promise((resolve) => child.on('close', resolve));
+  if (code !== 0) throw new Error(`osmium ${args[0]} endete mit ${code}`);
+}
+
+/**
+ * Praxen und – nur für Praxis-Punkte ohne Adresse – die Gebäude mit Hausnummer, in denen sie liegen.
+ * Gebäude werden über ein grobes Raster vorgefiltert, damit nicht Millionen im Speicher landen.
+ */
+export async function loadPbf(pbf: string, workDir: string): Promise<OsmElement[]> {
+  const practicesPbf = join(workDir, 'praxen.osm.pbf');
+  osmium(['tags-filter', pbf, ...PRACTICE_FILTERS, '-o', practicesPbf, '--overwrite']);
+  const practices: OsmElement[] = [];
+  await eachFeature(
+    [
+      'export',
+      practicesPbf,
+      '-f',
+      'geojsonseq',
+      '-a',
+      'type,id',
+      '--geometry-types=point,polygon',
+      '-o',
+      '-',
+    ],
+    (f) => {
+      const el = featureToElement(f);
+      if (el && isPractice(el.tags)) practices.push(el);
+    },
+  );
+
+  const CELL = 0.005; // ≈ 550 m
+  const cellKey = (lat: number, lon: number) =>
+    `${Math.floor(lat / CELL)}:${Math.floor(lon / CELL)}`;
+  const grid = new Map<string, { lat: number; lon: number }[]>();
+  for (const el of practices) {
+    if (el.type !== 'node' || el.lat == null || el.lon == null) continue;
+    if (el.tags?.['addr:street'] || el.tags?.['addr:place']) continue;
+    const key = cellKey(el.lat, el.lon);
+    grid.set(key, [...(grid.get(key) ?? []), { lat: el.lat, lon: el.lon }]);
+  }
+  if (!grid.size) return practices;
+
+  const addressPbf = join(workDir, 'adressen.osm.pbf');
+  osmium(['tags-filter', pbf, 'w/addr:housenumber', '-o', addressPbf, '--overwrite']);
+  const buildings: OsmElement[] = [];
+  await eachFeature(
+    [
+      'export',
+      addressPbf,
+      '-f',
+      'geojsonseq',
+      '-a',
+      'type,id',
+      '--geometry-types=polygon',
+      '-o',
+      '-',
+    ],
+    (f) => {
+      const ring = outerRing(f.geometry);
+      if (!ring?.length) return;
+      const lats = ring.map((p) => p.lat);
+      const lons = ring.map((p) => p.lon);
+      const [minLat, maxLat, minLon, maxLon] = [
+        Math.min(...lats),
+        Math.max(...lats),
+        Math.min(...lons),
+        Math.max(...lons),
+      ];
+      // Gebäude sind klein: Zellen der Ecken genügen
+      const keys = new Set([
+        cellKey(minLat, minLon),
+        cellKey(minLat, maxLon),
+        cellKey(maxLat, minLon),
+        cellKey(maxLat, maxLon),
+      ]);
+      const hit = [...keys].some((k) =>
+        grid
+          .get(k)
+          ?.some((p) => p.lat >= minLat && p.lat <= maxLat && p.lon >= minLon && p.lon <= maxLon),
+      );
+      if (!hit) return;
+      const el = featureToElement(f, true);
+      if (el) buildings.push(el);
+    },
+  );
+  return [...practices, ...buildings];
+}
+
 const USER_AGENT = 'Terminluecke-Verzeichnis/1.0 (github.com/benamarn100-gif/app)';
 
-export function overpassQuery(state: string): string {
-  return `[out:json][timeout:900];
-area["ISO3166-2"="DE-${state}"]["boundary"="administrative"]->.a;
-(
-  nwr["amenity"="doctors"](area.a);
-  nwr["amenity"="dentist"](area.a);
-  nwr["healthcare"~"^(doctor|dentist|psychotherapist)$"](area.a);
-)->.p;
-.p out center tags;
-node.p[!"addr:street"][!"addr:place"]->.n;
-way(around.n:30)["addr:housenumber"];
-out tags geom;`;
+function download(url: string, file: string) {
+  execFileSync(
+    'curl',
+    ['-fsSL', '--retry', '4', '--retry-delay', '20', '-A', USER_AGENT, '-o', file, url],
+    { stdio: ['ignore', 'ignore', 'inherit'] },
+  );
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-async function fetchState(state: string): Promise<OsmElement[]> {
-  let lastError: unknown;
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const endpoint = OVERPASS[attempt % OVERPASS.length]!;
-    try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'User-Agent': USER_AGENT },
-        body: new URLSearchParams({ data: overpassQuery(state) }),
-        signal: AbortSignal.timeout(15 * 60_000),
-      });
-      if (!res.ok) throw new Error(`${endpoint}: HTTP ${res.status}`);
-      const json = (await res.json()) as { elements?: OsmElement[]; remark?: string };
-      if (json.remark && /error|timed out/i.test(json.remark)) throw new Error(json.remark);
-      if (!json.elements?.length) throw new Error(`${endpoint}: keine Einträge (unerwartet)`);
-      return json.elements;
-    } catch (e) {
-      lastError = e;
-      console.warn(`  ${state}: Versuch ${attempt + 1} fehlgeschlagen – ${String(e)}`);
-      await sleep(30_000 * (attempt + 1));
-    }
-  }
-  throw lastError;
-}
 
 async function runSql(sql: string): Promise<unknown> {
   const token = process.env.SUPABASE_ACCESS_TOKEN;
@@ -587,8 +724,9 @@ async function main() {
   const unknown = states.filter((s) => !STATES[s]);
   if (unknown.length)
     throw new Error(`Unbekannte Bundesländer: ${unknown.join(', ')} (z. B. HE,BY,NW)`);
-  const complete = states.length === Object.keys(STATES).length;
+  const complete = states.length === Object.keys(STATES).length && !opt('--pbf');
   if (prune && !complete) throw new Error('--prune nur zusammen mit allen Bundesländern');
+  if (apply && opt('--pbf')) throw new Error('--pbf nur für Probeläufe');
 
   const seenAt = new Date().toISOString();
   summary(
@@ -601,21 +739,27 @@ async function main() {
   summary('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |');
   const all: ImportRow[] = [];
   const failed: string[] = [];
-  for (const state of states) {
+  const workDir = mkdtempSync(join(tmpdir(), 'osm-'));
+  const localPbf = opt('--pbf');
+  for (const state of localPbf ? ['lokal'] : states) {
+    const label = STATES[state] ?? localPbf!;
     try {
-      const elements = await fetchState(state);
+      const pbf = localPbf ?? join(workDir, `${state}.osm.pbf`);
+      if (!localPbf) download(geofabrikUrl(state), pbf);
+      const elements = await loadPbf(pbf, workDir);
+      if (!localPbf) rmSync(pbf, { force: true });
       const { rows, skipped, fromBuilding, cityFromPostcode, practices } = convert(elements);
       all.push(...rows);
       const t = apply ? await upload(rows, seenAt) : null;
       summary(
-        `| ${STATES[state]} | ${practices} | ${rows.length} | ${fromBuilding} | ${cityFromPostcode} | ${skipped.noSpecialty} | ${skipped.noAddress} | ${skipped.noName} | ${skipped.duplicate} | ${t?.inserted ?? '–'} | ${t?.updated ?? '–'} | ${t?.maintainedByPractice ?? '–'} |`,
+        `| ${label} | ${practices} | ${rows.length} | ${fromBuilding} | ${cityFromPostcode} | ${skipped.noSpecialty} | ${skipped.noAddress} | ${skipped.noName} | ${skipped.duplicate} | ${t?.inserted ?? '–'} | ${t?.updated ?? '–'} | ${t?.maintainedByPractice ?? '–'} |`,
       );
     } catch (e) {
       failed.push(state);
-      summary(`| ${STATES[state]} | Fehler: ${String(e).slice(0, 160)} | | | | | | | | | | |`);
+      summary(`| ${label} | Fehler: ${String(e).slice(0, 160)} | | | | | | | | | | |`);
     }
-    await sleep(5_000); // Overpass schonen
   }
+  rmSync(workDir, { recursive: true, force: true });
   const bySpecialty = new Map<string, number>();
   for (const r of all)
     for (const s of r.specialties) bySpecialty.set(s, (bySpecialty.get(s) ?? 0) + 1);

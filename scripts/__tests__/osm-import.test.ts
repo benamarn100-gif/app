@@ -1,8 +1,9 @@
 import {
   convert,
+  featureToElement,
+  geofabrikUrl,
   jsonLiteral,
   normalizeWebsite,
-  overpassQuery,
   parseOpeningHours,
   specialtiesFor,
   toRow,
@@ -296,9 +297,40 @@ describe('Hilfen', () => {
     expect(literal).toBe(`$${tag}$[{"name":"O'Brien $$ ; drop table x"}]$${tag}$::jsonb`);
   });
 
-  it('Overpass-Abfrage je Bundesland', () => {
-    expect(overpassQuery('HE')).toContain('"ISO3166-2"="DE-HE"');
-    expect(overpassQuery('HE')).toContain('.p out center tags;');
-    expect(overpassQuery('HE')).toContain('way(around.n:30)["addr:housenumber"];');
+  it('Geofabrik-Auszug je Bundesland', () => {
+    expect(geofabrikUrl('HE')).toBe(
+      'https://download.geofabrik.de/europe/germany/hessen-latest.osm.pbf',
+    );
+    expect(geofabrikUrl('NW')).toContain('/nordrhein-westfalen-latest.osm.pbf');
+  });
+
+  it('liest osmium-GeoJSON: Punkte direkt, Flächen mit Mittelpunkt', () => {
+    expect(
+      featureToElement({
+        geometry: { type: 'Point', coordinates: [9.68, 50.55] },
+        properties: { '@type': 'node', '@id': '7', amenity: 'dentist' },
+      }),
+    ).toEqual({ type: 'node', id: 7, lat: 50.55, lon: 9.68, tags: { amenity: 'dentist' } });
+    const ring = [
+      [9.68, 50.55],
+      [9.682, 50.55],
+      [9.682, 50.552],
+      [9.68, 50.552],
+      [9.68, 50.55],
+    ];
+    const way = featureToElement(
+      {
+        geometry: { type: 'Polygon', coordinates: [ring] },
+        properties: { '@type': 'way', '@id': '9', building: 'yes' },
+      },
+      true,
+    );
+    expect(way).toMatchObject({ type: 'way', id: 9 });
+    expect(way?.center?.lat).toBeCloseTo(50.551, 6);
+    expect(way?.center?.lon).toBeCloseTo(9.681, 6);
+    expect(way?.geometry).toHaveLength(5);
+    expect(
+      featureToElement({ geometry: null, properties: { '@type': 'area', '@id': '1' } }),
+    ).toBeNull();
   });
 });
