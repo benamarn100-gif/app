@@ -168,6 +168,7 @@
     "nextSlot": "{{when}} · {{distance}}",
     "noSlotInWindow": "Kein freier Termin im Zeitraum",
     "callForAppointment": "Für Termine bitte anrufen",
+    "noOnlineBooking": "Keine Online-Termine",
     "openSlots_one": "{{count}} freier Termin",
     "openSlots_other": "{{count}} freie Termine",
     "a11y": "{{name}}, {{specialty}}, {{status}}, {{next}}, {{distance}}",

@@ -151,6 +151,7 @@
     "nextSlot": "{{when}} · {{distance}}",
     "noSlotInWindow": "No free appointment in this period",
     "callForAppointment": "Please call for appointments",
+    "noOnlineBooking": "No online booking",
     "openSlots_one": "{{count}} free appointment",
     "openSlots_other": "{{count}} free appointments",
     "a11y": "{{name}}, {{specialty}}, {{status}}, {{next}}, {{distance}}",

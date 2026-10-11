@@ -48,8 +48,12 @@ export const PracticeCard = memo(function PracticeCard({
       ? t('card.nextSlot', { when, distance })
       : when
     : status === 'unknown'
-      ? t('card.callForAppointment')
+      ? distance
+        ? t('card.nextSlot', { when: t('card.callForAppointment'), distance })
+        : t('card.callForAppointment')
       : t('card.noSlotInWindow');
+  // Verzeichnis-Praxis (OpenStreetMap): bietet keine Online-Termine an – kein Datenalter anzeigen
+  const isDirectory = practice.source === 'osm';
   const statusText = t(`status.${status}`);
   // Spricht die Praxis die App-Sprache (außer Deutsch)? Dann direkt auf der Karte zeigen.
   const speaksMine =
@@ -68,12 +72,15 @@ export const PracticeCard = memo(function PracticeCard({
         specialtyName,
         status === 'free' || status === 'few'
           ? t('card.openSlots', { count: openCount })
-          : statusText,
+          : isDirectory
+            ? t('card.noOnlineBooking')
+            : statusText,
         practice.offersVideo ? t('service.video_consultation') : null,
         speaksMine,
         nextLine,
-        distance && !when ? distance : null,
-        t('time.updatedA11y', { age: freshnessText(t, lastSyncedAt, now) }),
+        // Bei „unbekannt“ steht die Entfernung schon in nextLine
+        distance && !when && status !== 'unknown' ? distance : null,
+        isDirectory ? null : t('time.updatedA11y', { age: freshnessText(t, lastSyncedAt, now) }),
         practice.rating
           ? t('card.ratingA11y', {
               value: practice.rating.average,
@@ -108,7 +115,9 @@ export const PracticeCard = memo(function PracticeCard({
           label={
             status === 'free' || status === 'few'
               ? t('card.openSlots', { count: openCount })
-              : undefined
+              : isDirectory
+                ? t('card.noOnlineBooking')
+                : undefined
           }
         />
         {practice.offersVideo ? (
@@ -137,7 +146,7 @@ export const PracticeCard = memo(function PracticeCard({
       </View>
 
       <View style={styles.footer}>
-        <FreshnessLabel lastSyncedAt={lastSyncedAt} />
+        {isDirectory ? <View /> : <FreshnessLabel lastSyncedAt={lastSyncedAt} />}
         <View style={styles.footerRight}>
           {practice.rating ? (
             <View

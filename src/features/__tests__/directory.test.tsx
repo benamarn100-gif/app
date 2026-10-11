@@ -2,6 +2,7 @@ import { Linking } from 'react-native';
 import { fireEvent, screen } from '@testing-library/react-native';
 
 import type { Practice } from '@/domain/types';
+import { PracticeCard } from '@/components';
 import {
   AccessibilityInfo,
   LanguagesAndInsurance,
@@ -81,5 +82,24 @@ describe('Verzeichnis-Praxen (OpenStreetMap)', () => {
       <LanguagesAndInsurance practice={{ ...directoryPractice, source: 'practice_dashboard' }} />,
     ).result;
     expect(screen.getByText('Gesetzlich versichert · Privat versichert')).toBeTruthy();
+  });
+
+  it('Trefferliste: „Keine Online-Termine“ mit Entfernung, ohne Datenalter', async () => {
+    await renderWithProviders(
+      <PracticeCard
+        item={{
+          practice: directoryPractice,
+          status: 'unknown',
+          openCount: 0,
+          nextSlot: null,
+          distanceM: 1200,
+          lastSyncedAt: null,
+        }}
+        testID="card"
+      />,
+    ).result;
+    expect(screen.getByText('Keine Online-Termine')).toBeTruthy();
+    expect(screen.getByText('Für Termine bitte anrufen · 1,2 km')).toBeTruthy();
+    expect(screen.queryByText('Keine aktuellen Daten')).toBeNull();
   });
 });
