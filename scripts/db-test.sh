@@ -29,7 +29,8 @@ for f in supabase/migrations/*.sql; do
   "${PSQL[@]}" -f "$f"
 done
 
-echo "› Seed"
+echo "› Seed (Demo-Praxen für die Tests sichtbar)"
+"${PSQL[@]}" -c "update app.settings set value = 'true' where key = 'show_demo';"
 npx --yes tsx scripts/generate-seed-sql.ts >/dev/null
 "${PSQL[@]}" -f supabase/seed.sql >/dev/null
 "${PSQL[@]}" -tAc "select 'Praxen: ' || count(*) from public.practices; select 'Slots: ' || count(*) from public.availability_slots;"

@@ -1,0 +1,110 @@
+name: Praxisverzeichnis importieren (OpenStreetMap)
+
+# Echte Arzt-, Zahnarzt- und Psychotherapiepraxen in ganz Deutschland aus OpenStreetMap
+# (© OpenStreetMap-Mitwirkende, ODbL 1.0) – mit Adresse, Telefon und, wo eindeutig, Sprechzeiten.
+# Termine werden nie erfunden: Diese Praxen erscheinen mit „Keine aktuellen Termindaten – bitte
+# anrufen“, bis sie als Pilotpraxis eigene Termine einstellen (Eintrag wird dann übernommen).
+# Skript: scripts/osm-import.ts · Datenbank: Migration 20261011000100 · Doku: docs/data-sources.md
+#
+# Voraussetzungen wie „Supabase bereitstellen“: Secret SUPABASE_ACCESS_TOKEN, Variable SUPABASE_PROJECT_REF.
+# Monatlich läuft der Import automatisch (alle Länder, mit Aufräumen).
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Nur zählen (nichts in die Datenbank schreiben)'
+        type: boolean
+        default: true
+      states:
+        description: 'Bundesländer: „alle“ oder Kürzel, z. B. HE,BY,NW'
+        required: false
+        default: 'alle'
+        type: string
+      remove_ref:
+        description: 'Optional: Eintrag entfernen und nie wieder importieren (z. B. node/123 – steht unter „Quelle“ in der App)'
+        required: false
+        type: string
+      remove_reason:
+        description: 'Grund für das Entfernen (z. B. „Praxis hat um Löschung gebeten“)'
+        required: false
+        type: string
+  schedule:
+    # 3. des Monats, 03:17 UTC
+    - cron: '17 3 3 * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-deploy
+  cancel-in-progress: false
+
+jobs:
+  import:
+    name: Import
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      PROJECT_REF: ${{ vars.SUPABASE_PROJECT_REF }}
+      # Eingaben nur über Umgebungsvariablen – nie direkt ins Skript einsetzen
+      IN_DRY: ${{ github.event_name == 'schedule' && 'false' || inputs.dry_run }}
+      IN_STATES: ${{ inputs.states || 'alle' }}
+      IN_REMOVE: ${{ inputs.remove_ref }}
+      IN_REASON: ${{ inputs.remove_reason }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Zugangsdaten prüfen
+        if: env.IN_DRY != 'true' || env.IN_REMOVE != ''
+        run: |
+          missing=0
+          for name in SUPABASE_ACCESS_TOKEN PROJECT_REF; do
+            if [ -z "${!name}" ]; then echo "::error::$name fehlt (siehe docs/supabase-setup.md)"; missing=1; fi
+          done
+          exit $missing
+
+      - name: Eintrag entfernen
+        if: env.IN_REMOVE != ''
+        run: |
+          ref="$(echo "$IN_REMOVE" | xargs)"
+          if [[ ! "$ref" =~ ^(osm:)?(node|way|relation)/[0-9]+$ ]]; then
+            echo "::error::Verweis bitte wie node/123 oder way/456 eingeben."; exit 1
+          fi
+          reason="${IN_REASON:-Auf Wunsch entfernt}"
+          tag="rm$(openssl rand -hex 8)"
+          sql="select app.exclude_directory_entry('$ref', \$${tag}\$${reason}\$${tag}\$) as removed;"
+          code="$(curl -sS -o response.json -w '%{http_code}' -X POST \
+            "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+            -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg q "$sql" '{query: $q}')")"
+          if [ "$code" -ge 300 ]; then echo "::error::$(jq -r '.message // .' response.json | head -c 600)"; exit 1; fi
+          echo "## Eintrag $ref entfernt ($(jq -r '.[0].removed' response.json) Praxis) und für künftige Importe gesperrt" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Abhängigkeiten
+        if: env.IN_REMOVE == ''
+        run: npm ci
+
+      - name: Import
+        if: env.IN_REMOVE == ''
+        run: |
+          args=(--states "$IN_STATES" --out verzeichnis.json)
+          if [ "$IN_DRY" != "true" ]; then
+            args+=(--apply)
+            # Aufräumen nur nach einem vollständigen Lauf über alle Länder
+            if [ "$(echo "$IN_STATES" | tr '[:upper:]' '[:lower:]' | xargs)" = "alle" ]; then args+=(--prune); fi
+          fi
+          npx tsx scripts/osm-import.ts "${args[@]}"
+
+      - uses: actions/upload-artifact@v4
+        if: env.IN_REMOVE == '' && always()
+        with:
+          name: praxisverzeichnis
+          path: verzeichnis.json
+          if-no-files-found: ignore
+          retention-days: 7

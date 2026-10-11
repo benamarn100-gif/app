@@ -1,7 +1,14 @@
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 
-import { Avatar, Card, FreshnessLabel, Text } from '@/components';
-import { Accessibility, Check, Languages, ShieldCheck, Star } from '@/components/icons';
+import { Avatar, Button, Card, FreshnessLabel, Text } from '@/components';
+import {
+  Accessibility,
+  Check,
+  ExternalLink,
+  Languages,
+  ShieldCheck,
+  Star,
+} from '@/components/icons';
 import { makeStyles, useTheme } from '@/design/theme';
 import { specialtyById } from '@/domain/seed/catalog';
 import { ACCESSIBILITY_FEATURES, WEEKDAYS, type Doctor, type Practice } from '@/domain/types';
@@ -10,6 +17,14 @@ import { useT } from '@/i18n/useT';
 export function OpeningHours({ practice }: { practice: Practice }) {
   const styles = useStyles();
   const { t } = useT();
+  // Ohne Angaben nicht sieben Mal „geschlossen“ anzeigen
+  if (!WEEKDAYS.some((day) => practice.openingHours[day]?.length)) {
+    return (
+      <Text variant="body" color="textSecondary">
+        {t('practice.openingHoursNone')}
+      </Text>
+    );
+  }
   return (
     <View style={styles.table}>
       {WEEKDAYS.map((day) => {
@@ -36,6 +51,11 @@ export function OpeningHours({ practice }: { practice: Practice }) {
           </View>
         );
       })}
+      {practice.source === 'osm' ? (
+        <Text variant="caption" color="textSecondary" style={styles.top}>
+          {t('practice.openingHoursOsm')}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -66,7 +86,9 @@ export function AccessibilityInfo({ practice }: { practice: Practice }) {
   if (!features.length) {
     return (
       <Text variant="body" color="textSecondary">
-        {t('practice.accessibilityNone')}
+        {practice.source === 'osm' && practice.accessibility.wheelchair === false
+          ? t('practice.accessibilityNotWheelchair')
+          : t('practice.accessibilityNone')}
       </Text>
     );
   }
@@ -101,12 +123,15 @@ export function LanguagesAndInsurance({ practice }: { practice: Practice }) {
         <Text variant="body" style={styles.flex}>
           {!practice.acceptsPublic
             ? t('practice.privateOnly')
-            : [
-                practice.acceptsPublic && t('practice.acceptsPublic'),
-                practice.acceptsPrivate && t('practice.acceptsPrivate'),
-              ]
-                .filter(Boolean)
-                .join(' · ')}
+            : practice.source === 'osm'
+              ? // Verzeichnis: keine geprüfte Angabe zur Kassenzulassung
+                t('practice.insuranceUnknown')
+              : [
+                  practice.acceptsPublic && t('practice.acceptsPublic'),
+                  practice.acceptsPrivate && t('practice.acceptsPrivate'),
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
         </Text>
       </View>
     </View>
@@ -200,7 +225,23 @@ export function SourceInfo({
       <Text variant="small" color="textSecondary">
         {practice.sourceLicense}
       </Text>
-      <FreshnessLabel lastSyncedAt={lastSyncedAt} />
+      {practice.source === 'osm' ? (
+        <Text variant="small" color="textSecondary">
+          {t('practice.directoryNote')}
+        </Text>
+      ) : (
+        <FreshnessLabel lastSyncedAt={lastSyncedAt} />
+      )}
+      {practice.sourceUrl ? (
+        <Button
+          variant="text"
+          label={t('practice.correctOsm')}
+          icon={ExternalLink}
+          accessibilityHint={t('practice.correctOsmHint')}
+          onPress={() => void Linking.openURL(practice.sourceUrl!)}
+          style={styles.alignStart}
+        />
+      ) : null}
     </View>
   );
 }
@@ -214,4 +255,5 @@ const useStyles = makeStyles((t) => ({
   item: { flexDirection: 'row', alignItems: 'center', gap: t.space.xs },
   doctor: { flexDirection: 'row', alignItems: 'center', gap: t.space.sm },
   top: { marginTop: t.space.xs },
+  alignStart: { alignSelf: 'flex-start' },
 }));

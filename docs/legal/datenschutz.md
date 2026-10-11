@@ -292,10 +292,11 @@ Das Dashboard speichert die Anmeldung nur im Sitzungsspeicher des Browser-Tabs; 
 
 In der App zeigen wir öffentliche Angaben zu Praxen: Name, Adresse, Lage, Telefonnummer, Webseite, Fachrichtungen, Sprechzeiten, Leistungen, Sprachen, Angaben zur Barrierefreiheit, Versicherungsarten, Videosprechstunde sowie die Namen, Fachrichtungen, Sprachen und ggf. Fotos der Ärztinnen und Ärzte. Außerdem zeigen wir, wann die Praxis ihre freien Termine zuletzt bestätigt hat.
 
-- **Herkunft:** Angaben der Praxis selbst (bei der Einrichtung des Praxis-Zugangs und im Dashboard).
+- **Herkunft:** Angaben der Praxis selbst (bei der Einrichtung des Praxis-Zugangs und im Dashboard) oder – bei Praxen, die Terminlücke (noch) nicht nutzen – das öffentliche Verzeichnis OpenStreetMap (© OpenStreetMap-Mitwirkende, ODbL 1.0). Aus OpenStreetMap übernehmen wir nur Name, Adresse, Lage, Telefon, Webseite, Fachrichtung, Sprechzeiten, Sprachen und Rollstuhlgerechtigkeit – keine Namen einzelner Ärztinnen oder Ärzte außer, wenn die Praxis danach benannt ist. Diese Einträge sind in der App als „OpenStreetMap“ gekennzeichnet; Termine zeigen wir für sie nicht an.
 - **Zweck:** Patientinnen und Patienten bei der Wahl einer Praxis und eines Termins informieren.
-- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO (Vertrag mit der Praxis) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse der Praxis und der Nutzenden an einer informierten Terminwahl).
-- **Speicherdauer:** solange die Praxis über Terminlücke Termine anbietet. [PLATZHALTER: Löschfrist für Praxis- und Arztangaben nach Ende der Zusammenarbeit]
+- **Rechtsgrundlage:** Art. 6 Abs. 1 lit. b DSGVO (Vertrag mit der Praxis) bzw. Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse der Praxis und der Nutzenden an einer informierten Terminwahl; bei Verzeichnis-Einträgen: Auffindbarkeit öffentlich zugänglicher Praxisangaben).
+- **Widerspruch:** Praxen, die nicht im Verzeichnis erscheinen möchten, schreiben uns an [PLATZHALTER: E-Mail]. Wir entfernen den Eintrag und übernehmen ihn auch künftig nicht wieder. Falsche Angaben können außerdem direkt in OpenStreetMap korrigiert werden (Link im Praxisprofil).
+- **Speicherdauer:** solange die Praxis über Terminlücke Termine anbietet bzw. solange der Eintrag in OpenStreetMap besteht (monatlicher Abgleich). [PLATZHALTER: Löschfrist für Praxis- und Arztangaben nach Ende der Zusammenarbeit]
 - **Empfänger:** alle Nutzenden der App (öffentlich), Supabase Inc. (Auftragsverarbeiter).
 
 ## 8. Empfänger im Überblick

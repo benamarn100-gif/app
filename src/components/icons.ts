@@ -30,6 +30,7 @@ export { default as Clock } from 'lucide-react-native/icons/clock';
 export { default as Download } from 'lucide-react-native/icons/download';
 export { default as Droplet } from 'lucide-react-native/icons/droplet';
 export { default as Ear } from 'lucide-react-native/icons/ear';
+export { default as ExternalLink } from 'lucide-react-native/icons/external-link';
 export { default as Eye } from 'lucide-react-native/icons/eye';
 export { default as FileText } from 'lucide-react-native/icons/file-text';
 export { default as FlaskConical } from 'lucide-react-native/icons/flask-conical';

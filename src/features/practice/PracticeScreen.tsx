@@ -170,7 +170,21 @@ export function PracticeScreen() {
   ) : canBook ? (
     <Button label={t('practice.chooseTime')} disabled testID="book-button" />
   ) : summary.status === 'unknown' && practice.phone ? (
-    <Button label={t('common.call')} icon={Phone} onPress={() => callPhone(practice.phone!)} />
+    <Button
+      label={t('common.call')}
+      icon={Phone}
+      onPress={() => callPhone(practice.phone!)}
+      testID="call-practice"
+    />
+  ) : practice.source === 'osm' ? (
+    // Verzeichnis-Praxis ohne Online-Termine: kein Termin-Alarm, der nie auslösen würde
+    practice.website ? (
+      <Button
+        label={t('common.website')}
+        icon={Globe}
+        onPress={() => void Linking.openURL(practice.website!)}
+      />
+    ) : null
   ) : (
     <Button
       label={t('practice.notifyMe')}
@@ -358,7 +372,11 @@ export function PracticeScreen() {
           </View>
         </View>
       </ScrollView>
-      <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) }]}>{footer}</View>
+      {footer ? (
+        <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) }]}>
+          {footer}
+        </View>
+      ) : null}
     </View>
   );
 }

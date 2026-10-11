@@ -62,7 +62,8 @@ export const ACCESSIBILITY_FEATURES = [
   'hearingLoop',
 ] as const;
 export type AccessibilityFeature = (typeof ACCESSIBILITY_FEATURES)[number];
-export type PracticeAccessibility = Record<AccessibilityFeature, boolean>;
+/** Fehlender Schlüssel = keine Angabe (z. B. Verzeichnis-Praxen aus OpenStreetMap). */
+export type PracticeAccessibility = Partial<Record<AccessibilityFeature, boolean>>;
 
 export const WEEKDAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
 export type Weekday = (typeof WEEKDAYS)[number];
@@ -95,6 +96,8 @@ export type Practice = {
   isDemo: boolean;
   source: DataSource;
   sourceLicense: string;
+  /** Nur Verzeichnis-Einträge (OpenStreetMap): Link zum Objekt, dort kann jede Person korrigieren. */
+  sourceUrl?: string | null;
   verifiedAt: string | null;
 };
 

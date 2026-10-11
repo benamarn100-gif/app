@@ -40,6 +40,10 @@ Grundlage: `docs/legal-checklist.md` (Dienstleister, Rechtsgrundlagen, Löschfri
    eingeschalteter Kalender-Sync läuft weiter). Ist das so gewollt und so richtig beschrieben (7.6)?
 10. **Verbraucherstreitbeilegung:** Angabe nach § 36 VSBG. (Die EU-Plattform zur Online-Streitbeilegung
     wurde im Juli 2025 eingestellt – kein Link mehr nötig.)
+11. **Praxisverzeichnis aus OpenStreetMap** (Datenschutzerklärung 7): Reicht Art. 6 Abs. 1 lit. f DSGVO
+    für Praxisnamen, die den Namen einer Ärztin oder eines Arztes enthalten? Wie wird die
+    Informationspflicht nach Art. 14 DSGVO erfüllt (Ausnahme Abs. 5 lit. b)? ODbL 1.0: Pflichten aus der
+    Share-Alike-Klausel für die abgeleitete Datenbank (Angebot der OSM-Daten auf Anfrage).
 
 ## Platzhalter, die der Betreiber ausfüllt
 
