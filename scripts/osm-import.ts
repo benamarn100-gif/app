@@ -71,7 +71,27 @@ export type ImportRow = {
   private_only?: boolean;
 };
 
-export type SkipReason = 'noName' | 'noAddress' | 'noSpecialty' | 'notPublic' | 'duplicate';
+export type SkipReason =
+  'noName' | 'noAddress' | 'noSpecialty' | 'notPublic' | 'notDoctor' | 'duplicate';
+
+/**
+ * Manche Einträge sind in OpenStreetMap als Arztpraxis markiert, sind aber keine (Heilpraktiker,
+ * Therapie-, Yoga- oder Kosmetikangebote). In einer Arzt-App haben sie nichts zu suchen.
+ */
+/** Heilpraktiker und Tierärzte sind keine Arztpraxen für Menschen – immer herausfiltern. */
+const NON_MEDICAL = /heilprakti|\bHP\b|tierarzt|tierärzt|tierklinik/i;
+/** Wellness/Therapie – nur herausfiltern, wenn der Name nicht auf eine Ärztin oder einen Arzt hinweist. */
+const OTHER_SERVICE =
+  /naturheil|osteopath|physiotherap|krankengymnast|ergotherap|logopäd|yoga|massage|kosmetik|hebamme|apotheke|sanitätshaus|pflegedienst|fußpflege|podolog|heilpädagog|coaching|hypnose|tattoo/i;
+const DOCTOR_HINT = /\bdr\.|\bdres\.|ärzt|arzt|medizin|\bmvz\b/i;
+
+export function isNotDoctor(tags: Record<string, string>): boolean {
+  const healthcare = tags.healthcare;
+  if (healthcare && !/^(doctor|dentist|psychotherapist)$/.test(healthcare)) return true;
+  const name = tags.name ?? '';
+  if (NON_MEDICAL.test(name)) return true;
+  return OTHER_SERVICE.test(name) && !DOCTOR_HINT.test(name);
+}
 
 // --- Fachrichtungen ------------------------------------------------------------------------------
 
@@ -307,6 +327,7 @@ export function normalizeWebsite(value: string | undefined): string | undefined 
 export function toRow(el: OsmElement): ImportRow | SkipReason {
   const tags = el.tags ?? {};
   if (tags.access === 'private' || tags.access === 'no') return 'notPublic';
+  if (isNotDoctor(tags)) return 'notDoctor';
   const name = tags.name?.trim();
   if (!name || name.length < 2) return 'noName';
   const streetName = (tags['addr:street'] ?? tags['addr:place'])?.trim();
@@ -443,6 +464,7 @@ export function convert(elements: OsmElement[]) {
   const rows: ImportRow[] = [];
   const skipped: Record<SkipReason, number> = {
     noName: 0,
+    notDoctor: 0,
     noAddress: 0,
     noSpecialty: 0,
     notPublic: 0,
@@ -734,9 +756,11 @@ async function main() {
   );
   summary('');
   summary(
-    '| Land | OSM-Praxen | übernommen | Adresse vom Gebäude | Ort aus PLZ | ohne Fachrichtung | ohne Adresse | ohne Name | Duplikate | neu | aktualisiert | von Praxis gepflegt |',
+    '| Land | OSM-Praxen | übernommen | Adresse vom Gebäude | Ort aus PLZ | ohne Fachrichtung | ohne Adresse | ohne Name | kein Arzt | Duplikate | neu | aktualisiert | von Praxis gepflegt |',
   );
-  summary('| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |');
+  summary(
+    '| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |',
+  );
   const all: ImportRow[] = [];
   const failed: string[] = [];
   const workDir = mkdtempSync(join(tmpdir(), 'osm-'));
@@ -752,11 +776,11 @@ async function main() {
       all.push(...rows);
       const t = apply ? await upload(rows, seenAt) : null;
       summary(
-        `| ${label} | ${practices} | ${rows.length} | ${fromBuilding} | ${cityFromPostcode} | ${skipped.noSpecialty} | ${skipped.noAddress} | ${skipped.noName} | ${skipped.duplicate} | ${t?.inserted ?? '–'} | ${t?.updated ?? '–'} | ${t?.maintainedByPractice ?? '–'} |`,
+        `| ${label} | ${practices} | ${rows.length} | ${fromBuilding} | ${cityFromPostcode} | ${skipped.noSpecialty} | ${skipped.noAddress} | ${skipped.noName} | ${skipped.notDoctor} | ${skipped.duplicate} | ${t?.inserted ?? '–'} | ${t?.updated ?? '–'} | ${t?.maintainedByPractice ?? '–'} |`,
       );
     } catch (e) {
       failed.push(state);
-      summary(`| ${label} | Fehler: ${String(e).slice(0, 160)} | | | | | | | | | | |`);
+      summary(`| ${label} | Fehler: ${String(e).slice(0, 160)} | | | | | | | | | | | |`);
     }
   }
   rmSync(workDir, { recursive: true, force: true });

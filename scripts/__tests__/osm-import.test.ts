@@ -1,5 +1,6 @@
 import {
   convert,
+  isNotDoctor,
   featureToElement,
   geofabrikUrl,
   jsonLiteral,
@@ -214,6 +215,43 @@ describe('Zeilen', () => {
     ]);
     expect(rows.map((r) => r.ref)).toEqual(['node/3']);
     expect(skipped).toMatchObject({ duplicate: 1, noAddress: 1 });
+  });
+});
+
+describe('Keine Arztpraxis', () => {
+  it('filtert Heilpraktiker, Therapie- und Wellnessangebote', () => {
+    expect(isNotDoctor({ amenity: 'doctors', name: 'Elke Muster, M.A., HP' })).toBe(true);
+    expect(isNotDoctor({ amenity: 'doctors', name: 'Naturheilpraxis am Park' })).toBe(true);
+    expect(isNotDoctor({ amenity: 'doctors', name: 'Yoga & Gesundheit' })).toBe(true);
+    expect(
+      isNotDoctor({ amenity: 'doctors', healthcare: 'alternative', name: 'Praxis Sonne' }),
+    ).toBe(true);
+    expect(isNotDoctor({ amenity: 'doctors', healthcare: 'doctor', name: 'Hausarztpraxis' })).toBe(
+      false,
+    );
+    expect(isNotDoctor({ amenity: 'doctors', name: 'Dr. med. Beispiel (HNO)' })).toBe(false);
+    expect(isNotDoctor({ healthcare: 'psychotherapist', name: 'Praxis für Psychotherapie' })).toBe(
+      false,
+    );
+  });
+
+  it('zählt sie gesondert', () => {
+    const { rows, skipped } = convert([
+      {
+        type: 'node',
+        id: 5,
+        lat: 50.55,
+        lon: 9.68,
+        tags: {
+          amenity: 'doctors',
+          'healthcare:speciality': 'general',
+          name: 'Heilpraktikerin Muster',
+          ...address,
+        },
+      },
+    ]);
+    expect(rows).toHaveLength(0);
+    expect(skipped.notDoctor).toBe(1);
   });
 });
 
