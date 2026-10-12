@@ -21,7 +21,8 @@
    (Fulda und Umgebung): Dort ist ein Besuch möglich, und die erste Praxis profitiert vom persönlichen
    Probelauf.
 2. Briefe drucken (eine Seite je Praxis) und jeweils die **Praxis-Mappe** beilegen (Infoblatt und
-   Datenblatt, 2 Blätter). Fensterumschlag DL oder C5/6, Porto Standardbrief.
+   Datenblatt, 5 Seiten – beidseitig 3 Blätter). Fensterumschlag DL oder C5/6; mit Beilage wiegt der Brief
+   mehr als 20 g, also als Kompaktbrief frankieren.
 3. In der Tabelle „Brief verschickt“ und das Datum eintragen.
 4. Meldet sich eine Praxis: 15-Minuten-Gespräch, dann Datenblatt zurück → Praxis anlegen
    (`docs/pilot/praxis-onboarding.md`). Voraussetzung: E-Mail-Versand eingerichtet
