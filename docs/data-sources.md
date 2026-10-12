@@ -24,14 +24,16 @@
 
 ## Praxisverzeichnis (OpenStreetMap) – Betrieb
 
-- **Import:** GitHub → Actions → **„Praxisverzeichnis importieren (OpenStreetMap)“**. Erst mit „Nur zählen“,
+- **Stand 11.10.2026:** 40.976 Praxen bundesweit (davon 25.042 mit Telefon, 15.395 mit Sprechzeiten).
+- **Import:** GitHub → Actions → **„Praxisverzeichnis importieren (OpenStreetMap)“** (Geofabrik-Auszüge je
+  Bundesland, gefiltert mit osmium; ca. 15 Minuten). Erst mit „Nur zählen“,
   dann ohne. Läuft zusätzlich monatlich automatisch (alle Bundesländer, mit Aufräumen). Skript:
   `scripts/osm-import.ts`, Datenbank: `app.import_osm_practices` (Migration `20261011000100`).
 - **Was übernommen wird:** nur Einträge mit Name, vollständiger Adresse (Straße, fünfstellige PLZ, Ort) und
   erkennbarer Fachrichtung (Tag `healthcare:speciality` oder eindeutige Wörter im Namen wie „Hausarzt“,
   „HNO“, „Zahnarzt“). Sprechzeiten nur, wenn die Angabe eindeutig ist – sonst zeigt die App „Keine
   Angaben“. Keine Ärztinnen/Ärzte, keine Termine, keine Bewertungen.
-- **Status in der App:** „Keine aktuellen Termindaten – bitte anrufen“; Knopf „Anrufen“ bzw. „Website“.
+- **Status in der App:** „Keine Online-Termine“ mit Entfernung; Knopf „Anrufen“ bzw. „Website“.
   Kein Termin-Alarm für diese Praxen.
 - **Pilotpraxis:** „Pilotpraxis anlegen“ übernimmt einen passenden Verzeichniseintrag (gleiche Adresse und
   Fachrichtung oder gleicher Name in 300 m) mit derselben Praxis-ID. Danach überschreibt der Import ihn nie
