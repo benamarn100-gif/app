@@ -205,7 +205,7 @@ export function SearchScreen() {
       title={
         filterCount || filters.text
           ? t('empty.noResults')
-          : t('empty.radius', { radius: filters.radiusKm })
+          : t('empty.noPractices', { radius: filters.radiusKm })
       }
       primaryAction={
         filterCount || filters.text

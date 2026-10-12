@@ -106,6 +106,8 @@ export function AcuteScreen({ variant = 'stack' }: { variant?: 'stack' | 'tab' }
     return out;
   }, [source, t]);
 
+  // Nur Praxen ohne Online-Termine in der Nähe: das offen sagen statt „nichts frei“
+  const noOnline = !loading && source.length > 0 && source.every((r) => r.status === 'unknown');
   const earliest = source.find((r) => r.nextSlot)?.nextSlot;
   const bookableCount = source.filter((r) => r.nextSlot).length;
   const next = nextRadius(radius);
@@ -128,6 +130,11 @@ export function AcuteScreen({ variant = 'stack' }: { variant?: 'stack' | 'tab' }
           <Text variant="bodyStrong">
             {t('acute.noneToday', { when: formatSlotWhen(earliest.startsAt, now, t, locale) })}
           </Text>
+        </Card>
+      ) : null}
+      {noOnline ? (
+        <Card tone="accent" testID="acute-no-online">
+          <Text variant="bodyStrong">{t('acute.noOnline')}</Text>
         </Card>
       ) : null}
       {!loading && bookableCount > 0 ? (
@@ -187,7 +194,7 @@ export function AcuteScreen({ variant = 'stack' }: { variant?: 'stack' | 'tab' }
           ) : (
             <EmptyState
               illustration={<IllustrationSearchEmpty size={150} />}
-              title={t('empty.radius', { radius })}
+              title={t('empty.noPractices', { radius })}
               primaryAction={
                 next
                   ? {

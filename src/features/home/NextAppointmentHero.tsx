@@ -20,6 +20,8 @@ type Props = {
   center: LatLng | null;
   /** Praxen mit freien Terminen in den nächsten 24 h (für den Akut-Hero), undefined = lädt */
   freeSoonCount: number | undefined;
+  /** In der Nähe bietet keine Praxis Online-Termine an (nur Verzeichnis-Einträge) */
+  noOnline?: boolean;
 };
 
 /**
@@ -27,10 +29,17 @@ type Props = {
  * Arzt, Datum, Entfernung und Route auf einen Blick. Ohne Termin wird der Block zum
  * Akut-Einstieg („Ich brauche bald einen Termin“).
  */
-export function NextAppointmentHero({ appointment, loading, now, center, freeSoonCount }: Props) {
+export function NextAppointmentHero({
+  appointment,
+  loading,
+  now,
+  center,
+  freeSoonCount,
+  noOnline,
+}: Props) {
   if (loading) return <HeroSkeleton />;
   if (appointment) return <AppointmentHero appointment={appointment} now={now} center={center} />;
-  return <AcuteHero freeSoonCount={freeSoonCount} />;
+  return <AcuteHero freeSoonCount={freeSoonCount} noOnline={noOnline} />;
 }
 
 function HeroSkeleton() {
@@ -134,7 +143,13 @@ function AppointmentHero({
   );
 }
 
-function AcuteHero({ freeSoonCount }: { freeSoonCount: number | undefined }) {
+function AcuteHero({
+  freeSoonCount,
+  noOnline,
+}: {
+  freeSoonCount: number | undefined;
+  noOnline?: boolean;
+}) {
   const theme = useTheme();
   const styles = useStyles();
   const { t } = useT();
@@ -143,7 +158,9 @@ function AcuteHero({ freeSoonCount }: { freeSoonCount: number | undefined }) {
       ? null
       : freeSoonCount > 0
         ? t('home.heroCount', { count: freeSoonCount })
-        : t('home.heroNone');
+        : noOnline
+          ? t('home.heroNoOnline')
+          : t('home.heroNone');
   return (
     <Card
       tone="primary"

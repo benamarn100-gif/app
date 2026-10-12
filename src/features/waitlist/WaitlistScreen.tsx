@@ -14,6 +14,7 @@ import {
 } from '@/components';
 import { BellRing } from '@/components/icons';
 import {
+  useAvailabilitySearch,
   useGrantConsent,
   useHasConsent,
   useJoinWaitlist,
@@ -93,6 +94,27 @@ export function WaitlistScreen() {
   // Grenze der Stufe erreicht: Hinweis statt Fehlermeldung (Abo-Konzept, Abschnitt 5)
   const [limitReached, setLimitReached] = useState(false);
   const active = (waitlist.data ?? []).filter((w) => w.status === 'active');
+  // Bietet im Umkreis überhaupt eine Praxis dieser Fachrichtung Online-Termine an? Sonst sagen
+  // wir vorher, dass der Alarm erst greift, wenn eine Praxis mitmacht.
+  const coverage = useAvailabilitySearch(
+    mode === 'specialty' && center.center
+      ? {
+          center: center.center,
+          radiusKm: maxKm,
+          window: 'week',
+          specialtyIds: [specialtyId],
+          languages: [],
+          accessibility: [],
+          insurance: 'any',
+          videoOnly: false,
+          text: '',
+        }
+      : null,
+  );
+  const noOnlineYet =
+    mode === 'specialty'
+      ? coverage.isSuccess && !(coverage.data ?? []).some((r) => r.status !== 'unknown')
+      : practice.data?.practice.source === 'osm';
 
   async function registerPush() {
     const granted = await requestNotificationPermission();
@@ -287,6 +309,15 @@ export function WaitlistScreen() {
           </View>
         </View>
 
+        {noOnlineYet ? (
+          <Card tone="accent" testID="alarm-no-online">
+            <Text variant="small">
+              {mode === 'specialty'
+                ? t('waitlist.noOnlineArea', { km: maxKm })
+                : t('waitlist.noOnlinePractice')}
+            </Text>
+          </Card>
+        ) : null}
         {!hasConsent ? (
           <ConsentCheckbox checked={consent} onChange={setConsent} showError={showErrors} />
         ) : null}

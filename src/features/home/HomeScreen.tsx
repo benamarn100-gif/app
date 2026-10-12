@@ -62,6 +62,11 @@ export function HomeScreen() {
     [weekQuery.data],
   );
   const useWeek = soonQuery.isSuccess && soonFree.length === 0;
+  // In der Nähe nur Praxen ohne Online-Termine (Verzeichnis): nicht „alles vergeben“ behaupten
+  const noOnline =
+    soonQuery.isSuccess &&
+    (soonQuery.data?.length ?? 0) > 0 &&
+    soonQuery.data!.every((r) => r.status === 'unknown');
 
   const appointments = useAppointments();
   const nextAppointment = useMemo(
@@ -131,6 +136,7 @@ export function HomeScreen() {
             now={now}
             center={soon.center.center}
             freeSoonCount={soonQuery.data ? soonFree.length : undefined}
+            noOnline={noOnline}
           />
         </Stagger>
 
@@ -145,6 +151,7 @@ export function HomeScreen() {
             loading={nearbyLoading}
             error={nearbyError}
             radiusKm={prefRadius}
+            noOnline={noOnline}
             onRetry={() => void soonQuery.refetch()}
             onExpandRadius={(km) => setPreferences({ radiusKm: km })}
           />

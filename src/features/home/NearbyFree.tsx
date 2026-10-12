@@ -24,6 +24,8 @@ type Props = {
   loading: boolean;
   error: boolean;
   radiusKm: number;
+  /** In der Nähe bietet keine Praxis Online-Termine an (nur Verzeichnis-Einträge) */
+  noOnline?: boolean;
   onRetry: () => void;
   onExpandRadius: (km: number) => void;
 };
@@ -39,6 +41,7 @@ export function NearbyFree({
   loading,
   error,
   radiusKm,
+  noOnline,
   onRetry,
   onExpandRadius,
 }: Props) {
@@ -68,6 +71,22 @@ export function NearbyFree({
         <Card tone="muted" style={styles.message}>
           <Text variant="body">{t('errors.loadPractices')}</Text>
           <Button variant="secondary" label={t('common.retry')} onPress={onRetry} />
+        </Card>
+      ) : items.length === 0 && noOnline ? (
+        <Card tone="muted" style={styles.message} testID="nearby-no-online">
+          <Text variant="body">{t('home.nearbyNoOnline')}</Text>
+          <View style={styles.actions}>
+            <Button
+              variant="secondary"
+              label={t('home.nearbyNoOnlineAction')}
+              onPress={() => router.navigate('/(tabs)/search')}
+            />
+            <Button
+              variant="text"
+              label={t('home.nearbyNoOnlineAlarm')}
+              onPress={() => router.push('/waitlist/any')}
+            />
+          </View>
         </Card>
       ) : items.length === 0 ? (
         <Card tone="muted" style={styles.message} testID="nearby-empty">
